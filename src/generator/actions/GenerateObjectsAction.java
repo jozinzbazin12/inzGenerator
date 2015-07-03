@@ -21,22 +21,20 @@ public class GenerateObjectsAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
-		GenerationInfo info =new GenerationInfo();
-		List<ObjectInfo> objects=new ArrayList<ObjectInfo>();
+		GenerationInfo info = new GenerationInfo();
+		List<ObjectInfo> objects = new ArrayList<ObjectInfo>();
 		info.setCount(30);
-		PositionSettings pos=new PositionSettings(Mediator.getArgument(Consts.MIN_X),
-				Mediator.getArgument(Consts.MAX_X), Mediator.getArgument(Consts.MIN_Y), Mediator.getArgument(Consts.MAX_Y),
-				Mediator.getArgument(Consts.MIN_Z), Mediator.getArgument(Consts.MAX_Z),true);
-		
-		ScaleSettings scale=new ScaleSettings(Mediator.getArgument(Consts.MIN_SX),
-				Mediator.getArgument(Consts.MAX_SX), Mediator.getArgument(Consts.MIN_SY), Mediator.getArgument(Consts.MAX_SY),
-				Mediator.getArgument(Consts.MIN_SZ), Mediator.getArgument(Consts.MAX_SZ));
-		
-		RotationSettings rotation=new RotationSettings(Mediator.getArgument(Consts.MIN_RX),
-				Mediator.getArgument(Consts.MAX_RX), Mediator.getArgument(Consts.MIN_RY), Mediator.getArgument(Consts.MAX_RY),
-				Mediator.getArgument(Consts.MIN_RZ), Mediator.getArgument(Consts.MAX_RZ));
-		
-		ObjectInfo obj=new ObjectInfo(0, pos, rotation, scale);
+		PositionSettings pos = new PositionSettings(Mediator.getArgument(Consts.MIN_X), Mediator.getArgument(Consts.MAX_X), Mediator.getArgument(Consts.MIN_Y),
+				Mediator.getArgument(Consts.MAX_Y), Mediator.getArgument(Consts.MIN_Z), Mediator.getArgument(Consts.MAX_Z), true);
+
+		ScaleSettings scale = new ScaleSettings(Mediator.getArgument(Consts.MIN_SX), Mediator.getArgument(Consts.MAX_SX), Mediator.getArgument(Consts.MIN_SY),
+				Mediator.getArgument(Consts.MAX_SY), Mediator.getArgument(Consts.MIN_SZ), Mediator.getArgument(Consts.MAX_SZ));
+
+		RotationSettings rotation = new RotationSettings(Mediator.getArgument(Consts.MIN_RX), Mediator.getArgument(Consts.MAX_RX),
+				Mediator.getArgument(Consts.MIN_RY), Mediator.getArgument(Consts.MAX_RY), Mediator.getArgument(Consts.MIN_RZ),
+				Mediator.getArgument(Consts.MAX_RZ));
+
+		ObjectInfo obj = new ObjectInfo(0, pos, rotation, scale);
 		objects.add(obj);
 		info.setObjects(objects);
 		Mediator.setResultObject(new ResultObject(Mediator.getAlgorithm().generate(info)));

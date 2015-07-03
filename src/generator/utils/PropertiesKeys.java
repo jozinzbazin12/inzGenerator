@@ -33,4 +33,6 @@ public final class PropertiesKeys {
 	public static final String RELATIVE = "relative";
 	public static final String FULL_RANDOM_ALGORITHM = "fullRandomAlgorithm";
 	public static final String REGULAR_ALGORITHM = "regularAlgorithm";
+	public static final String LANGUAGE = "language";
+	public static final String CHANGE_LANGUAGE_WARNING = "changeLanguageWarning";
 }
