@@ -36,5 +36,6 @@ public class ResultObject {
 
 	public void setGeneratedObjects(List<GeneratedObject> generatedObjects) {
 		this.generatedObjects = generatedObjects;
+		
 	}
 }

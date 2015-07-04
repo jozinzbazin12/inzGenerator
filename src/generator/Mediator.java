@@ -142,6 +142,7 @@ public class Mediator {
 
 		setMapFileName(resultObject.getMapObject().getMapFileName());
 		updateObjectList(resultObject.getGeneratedObjects());
+		printOnPreview();
 	}
 
 	public static void registerSecondTabPanel(SecondTabPanel secp) {
@@ -173,7 +174,7 @@ public class Mediator {
 
 	public static void printOnPreview() {
 		secondTabPanel.printOnPreview(resultObject.getGeneratedObjects());
-		secondTabPanel.repaint();
+		secondTabPanel.revalidate();
 	}
 
 	public static double getArgument(String key) {
@@ -192,6 +193,7 @@ public class Mediator {
 	public static void deleteObject(int index) {
 		resultObject.getGeneratedObjects().remove(index);
 		secondTabPanel.deleteObject(index+1);
+		printOnPreview();
 	}
 
 }
