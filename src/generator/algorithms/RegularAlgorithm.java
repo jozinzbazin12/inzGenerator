@@ -16,7 +16,7 @@ public class RegularAlgorithm extends Algorithm {
 	}
 
 	@Override
-	public List<GeneratedObject> generate(GenerationInfo info) {
+	public List<GeneratedObject> generationMethod(GenerationInfo info) {
 		List<GeneratedObject> list = new ArrayList<GeneratedObject>();
 		PositionSettings positionSettings = info.getObjects().get(0).getPositionSettings();
 		double width = positionSettings.getMaxZ() - positionSettings.getMinZ();

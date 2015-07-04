@@ -38,4 +38,11 @@ public final class PropertiesKeys {
 	public static final String SAVE_XML_ERROR = "saveXmlError";
 	public static final String SAVE_XML_SUCCESS = "saveXmlSuccess";
 	public static final String LOAD_XML_ERROR = "loadXmlError";
+	public static final String GENERATED_OBJECTS = "generatedObjects";
+	public static final String MODIFY_OBJECT = "modifyObject";
+	public static final String DELETE_OBJECT = "deleteObject";
+	public static final String OBJECT_NAME = "objectName";
+	public static final String COORDINATES = "coordinates";
+	public static final String ROTATIONS = "rotations";
+	public static final String SCALES = "scales";
 }

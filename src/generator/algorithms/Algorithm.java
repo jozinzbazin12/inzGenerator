@@ -1,5 +1,6 @@
 package generator.algorithms;
 
+import generator.Mediator;
 import generator.models.generation.GenerationInfo;
 import generator.models.result.GeneratedObject;
 
@@ -21,6 +22,11 @@ public abstract class Algorithm {
 		return min + (max - min) * new Random().nextDouble();
 	}
 
-	public abstract List<GeneratedObject> generate(GenerationInfo info);
-
+	protected abstract List<GeneratedObject> generationMethod(GenerationInfo info);
+	
+	public List<GeneratedObject> generate(GenerationInfo info){
+		List<GeneratedObject> result = generationMethod(info);
+		Mediator.updateObjectList(result);
+		return result;
+	}
 }

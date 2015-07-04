@@ -1,7 +1,7 @@
 package generator;
 
 import generator.algorithms.Algorithm;
-import generator.models.result.MapObject;
+import generator.models.result.GeneratedObject;
 import generator.models.result.ResultObject;
 import generator.panels.BottomPanel;
 import generator.panels.FirstTabPanel;
@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -140,7 +141,7 @@ public class Mediator {
 		}
 
 		setMapFileName(resultObject.getMapObject().getMapFileName());
-
+		updateObjectList(resultObject.getGeneratedObjects());
 	}
 
 	public static void registerSecondTabPanel(SecondTabPanel secp) {
@@ -181,6 +182,16 @@ public class Mediator {
 
 	public static Locale getLocale() {
 		return locale;
+	}
+
+	public static void updateObjectList(List<GeneratedObject> objects) {
+		secondTabPanel.updateObjectListPanel(objects);
+		
+	}
+
+	public static void deleteObject(int index) {
+		resultObject.getGeneratedObjects().remove(index);
+		secondTabPanel.deleteObject(index+1);
 	}
 
 }

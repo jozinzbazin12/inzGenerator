@@ -15,7 +15,7 @@ public class FullRandomAlgorithm extends Algorithm {
 	}
 
 	@Override
-	public List<GeneratedObject> generate(GenerationInfo info) {
+	public List<GeneratedObject> generationMethod(GenerationInfo info) {
 		List<GeneratedObject> list = new ArrayList<GeneratedObject>();
 		ObjectInfo objInfo = info.getObjects().get(0);
 		for (int i = 0; i < info.getCount(); i++) {

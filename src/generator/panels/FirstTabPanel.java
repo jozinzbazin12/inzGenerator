@@ -99,23 +99,23 @@ public class FirstTabPanel extends JPanel {
 		legendPanel.add(maxLabel);
 
 		options.add(legendPanel);
-		options.add(createSpinners(-10000, 10000, Consts.MIN_X, Consts.MAX_X, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X)));
-		options.add(createSpinners(-10000, 10000, Consts.MIN_Y, Consts.MAX_Y, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y)));
-		options.add(createSpinners(-10000, 10000, Consts.MIN_Z, Consts.MAX_Z, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z)));
+		options.add(createSpinner(-10000, 10000, Consts.MIN_X, Consts.MAX_X, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X)));
+		options.add(createSpinner(-10000, 10000, Consts.MIN_Y, Consts.MAX_Y, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y)));
+		options.add(createSpinner(-10000, 10000, Consts.MIN_Z, Consts.MAX_Z, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z)));
 
-		options.add(createSpinners(-180, 180, Consts.MIN_RX, Consts.MAX_RX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X)));
-		options.add(createSpinners(-180, 180, Consts.MIN_RY, Consts.MAX_RY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y)));
-		options.add(createSpinners(-180, 180, Consts.MIN_RZ, Consts.MAX_RZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z)));
+		options.add(createSpinner(-180, 180, Consts.MIN_RX, Consts.MAX_RX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X)));
+		options.add(createSpinner(-180, 180, Consts.MIN_RY, Consts.MAX_RY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y)));
+		options.add(createSpinner(-180, 180, Consts.MIN_RZ, Consts.MAX_RZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z)));
 
-		options.add(createSpinners(-1000, 1000, Consts.MIN_SX, Consts.MAX_SX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X)));
-		options.add(createSpinners(-1000, 1000, Consts.MIN_SY, Consts.MAX_SY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y)));
-		options.add(createSpinners(-1000, 1000, Consts.MIN_SZ, Consts.MAX_SZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z)));
+		options.add(createSpinner(-1000, 1000, Consts.MIN_SX, Consts.MAX_SX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X)));
+		options.add(createSpinner(-1000, 1000, Consts.MIN_SY, Consts.MAX_SY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y)));
+		options.add(createSpinner(-1000, 1000, Consts.MIN_SZ, Consts.MAX_SZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z)));
 		
 
 		add(options);
 	}
 
-	private JPanel createSpinners(double min, double max, String key1, String key2, String description) {
+	private JPanel createSpinner(double min, double max, String key1, String key2, String description) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 3));
 		JLabel attributelabel = new JLabel(description);
