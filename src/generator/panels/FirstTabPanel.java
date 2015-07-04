@@ -48,7 +48,7 @@ public class FirstTabPanel extends JPanel {
 		return mapLabel.getText();
 	}
 
-	public void setMapName(String name) {
+	public void setMapFileName(String name) {
 		mapLabel.setText(name);
 	}
 	

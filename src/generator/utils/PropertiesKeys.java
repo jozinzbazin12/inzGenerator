@@ -37,4 +37,5 @@ public final class PropertiesKeys {
 	public static final String CHANGE_LANGUAGE_WARNING = "changeLanguageWarning";
 	public static final String SAVE_XML_ERROR = "saveXmlError";
 	public static final String SAVE_XML_SUCCESS = "saveXmlSuccess";
+	public static final String LOAD_XML_ERROR = "loadXmlError";
 }

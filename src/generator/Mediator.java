@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 public class Mediator {
 	private static final String PROPERTIES_FILE = "config.properties";
@@ -75,13 +76,10 @@ public class Mediator {
 				mainWindow.dispose();
 				main(null);
 			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+			}
 	}
 
 	public static void register(MainWindow mw) {
@@ -93,8 +91,17 @@ public class Mediator {
 
 	}
 
-	public static void setLoadMapName(String name) {
-		firstTabPanel.setMapName(name);
+	public static void setMapFileName(String imgName) {
+		try {
+			resultObject.getMapObject().setMapFileName(secondTabPanel.addPreview(imgName).getAbsolutePath());
+			firstTabPanel.setMapFileName(imgName);
+			mainWindow.getContentPane().revalidate();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.FILE_NOT_IMAGE),
+					messages.getString(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
+		}
+		firstTabPanel.setMapHeight(String.valueOf(secondTabPanel.getImageSize().height) + " px");
+		firstTabPanel.setMapWidth(String.valueOf(secondTabPanel.getImageSize().width) + " px");
 	}
 
 	public static void saveXMLFile(String name) {
@@ -118,20 +125,22 @@ public class Mediator {
 	}
 
 	public static void loadXMLFile(String name) {
-		bottomPanel.setXmlName(name);
-
-	}
-
-	public static void setPreview(String imgName) {
+		File file = new File(name);
+		JAXBContext context;
 		try {
-			resultObject.getMapObject().setMapFileName(secondTabPanel.addPreview(imgName).getAbsolutePath());
-			mainWindow.getContentPane().revalidate();
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.FILE_NOT_IMAGE),
-					messages.getString(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
+			context = JAXBContext.newInstance("generator.models.result");
+			Unmarshaller um = context.createUnmarshaller();
+			resultObject = (ResultObject) um.unmarshal(file);
+			bottomPanel.setXmlName(name);
+		} catch (JAXBException e) {
+			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.LOAD_XML_ERROR), messages.getString(PropertiesKeys.LOAD_XML_ERROR),
+					JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+			return;
 		}
-		firstTabPanel.setMapHeight(String.valueOf(secondTabPanel.getImageSize().height) + " px");
-		firstTabPanel.setMapWidth(String.valueOf(secondTabPanel.getImageSize().width) + " px");
+
+		setMapFileName(resultObject.getMapObject().getMapFileName());
+
 	}
 
 	public static void registerSecondTabPanel(SecondTabPanel secp) {

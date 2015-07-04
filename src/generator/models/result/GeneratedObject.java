@@ -29,4 +29,6 @@ public class GeneratedObject {
 		return objectFile;
 	}
 
+	public GeneratedObject() {
+	}
 }
