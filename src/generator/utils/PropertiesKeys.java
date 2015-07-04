@@ -35,4 +35,6 @@ public final class PropertiesKeys {
 	public static final String REGULAR_ALGORITHM = "regularAlgorithm";
 	public static final String LANGUAGE = "language";
 	public static final String CHANGE_LANGUAGE_WARNING = "changeLanguageWarning";
+	public static final String SAVE_XML_ERROR = "saveXmlError";
+	public static final String SAVE_XML_SUCCESS = "saveXmlSuccess";
 }

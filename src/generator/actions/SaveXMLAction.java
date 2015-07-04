@@ -24,7 +24,9 @@ public class SaveXMLAction extends AbstractAction {
 		if (rVal == JFileChooser.CANCEL_OPTION) {
 			fileName = null;
 		}
-		if(fileName!=null) Mediator.setSaveXMLName(fileName);
+		if(fileName!=null) {
+			Mediator.saveXMLFile(fileName);
+		}
 	}
 
 	public SaveXMLAction(String name) {

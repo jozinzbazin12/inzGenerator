@@ -6,7 +6,6 @@ import generator.models.generation.ObjectInfo;
 import generator.models.generation.PositionSettings;
 import generator.models.generation.RotationSettings;
 import generator.models.generation.ScaleSettings;
-import generator.models.result.ResultObject;
 import generator.utils.Consts;
 
 import java.awt.event.ActionEvent;
@@ -37,7 +36,7 @@ public class GenerateObjectsAction extends AbstractAction {
 		ObjectInfo obj = new ObjectInfo(0, pos, rotation, scale);
 		objects.add(obj);
 		info.setObjects(objects);
-		Mediator.setResultObject(new ResultObject(Mediator.getAlgorithm().generate(info)));
+		Mediator.getResultObject().setGeneratedObjects(Mediator.getAlgorithm().generate(info));;
 		Mediator.printOnPreview();
 	}
 

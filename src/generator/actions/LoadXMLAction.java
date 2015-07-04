@@ -17,7 +17,6 @@ public class LoadXMLAction extends AbstractAction {
 	public void actionPerformed(ActionEvent arg0) {
 		JFileChooser c = new XMLChooser();
 		String fileName=null;
-		// Demonstrate "Open" dialog:
 		int rVal = c.showOpenDialog(new JFrame());
 		if (rVal == JFileChooser.APPROVE_OPTION) {
 			fileName = (c.getSelectedFile().getAbsolutePath());
@@ -25,7 +24,7 @@ public class LoadXMLAction extends AbstractAction {
 		if (rVal == JFileChooser.CANCEL_OPTION) {
 			fileName = null;
 		}
-		if(fileName!=null) Mediator.setLoadXMLFile(fileName);
+		if(fileName!=null) Mediator.loadXMLFile(fileName);
 	}
 
 	public LoadXMLAction(String name) {
