@@ -17,10 +17,10 @@ public final class PropertiesKeys {
 	public static final String GIF_FILES = "gifFiles";
 	public static final String BMP_FILES = "bmpFiles";
 	public static final String LOAD_MAP_BUTTON = "loadMapButton";
-	public static final String LOAD_XML_BUTTON = "loadXmlButton";
-	public static final String SAVE_XML_BUTTON = "saveXmlButton";
+	public static final String LOAD_XML_OPTION = "loadXmlOption";
+	public static final String SAVE_XML_OPTION = "saveXmlOption";
 	public static final String XML_FILES = "xmlFiles";
-	public static final String GENERATE_BUTTON = "generateButton";
+	public static final String GENERATE_OPTION = "generateOption";
 	public static final String ALGORITHM_OPTIONS = "algorithmOptions";
 	public static final String MIN = "min";
 	public static final String MAX = "max";
@@ -47,4 +47,8 @@ public final class PropertiesKeys {
 	public static final String SCALES = "scales";
 	public static final String COLOR = "color";
 	public static final String NEW_OBJECT = "newObject";
+	public static final String EXIT = "exit";
+	public static final String FILE_MENU = "fileMenu";
+	public static final String OPTIONS_MENU = "optionsMenu";
+	public static final String LANGUAGE_MENU = "languageMenu";
 }

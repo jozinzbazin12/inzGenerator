@@ -42,7 +42,7 @@ public class SecondTabPanel extends JPanel {
 			}
 		}
 		objectsPanel.revalidate();
-		objectsPanel.repaint();
+		previewPanel.repaint();
 	}
 
 	public File addPreview(String imgName) throws IOException {
@@ -60,6 +60,7 @@ public class SecondTabPanel extends JPanel {
 
 	public void printOnPreview(List<GeneratedObject> list) {
 		previewPanel.setResultObject(list);
+		previewPanel.repaint();
 	}
 
 	public SecondTabPanel() {

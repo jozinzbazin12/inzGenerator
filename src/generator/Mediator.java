@@ -4,7 +4,6 @@ import generator.algorithms.Algorithm;
 import generator.models.generation.ObjectListRow;
 import generator.models.result.GeneratedObject;
 import generator.models.result.ResultObject;
-import generator.panels.BottomPanel;
 import generator.panels.FirstTabPanel;
 import generator.panels.SecondTabPanel;
 import generator.utils.PropertiesKeys;
@@ -33,7 +32,6 @@ public class Mediator {
 	private static final String PROPERTIES_FILE = "config.properties";
 	private static final String LANGUAGE_KEY = "language";
 	private static MainWindow mainWindow;
-	private static BottomPanel bottomPanel;
 	private static SecondTabPanel secondTabPanel;
 	private static ResourceBundle messages;
 	private static FirstTabPanel firstTabPanel;
@@ -88,11 +86,6 @@ public class Mediator {
 		mainWindow = mw;
 	}
 
-	public static void registerBottomPanel(BottomPanel bp) {
-		bottomPanel = bp;
-
-	}
-
 	public static void setMapFileName(String imgName) {
 		try {
 			resultObject.getMapObject().setMapFileName(secondTabPanel.addPreview(imgName).getAbsolutePath());
@@ -107,7 +100,6 @@ public class Mediator {
 	}
 
 	public static void saveXMLFile(String name) {
-		bottomPanel.setXmlToSaveName(name);
 		JAXBContext context;
 		try {
 			context = JAXBContext.newInstance("generator.models.result");
@@ -133,7 +125,6 @@ public class Mediator {
 			context = JAXBContext.newInstance("generator.models.result");
 			Unmarshaller um = context.createUnmarshaller();
 			resultObject = (ResultObject) um.unmarshal(file);
-			bottomPanel.setXmlName(name);
 		} catch (JAXBException e) {
 			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.LOAD_XML_ERROR), messages.getString(PropertiesKeys.LOAD_XML_ERROR),
 					JOptionPane.ERROR_MESSAGE);

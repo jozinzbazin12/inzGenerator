@@ -1,7 +1,11 @@
 package generator.windows;
 
 import generator.Mediator;
-import generator.panels.BottomPanel;
+import generator.actions.GenerateObjectsAction;
+import generator.actions.LoadXMLAction;
+import generator.actions.SaveXMLAction;
+import generator.listeners.ChangeLanguageListener;
+import generator.models.LangugeOption;
 import generator.panels.FirstTabPanel;
 import generator.panels.SecondTabPanel;
 import generator.utils.PropertiesKeys;
@@ -9,73 +13,130 @@ import generator.utils.PropertiesKeys;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Locale;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
-public class MainWindow extends JFrame implements ComponentListener {
+public class MainWindow extends JFrame {
 	private static final String WINDOWS_LOOK = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
 	private static final long serialVersionUID = 2924752215725936696L;
 	private JTabbedPane tab;
-	private BottomPanel bottomPanel;
+	private JMenuBar menuBar;
+
 	public void createWindow() {
-		FirstTabPanel first=new FirstTabPanel();
+		createMenu();
+		FirstTabPanel first = new FirstTabPanel();
 		SecondTabPanel secondTab = new SecondTabPanel();
-		bottomPanel = new BottomPanel();
-		preparePanels(first,secondTab);
-		add(bottomPanel, BorderLayout.WEST);
+		preparePanels(first, secondTab);
 		revalidate();
 	}
 
+	private void createMenu() {
+		menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		JMenu menu = new JMenu(Mediator.getMessage(PropertiesKeys.FILE_MENU));
+
+		JMenuItem openXmlOption = new JMenuItem(new LoadXMLAction(Mediator.getMessage(PropertiesKeys.LOAD_XML_OPTION)));
+		openXmlOption.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+		menu.add(openXmlOption);
+
+		JMenuItem saveXmlOption = new JMenuItem(new SaveXMLAction(Mediator.getMessage(PropertiesKeys.SAVE_XML_OPTION)));
+		saveXmlOption.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		menu.add(saveXmlOption);
+
+		menu.add(new JSeparator());
+
+		JMenuItem exitAction = new JMenuItem(new AbstractAction(Mediator.getMessage(PropertiesKeys.EXIT)) {
+
+			private static final long serialVersionUID = -5730350713517630878L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+
+		menu.add(exitAction);
+
+		JMenu optionsMenu = new JMenu(Mediator.getMessage(PropertiesKeys.OPTIONS_MENU));
+
+		JMenu languageMenu = new JMenu(Mediator.getMessage(PropertiesKeys.LANGUAGE_MENU));
+		ButtonGroup group = new ButtonGroup();
+		languageMenu.add(createLanguage(group, new Locale("PL"), "Polski"));
+		languageMenu.add(createLanguage(group, Locale.ENGLISH, "English"));
+		optionsMenu.add(languageMenu);
+
+		JMenuItem generateOption = new JMenuItem(new GenerateObjectsAction(Mediator.getMessage(PropertiesKeys.GENERATE_OPTION)));
+		generateOption.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
+		optionsMenu.add(generateOption);
+
+		menuBar.add(menu);
+		menuBar.add(optionsMenu);
+	}
+
+	private JRadioButtonMenuItem createLanguage(ButtonGroup group, Locale locale, String name) {
+		LangugeOption languageOption = new LangugeOption(name, locale);
+		group.add(languageOption);
+		languageOption.addActionListener(new ChangeLanguageListener());
+		if (languageOption.getLocale().equals(Mediator.getLocale()))
+			languageOption.setSelected(true);
+		return languageOption;
+	}
 
 	private void preparePanels(JPanel first, JPanel second) {
 		tab = new JTabbedPane();
 		tab.addTab(Mediator.getMessage(PropertiesKeys.FIRST_TAB_NAME), first);
 		tab.addTab(Mediator.getMessage(PropertiesKeys.SECOND_TAB_NAME), second);
-		tab.setPreferredSize(new Dimension(getWidth(), (int) (getHeight()*0.85)));
-		tab.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK),new Action() {
-			
+		tab.setPreferredSize(new Dimension(getWidth(), (int) (getHeight() * 0.9)));
+		tab.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK), new Action() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tab.setSelectedIndex((tab.getSelectedIndex()+1)%tab.getTabCount());	
+				tab.setSelectedIndex((tab.getSelectedIndex() + 1) % tab.getTabCount());
 			}
-			
+
 			@Override
-			public void setEnabled(boolean b) {	
+			public void setEnabled(boolean b) {
 			}
-			
+
 			@Override
 			public void removePropertyChangeListener(PropertyChangeListener listener) {
 			}
-			
+
 			@Override
 			public void putValue(String key, Object value) {
 			}
-			
+
 			@Override
 			public boolean isEnabled() {
 				return false;
 			}
-			
+
 			@Override
 			public Object getValue(String key) {
 				return null;
 			}
-			
+
 			@Override
 			public void addPropertyChangeListener(PropertyChangeListener listener) {
 			}
 		});
-		add(tab,BorderLayout.NORTH);	
+		add(tab, BorderLayout.NORTH);
 	}
 
 	public MainWindow(String name) {
@@ -88,29 +149,6 @@ public class MainWindow extends JFrame implements ComponentListener {
 		setVisible(true);
 		setSize(1200, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new BorderLayout());
-		addComponentListener(this);
 	}
 
-
-	@Override
-	public void componentHidden(ComponentEvent e) {	
-	}
-
-
-	@Override
-	public void componentMoved(ComponentEvent e) {	
-	}
-
-
-	@Override
-	public void componentResized(ComponentEvent e) {
-		if(tab!=null) tab.setPreferredSize(new Dimension(getWidth(), (int) (getHeight()*0.85)));	
-		getContentPane().revalidate();
-	}
-
-
-	@Override
-	public void componentShown(ComponentEvent e) {
-	}
 }
