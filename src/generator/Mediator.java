@@ -1,6 +1,7 @@
 package generator;
 
 import generator.algorithms.Algorithm;
+import generator.models.generation.ObjectListRow;
 import generator.models.result.GeneratedObject;
 import generator.models.result.ResultObject;
 import generator.panels.BottomPanel;
@@ -190,9 +191,9 @@ public class Mediator {
 		
 	}
 
-	public static void deleteObject(int index) {
-		resultObject.getGeneratedObjects().remove(index);
-		secondTabPanel.deleteObject(index+1);
+	public static void deleteObject(ObjectListRow objectListRow) {
+		resultObject.getGeneratedObjects().remove(objectListRow.getIndex());
+		secondTabPanel.deleteObject(objectListRow);
 		printOnPreview();
 	}
 

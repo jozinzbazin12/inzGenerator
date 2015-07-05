@@ -45,4 +45,6 @@ public final class PropertiesKeys {
 	public static final String COORDINATES = "coordinates";
 	public static final String ROTATIONS = "rotations";
 	public static final String SCALES = "scales";
+	public static final String COLOR = "color";
+	public static final String NEW_OBJECT = "newObject";
 }

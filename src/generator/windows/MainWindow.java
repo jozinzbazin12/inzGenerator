@@ -8,12 +8,18 @@ import generator.utils.PropertiesKeys;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
 
+import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 public class MainWindow extends JFrame implements ComponentListener {
@@ -36,6 +42,39 @@ public class MainWindow extends JFrame implements ComponentListener {
 		tab.addTab(Mediator.getMessage(PropertiesKeys.FIRST_TAB_NAME), first);
 		tab.addTab(Mediator.getMessage(PropertiesKeys.SECOND_TAB_NAME), second);
 		tab.setPreferredSize(new Dimension(getWidth(), (int) (getHeight()*0.85)));
+		tab.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK),new Action() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tab.setSelectedIndex((tab.getSelectedIndex()+1)%tab.getTabCount());	
+			}
+			
+			@Override
+			public void setEnabled(boolean b) {	
+			}
+			
+			@Override
+			public void removePropertyChangeListener(PropertyChangeListener listener) {
+			}
+			
+			@Override
+			public void putValue(String key, Object value) {
+			}
+			
+			@Override
+			public boolean isEnabled() {
+				return false;
+			}
+			
+			@Override
+			public Object getValue(String key) {
+				return null;
+			}
+			
+			@Override
+			public void addPropertyChangeListener(PropertyChangeListener listener) {
+			}
+		});
 		add(tab,BorderLayout.NORTH);	
 	}
 

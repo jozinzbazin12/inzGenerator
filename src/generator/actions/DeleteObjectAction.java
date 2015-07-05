@@ -3,11 +3,12 @@ package generator.actions;
 import generator.Mediator;
 import generator.models.generation.ObjectListRow;
 
-import java.awt.Container;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 public class DeleteObjectAction extends AbstractAction {
 
@@ -15,14 +16,16 @@ public class DeleteObjectAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(!(e.getSource() instanceof JButton)) return;
-		
-		Container parent = ((JButton)e.getSource()).getParent();
-		Mediator.deleteObject(((ObjectListRow)parent).getIndex());
-		
+		if (e.getSource() instanceof JMenuItem) {
+			Component parent = ((JPopupMenu) ((JMenuItem) e.getSource()).getParent()).getInvoker();
+			Mediator.deleteObject(((ObjectListRow) parent));
+		} else if (e.getSource() instanceof ObjectListRow && ObjectListRow.getClicked() != null) {
+			Mediator.deleteObject(ObjectListRow.getClicked());
+		}
+
 	}
 
-	public DeleteObjectAction(String name){
+	public DeleteObjectAction(String name) {
 		super(name);
 	}
 }

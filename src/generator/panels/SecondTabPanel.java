@@ -6,9 +6,7 @@ import generator.models.result.GeneratedObject;
 import generator.utils.PropertiesKeys;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,10 +17,8 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 
 public class SecondTabPanel extends JPanel {
 
@@ -35,17 +31,18 @@ public class SecondTabPanel extends JPanel {
 
 	private JPanel view;
 
-	public void deleteObject(int index) {
-		view.remove(index);
-		view.revalidate();
+	public void deleteObject(ObjectListRow objectListRow) {
+		view.remove(objectListRow.getIndex()+1);
+		ObjectListRow.setClicked(null);
 		int count = 0;
 		for (Object i : view.getComponents()) {
 			if (i instanceof ObjectListRow) {
 				((ObjectListRow) i).setIndex(count++);
 				((JComponent) i).revalidate();
 			}
-
 		}
+		objectsPanel.revalidate();
+		objectsPanel.repaint();
 	}
 
 	public File addPreview(String imgName) throws IOException {
@@ -70,6 +67,7 @@ public class SecondTabPanel extends JPanel {
 		objectsPanel = new JPanel();
 		objectsPanel.setLayout(new GridLayout(0, 1));
 		objectsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.GENERATED_OBJECTS)));
+		objectsPanel.add(createObjectListPanel());
 		add(objectsPanel);
 		previewPanel = new PreviewPanel();
 		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
@@ -81,41 +79,22 @@ public class SecondTabPanel extends JPanel {
 	public JScrollPane createObjectListPanel() {
 		JPanel view = new JPanel();
 		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
-		view.add(createTitle());
+		view.add(ObjectListRow.createTitle());
 
 		JScrollPane listScroller = new JScrollPane(view);
 		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		return listScroller;
 	}
 
-	private Component createTitle() {
-		JPanel title = new JPanel();
-		title.setMaximumSize(new Dimension(2000,20));
-		title.setLayout(new GridLayout(0, 6));
-		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.OBJECT_NAME)));
-		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.COORDINATES)));
-		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.SCALES)));
-		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.ROTATIONS)));
-		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT)));
-		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT)));
-		for (Object i : title.getComponents()) {
-			if (i instanceof JLabel) {
-				((JComponent) i).setFont(new Font(((Component) i).getFont().getName(), Font.BOLD, 15));
-				((JComponent) i).setBorder(new EmptyBorder(0, 10, 0, 10));
-			}
-		}
-		title.setBackground(new Color(128, 128, 255));
-		return title;
-	}
-
+	
 	public void updateObjectListPanel(List<GeneratedObject> objects) {
 		objectsPanel.removeAll();
 		view = new JPanel();
 		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
-		view.add(createTitle());
+		view.add(ObjectListRow.createTitle());
 		int count = 0;
 		for (GeneratedObject i : objects) {
-			view.add(new ObjectListRow(i, count++));
+			view.add(new ObjectListRow(i, Color.blue,count++));
 		}
 		JScrollPane listScroller = new JScrollPane(view);
 		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
