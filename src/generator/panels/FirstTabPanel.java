@@ -119,8 +119,6 @@ public class FirstTabPanel extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 3));
 		JLabel attributelabel = new JLabel(description);
-		// JLabel attributelabel = new
-		// JLabel(MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE),cord));
 		panel.add(attributelabel);
 		JSpinner minSpinner = new JSpinner(new SpinnerNumberModel(0.0, min, max, 1));
 		panel.add(attributelabel);

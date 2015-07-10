@@ -1,5 +1,9 @@
 package generator.actions;
 
+import generator.Mediator;
+import generator.utils.PropertiesKeys;
+import generator.windows.ObjectWindow;
+
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -10,6 +14,7 @@ public class NewObjectAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		new ObjectWindow(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
 	}
 
 	public NewObjectAction(String name){

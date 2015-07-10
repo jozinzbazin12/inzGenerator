@@ -5,6 +5,14 @@ public class Consts {
 	public static final String X="X";
 	public static final String Y="Y";
 	public static final String Z="Z";
+	public static final String RX = "Rx";
+	public static final String RY = "Ry";
+	public static final String RZ = "Rz";
+	public static final String SX = "Sx";
+	public static final String SY = "Sy";
+	public static final String SZ = "Sz";
+	
+	
 	
 	public static final String MIN_X="minX";
 	public static final String MIN_Y="minY";
@@ -26,4 +34,6 @@ public class Consts {
 	public static final String MAX_SX="maxSX";
 	public static final String MAX_SY="maxSY";
 	public static final String MAX_SZ="maxSZ";
+			
+			
 }

@@ -1,5 +1,6 @@
 package generator.models.result;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,7 +14,7 @@ public class ResultObject {
 	@XmlElement(name = "Map", required = true)
 	private MapObject mapObject = new MapObject();
 	@XmlElement(name = "Object", required = true)
-	private List<GeneratedObject> generatedObjects;
+	private List<GeneratedObject> generatedObjects=new ArrayList<GeneratedObject>();
 
 	public ResultObject(List<GeneratedObject> generatedObjects) {
 		this.generatedObjects = generatedObjects;

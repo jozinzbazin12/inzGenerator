@@ -8,7 +8,9 @@ import generator.panels.FirstTabPanel;
 import generator.panels.SecondTabPanel;
 import generator.utils.PropertiesKeys;
 import generator.windows.MainWindow;
+import generator.windows.ObjectWindow;
 
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,11 +20,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -38,6 +45,7 @@ public class Mediator {
 	private static ResultObject resultObject = new ResultObject();
 	private static Properties properties;
 	private static Locale locale;
+	private static ObjectWindow objectWindow;
 
 	public static void main(String[] args) throws IOException {
 		properties = new Properties();
@@ -79,7 +87,7 @@ public class Mediator {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			}
+		}
 	}
 
 	public static void register(MainWindow mw) {
@@ -169,8 +177,12 @@ public class Mediator {
 		secondTabPanel.revalidate();
 	}
 
-	public static double getArgument(String key) {
+	public static double getGenerationInfoArguments(String key) {
 		return (double) firstTabPanel.getArguments().get(key).getValue();
+	}
+
+	public static double getGeneratetObjectArguments(String key) {
+		return (double) objectWindow.getArguments().get(key).getValue();
 	}
 
 	public static Locale getLocale() {
@@ -179,7 +191,10 @@ public class Mediator {
 
 	public static void updateObjectList(List<GeneratedObject> objects) {
 		secondTabPanel.updateObjectListPanel(objects);
-		
+	}
+	
+	public static void updateObjectList() {
+		secondTabPanel.updateObjectListPanel(resultObject.getGeneratedObjects());
 	}
 
 	public static void deleteObject(ObjectListRow objectListRow) {
@@ -188,4 +203,16 @@ public class Mediator {
 		printOnPreview();
 	}
 
+
+	public static void registerObjectWindow(ObjectWindow window) {
+		objectWindow = window;
+	}
+
+	public static void unregisterObjectWindow() {
+		objectWindow = null;
+	}
+
+	public static GeneratedObject getGeneratedObject() {
+		return secondTabPanel.getGeneratedObject();
+	}
 }

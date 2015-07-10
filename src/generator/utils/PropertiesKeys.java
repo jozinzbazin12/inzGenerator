@@ -51,4 +51,7 @@ public final class PropertiesKeys {
 	public static final String FILE_MENU = "fileMenu";
 	public static final String OPTIONS_MENU = "optionsMenu";
 	public static final String LANGUAGE_MENU = "languageMenu";
+	public static final String CANCEL = "cancel";
+	public static final String OK = "ok";
+	public static final String EDIT_OBJECT = "editObject";
 }
