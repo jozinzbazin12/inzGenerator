@@ -41,7 +41,7 @@ public class RegularAlgorithm extends Algorithm {
 			obj.setScale(randomizeDouble(objInfo.getScaleSettings().getMinX(), objInfo.getScaleSettings().getMaxX()),
 					randomizeDouble(objInfo.getScaleSettings().getMinY(), objInfo.getScaleSettings().getMaxY()),
 					randomizeDouble(objInfo.getScaleSettings().getMinZ(), objInfo.getScaleSettings().getMaxZ()));
-			list.add(new GeneratedObject("test", obj));
+			list.add(new GeneratedObject(info.getObjects().get(0).getModel(), obj));
 			i--;
 			x +=dx;
 			

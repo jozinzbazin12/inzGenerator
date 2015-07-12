@@ -6,7 +6,6 @@ import generator.models.generation.ObjectListRow;
 import generator.models.result.GeneratedObject;
 import generator.utils.PropertiesKeys;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.InputEvent;
@@ -42,31 +41,30 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	private JPanel view;
 	private List<ObjectListRow> rows;
 
-	
-	public void refreshObjects(){
-		for(ObjectListRow i:rows){
+	public void refreshObjects() {
+		for (ObjectListRow i : rows) {
 			i.refresh();
 		}
 		objectsPanel.revalidate();
 	}
+
 	public GeneratedObject getGeneratedObject() {
 		return ObjectListRow.getClicked().getObject();
 	}
 
 	public void highlight(GeneratedObject obj) {
-		for(ObjectListRow i:rows){
-			if(i.getObject()==obj){
+		for (ObjectListRow i : rows) {
+			if (i.getObject() == obj) {
 				i.highlight();
-				objectsPanel.repaint();
 				i.repaint();
 				break;
 			}
 		}
 	}
-	
+
 	public void setClicked(GeneratedObject obj) {
-		for(ObjectListRow i:rows){
-			if(i.getObject()==obj){
+		for (ObjectListRow i : rows) {
+			if (i.getObject() == obj) {
 				ObjectListRow.setClicked(i);
 				objectsPanel.revalidate();
 				i.revalidate();
@@ -74,7 +72,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 			}
 		}
 	}
-	
+
 	public void deleteObject(ObjectListRow objectListRow) {
 		view.remove(objectListRow.getIndex() + 1);
 		ObjectListRow.setClicked(null);
@@ -148,7 +146,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 		rows = new ArrayList<ObjectListRow>();
 		Collections.sort(objects);
 		for (GeneratedObject i : objects) {
-			ObjectListRow objectListRow = new ObjectListRow(i, Color.blue, count++);
+			ObjectListRow objectListRow = new ObjectListRow(i, count++);
 			rows.add(objectListRow);
 			view.add(objectListRow);
 		}
@@ -193,7 +191,9 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 		ObjectListRow.unHighlight();
 	}
 
+	public void refreshPreview() {
+		previewPanel.repaint();
 
+	}
 
-	
 }

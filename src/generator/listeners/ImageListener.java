@@ -42,8 +42,8 @@ public class ImageListener extends MouseAdapter {
 			((JComponent) e.getSource()).repaint();
 		}
 		if (currentObject != null && SwingUtilities.isLeftMouseButton(e)) {
-			currentObject.getBasic().setX((e.getX()-panel.getCurrentPoint().x)/(1+panel.getZoom()));
-			currentObject.getBasic().setZ((e.getY()-panel.getCurrentPoint().y)/(1+panel.getZoom()));
+			currentObject.getBasic().setX((e.getX() - panel.getCurrentPoint().x) / (1 + panel.getZoom()) - Mediator.getMapDimensions().width / 2);
+			currentObject.getBasic().setZ(((e.getY() - panel.getCurrentPoint().y) / (1 + panel.getZoom()) - Mediator.getMapDimensions().height / 2) * -1);
 			Mediator.setClicked(currentObject);
 			panel.repaint();
 			Mediator.refreshObjects();
@@ -64,11 +64,13 @@ public class ImageListener extends MouseAdapter {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if (currentObject == null) {
+		if (panel.getGeneratedObjects() != null) {
 			for (GeneratedObject i : panel.getGeneratedObjects()) {
-				double x = i.getBasic().getX() + i.getBasic().getX() * panel.getZoom() + panel.getCurrentPoint().x;
-				double z = i.getBasic().getZ() + i.getBasic().getZ() * panel.getZoom() + panel.getCurrentPoint().y;
-				if (absolute(e.getX(), x) <= 4 && absolute(e.getY(), z) <= 4) {
+				double x = (i.getBasic().getX() + Mediator.getMapDimensions().width / 2) * (1 + panel.getZoom()) + panel.getCurrentPoint().x;
+				double z = ((Mediator.getMapDimensions().height / 2 - i.getBasic().getZ()) * (1 + panel.getZoom()) + panel.getCurrentPoint().y);
+				if (absolute(e.getX(), x) <= 5 && absolute(e.getY(), z) <= 5) {
+					if (currentObject == i)
+						return;
 					Mediator.highlight(i);
 					currentObject = i;
 					return;

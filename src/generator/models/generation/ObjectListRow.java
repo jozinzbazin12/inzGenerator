@@ -62,7 +62,7 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 		return title;
 	}
 
-	public ObjectListRow(GeneratedObject obj, Color pointColor, int index) {
+	public ObjectListRow(GeneratedObject obj, int index) {
 		this.index = index;
 		this.object = obj;
 		setMaximumSize(new Dimension(2000, 20));
@@ -82,7 +82,7 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 				g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
 			}
 		};
-		color.setBackground(pointColor);
+		color.setBackground(obj.getModel().getColor());
 
 		name.setBorder(new EmptyBorder(0, 10, 0, 10));
 		position.setBorder(new EmptyBorder(0, 10, 0, 10));
@@ -157,6 +157,8 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 			unHighlight();
 		highlighted = this;
 		setBackground(new Color(backgroundColor.getRed() - 20, backgroundColor.getGreen() - 20, backgroundColor.getBlue() - 20));
+		getObject().swapColors();
+		Mediator.refreshPreview();
 		repaint();
 	}
 
@@ -165,6 +167,8 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 			highlighted.setBackground(new Color(highlighted.getBackgroundColor().getRed(), highlighted.getBackgroundColor().getGreen(), highlighted
 					.getBackgroundColor().getBlue()));
 			highlighted.repaint();
+			highlighted.getObject().swapColors();
+			Mediator.refreshPreview();
 			highlighted = null;
 		}
 	}

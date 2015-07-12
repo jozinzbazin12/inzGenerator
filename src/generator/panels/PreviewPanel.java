@@ -40,8 +40,8 @@ public class PreviewPanel extends JPanel {
 			g.drawLine(currentPoint.x - 1000, height / 2 + currentPoint.y, width + currentPoint.x + 1000, height / 2 + currentPoint.y);
 			if (generatedObjects != null) {
 				for (GeneratedObject i : generatedObjects) {
-					g.fillRect((int) (i.getBasic().getX() + i.getBasic().getX() * zoom + currentPoint.x), (int) (i.getBasic().getZ() + i.getBasic().getZ()
-							* zoom + currentPoint.y), 4, 4);
+					g.setColor(i.getColor());
+					g.fillRect((int) ((i.getBasic().getX()+image.getWidth()/2) * (1 + zoom) + currentPoint.x), (int) ((image.getHeight()/2-i.getBasic().getZ()) * (1 + zoom) + currentPoint.y), 4, 4);
 				}
 			}
 		}

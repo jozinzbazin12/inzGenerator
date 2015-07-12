@@ -1,6 +1,7 @@
 package generator;
 
 import generator.algorithms.Algorithm;
+import generator.models.generation.GenerationModel;
 import generator.models.generation.ObjectListRow;
 import generator.models.result.GeneratedObject;
 import generator.models.result.ResultObject;
@@ -10,7 +11,7 @@ import generator.utils.PropertiesKeys;
 import generator.windows.MainWindow;
 import generator.windows.ObjectWindow;
 
-import java.awt.GridLayout;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -25,11 +27,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -46,6 +44,7 @@ public class Mediator {
 	private static Properties properties;
 	private static Locale locale;
 	private static ObjectWindow objectWindow;
+	private static Map<String, GenerationModel> models=new HashMap<>();
 
 	public static void main(String[] args) throws IOException {
 		properties = new Properties();
@@ -139,7 +138,16 @@ public class Mediator {
 			e.printStackTrace();
 			return;
 		}
-
+		for(GeneratedObject i:resultObject.getGeneratedObjects()){
+			if(models.get(i.getObjectFile())==null){
+				GenerationModel model = new GenerationModel("dupa", i.getObjectFile());
+				models.put(i.getObjectFile(), model);
+				i.setModel(model);
+			}
+			else{
+				i.setModel(models.get(i.getObjectFile()));
+			}
+		}
 		setMapFileName(resultObject.getMapObject().getMapFileName());
 		updateObjectList(resultObject.getGeneratedObjects());
 		printOnPreview();
@@ -231,5 +239,12 @@ public class Mediator {
 
 	public static void refreshObjects() {
 		secondTabPanel.refreshObjects();
+	}
+	
+	public static void refreshPreview(){
+		secondTabPanel.refreshPreview();
+	}
+	public static Dimension getMapDimensions(){
+		return secondTabPanel.getImageSize();
 	}
 }

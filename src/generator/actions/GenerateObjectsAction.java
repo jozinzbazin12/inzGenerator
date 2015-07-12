@@ -2,6 +2,7 @@ package generator.actions;
 
 import generator.Mediator;
 import generator.models.generation.GenerationInfo;
+import generator.models.generation.GenerationModel;
 import generator.models.generation.ObjectInfo;
 import generator.models.generation.PositionSettings;
 import generator.models.generation.RotationSettings;
@@ -33,7 +34,7 @@ public class GenerateObjectsAction extends AbstractAction {
 				Mediator.getGenerationInfoArguments(Consts.MIN_RY), Mediator.getGenerationInfoArguments(Consts.MAX_RY), Mediator.getGenerationInfoArguments(Consts.MIN_RZ),
 				Mediator.getGenerationInfoArguments(Consts.MAX_RZ));
 
-		ObjectInfo obj = new ObjectInfo(0, pos, rotation, scale);
+		ObjectInfo obj = new ObjectInfo(0, pos, rotation, scale, new GenerationModel("dupa", "dup/dupa/dupa"));
 		objects.add(obj);
 		info.setObjects(objects);
 		Mediator.getResultObject().setGeneratedObjects(Mediator.getAlgorithm().generate(info));;
