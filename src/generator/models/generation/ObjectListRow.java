@@ -32,10 +32,16 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 
 	private static final long serialVersionUID = 5353030562828445813L;
 	private static ObjectListRow clicked = null;
+	private static ObjectListRow highlighted = null;
 	private int index;
 	private Color backgroundColor;
 	private GeneratedObject object;
 	private static JPopupMenu menu;
+	private JLabel name;
+	private JLabel position;
+	private JLabel scale;
+	private JLabel rotation;
+	private JPanel color;
 
 	public static Component createTitle() {
 		JPanel title = new JPanel();
@@ -62,11 +68,11 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 		setMaximumSize(new Dimension(2000, 20));
 		setLayout(new GridLayout(0, 5));
 		setbackground(index);
-		JLabel name = new JLabel(obj.getObjectFile());
-		JLabel position = new JLabel(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", obj.getBasic().getX(), obj.getBasic().getY(), obj.getBasic().getZ()));
-		JLabel scale = new JLabel(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", obj.getBasic().getSx(), obj.getBasic().getSy(), obj.getBasic().getSz()));
-		JLabel rotation = new JLabel(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", obj.getBasic().getRx(), obj.getBasic().getRy(), obj.getBasic().getRz()));
-		JPanel color = new JPanel() {
+		name = new JLabel(obj.getObjectFile());
+		position = new JLabel(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", obj.getBasic().getX(), obj.getBasic().getY(), obj.getBasic().getZ()));
+		scale = new JLabel(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", obj.getBasic().getSx(), obj.getBasic().getSy(), obj.getBasic().getSz()));
+		rotation = new JLabel(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", obj.getBasic().getRx(), obj.getBasic().getRy(), obj.getBasic().getRz()));
+		color = new JPanel() {
 			private static final long serialVersionUID = 5649120561651341378L;
 
 			@Override
@@ -89,35 +95,34 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 		add(scale);
 		add(rotation);
 		add(color);
-		
+
 		menu = new JPopupMenu();
 		DeleteObjectAction deleteAction = new DeleteObjectAction(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
-		EditObjectAction editAction=new EditObjectAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
-		NewObjectAction newAction=new NewObjectAction(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
-		
+		EditObjectAction editAction = new EditObjectAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
+		NewObjectAction newAction = new NewObjectAction(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
+
 		JMenuItem neww = new JMenuItem(newAction);
 		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
 		menu.add(neww);
-		
+
 		menu.add(new JSeparator());
-		
+
 		JMenuItem edit = new JMenuItem(editAction);
 		edit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK));
 		menu.add(edit);
-		
+
 		JMenuItem delete = new JMenuItem(deleteAction);
 		delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK));
 		menu.add(delete);
-		
+
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), "newAction");
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK), "editAction");
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK), "deleteAction");
-		
+
 		getActionMap().put("newAction", newAction);
 		getActionMap().put("editAction", editAction);
 		getActionMap().put("deleteAction", deleteAction);
 
-		
 		addMouseListener(this);
 	}
 
@@ -147,22 +152,30 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 		this.index = index;
 	}
 
+	public void highlight() {
+		if (highlighted != null)
+			unHighlight();
+		highlighted = this;
+		setBackground(new Color(backgroundColor.getRed() - 20, backgroundColor.getGreen() - 20, backgroundColor.getBlue() - 20));
+		repaint();
+	}
+
+	public static void unHighlight() {
+		if (highlighted != null) {
+			highlighted.setBackground(new Color(highlighted.getBackgroundColor().getRed(), highlighted.getBackgroundColor().getGreen(), highlighted
+					.getBackgroundColor().getBlue()));
+			highlighted.repaint();
+			highlighted = null;
+		}
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON3) {
 			menu.setInvoker(this);
 			menu.show(e.getComponent(), e.getX(), e.getY());
 		}
-		if (clicked != this) {
-			ObjectListRow prev = clicked;
-			clicked = this;
-			if (prev != null) {
-				prev.repaint();
-			}
-		} else {
-			clicked = null;
-		}
-		repaint();
+		setClicked(this);
 	}
 
 	@Override
@@ -176,12 +189,12 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		setBackground(new Color(backgroundColor.getGreen() - 20, backgroundColor.getBlue() - 20, backgroundColor.getRed() - 20));
+		highlight();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		setBackground(backgroundColor);
+		unHighlight();
 	}
 
 	@Override
@@ -197,8 +210,31 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 		return clicked;
 	}
 
-	public static void setClicked(ObjectListRow clicked) {
-		ObjectListRow.clicked = clicked;
+	public static void setClicked(ObjectListRow obj) {
+		if (clicked != obj) {
+			ObjectListRow prev = clicked;
+			clicked = obj;
+			if (prev != null) {
+				prev.repaint();
+			}
+		} else {
+			clicked = null;
+		}
+		clicked = obj;
+		if (clicked != null)
+			clicked.repaint();
 	}
-	
+
+	public Color getBackgroundColor() {
+		return backgroundColor;
+	}
+
+	public void refresh() {
+		name.setText(object.getObjectFile());
+		position.setText(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", object.getBasic().getX(), object.getBasic().getY(), object.getBasic().getZ()));
+		scale.setText(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", object.getBasic().getSx(), object.getBasic().getSy(), object.getBasic().getSz()));
+		rotation.setText(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", object.getBasic().getRx(), object.getBasic().getRy(), object.getBasic().getRz()));
+		//color.setBackground(pointColor);
+	}
+
 }

@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,11 +40,41 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	private JPanel objectsPanel;
 
 	private JPanel view;
+	private List<ObjectListRow> rows;
 
+	
+	public void refreshObjects(){
+		for(ObjectListRow i:rows){
+			i.refresh();
+		}
+		objectsPanel.revalidate();
+	}
 	public GeneratedObject getGeneratedObject() {
 		return ObjectListRow.getClicked().getObject();
 	}
 
+	public void highlight(GeneratedObject obj) {
+		for(ObjectListRow i:rows){
+			if(i.getObject()==obj){
+				i.highlight();
+				objectsPanel.repaint();
+				i.repaint();
+				break;
+			}
+		}
+	}
+	
+	public void setClicked(GeneratedObject obj) {
+		for(ObjectListRow i:rows){
+			if(i.getObject()==obj){
+				ObjectListRow.setClicked(i);
+				objectsPanel.revalidate();
+				i.revalidate();
+				break;
+			}
+		}
+	}
+	
 	public void deleteObject(ObjectListRow objectListRow) {
 		view.remove(objectListRow.getIndex() + 1);
 		ObjectListRow.setClicked(null);
@@ -114,16 +145,19 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
 		view.add(ObjectListRow.createTitle());
 		int count = 0;
+		rows = new ArrayList<ObjectListRow>();
 		Collections.sort(objects);
 		for (GeneratedObject i : objects) {
-			view.add(new ObjectListRow(i, Color.blue, count++));
+			ObjectListRow objectListRow = new ObjectListRow(i, Color.blue, count++);
+			rows.add(objectListRow);
+			view.add(objectListRow);
 		}
 		JScrollPane listScroller = new JScrollPane(view);
 		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		listScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		listScroller.addMouseListener(this);
 		objectsPanel.add(listScroller);
-		objectsPanel.repaint();
+		objectsPanel.revalidate();
 	}
 
 	public Dimension getImageSize() {
@@ -141,25 +175,25 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
+
+	public void unHighlight() {
+		ObjectListRow.unHighlight();
+	}
+
+
+
+	
 }

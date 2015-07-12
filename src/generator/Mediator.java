@@ -215,4 +215,21 @@ public class Mediator {
 	public static GeneratedObject getGeneratedObject() {
 		return secondTabPanel.getGeneratedObject();
 	}
+
+	public static void setClicked(GeneratedObject obj) {
+		secondTabPanel.setClicked(obj);
+	}
+
+	public static void highlight(GeneratedObject obj) {
+		secondTabPanel.highlight(obj);
+		
+	}
+
+	public static void unHighlight() {
+		secondTabPanel.unHighlight();		
+	}
+
+	public static void refreshObjects() {
+		secondTabPanel.refreshObjects();
+	}
 }

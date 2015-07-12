@@ -63,29 +63,30 @@ public class FirstTabPanel extends JPanel {
 	private void createOptionsPanel() {
 		options = new JPanel();
 		options.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.OPTIONS_BORDER)));
-		options.setLayout(new GridLayout(12, 0, 5, 5));
+		options.setLayout(new GridLayout(13, 0, 5, 5));
 		add(options);
-		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new GridLayout(0, 2));
+		mapLabel = new JLabel();
+		mapLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_BORDER)));
+		options.add(mapLabel);
+		JPanel size = new JPanel();
+		size.setLayout(new GridLayout(0, 2));	
+		mapWidthLabel = new JLabel();
+		mapWidthLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.WIDTH)));
+		size.add(mapWidthLabel);
+		mapHeightLabel = new JLabel();
+		mapHeightLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.HEIGHT)));
+		size.add(mapHeightLabel);
+		options.add(size);
+		
+		JPanel controls = new JPanel();
+		controls.setLayout(new GridLayout(0, 2));	
 		JButton loadMapButton = new JButton(new LoadMapAction(Mediator.getMessage(PropertiesKeys.LOAD_MAP_BUTTON)));
 		JCheckBox box=new JCheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE));
 		box.setSelected(true);
-		topPanel.add(loadMapButton);
-		topPanel.add(box);
-		options.add(topPanel);
-	
-		JPanel mapInfoPanel = new JPanel();
-		mapInfoPanel.setLayout(new GridLayout(0, 3));
-		mapLabel = new JLabel();
-		mapLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_BORDER)));
-		mapInfoPanel.add(mapLabel);
-		mapWidthLabel = new JLabel();
-		mapWidthLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.WIDTH)));
-		mapInfoPanel.add(mapWidthLabel);
-		mapHeightLabel = new JLabel();
-		mapHeightLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.HEIGHT)));
-		mapInfoPanel.add(mapHeightLabel);
-		options.add(mapInfoPanel);
+		controls.add(loadMapButton);
+		controls.add(box);
+		options.add(controls);
+		
 		
 		JPanel legendPanel = new JPanel();
 		legendPanel.setLayout(new GridLayout(0, 3));

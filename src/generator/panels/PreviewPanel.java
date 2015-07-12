@@ -1,6 +1,6 @@
 package generator.panels;
 
-import generator.actions.ImageListener;
+import generator.listeners.ImageListener;
 import generator.models.result.GeneratedObject;
 
 import java.awt.Color;
@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 
 public class PreviewPanel extends JPanel {
 	private static final long serialVersionUID = -9061500843600921283L;
-	// private static final int BORDER = 10;
 	private BufferedImage image;
 	private Point currentPoint;
 	private Point previousPoint = new Point();
@@ -41,7 +40,8 @@ public class PreviewPanel extends JPanel {
 			g.drawLine(currentPoint.x - 1000, height / 2 + currentPoint.y, width + currentPoint.x + 1000, height / 2 + currentPoint.y);
 			if (generatedObjects != null) {
 				for (GeneratedObject i : generatedObjects) {
-					g.fillRect((int) (i.getBasic().getX() + i.getBasic().getX() * zoom + currentPoint.x), (int) (i.getBasic().getZ() + i.getBasic().getZ() * zoom + currentPoint.y), 4, 4);
+					g.fillRect((int) (i.getBasic().getX() + i.getBasic().getX() * zoom + currentPoint.x), (int) (i.getBasic().getZ() + i.getBasic().getZ()
+							* zoom + currentPoint.y), 4, 4);
 				}
 			}
 		}
@@ -63,18 +63,8 @@ public class PreviewPanel extends JPanel {
 		currentPoint = new Point((getWidth() - getResizedWidth()) / 2, (getHeight() - getResizedHeight()) / 2);
 	}
 
-	// @Override
-	// public int getHeight() {
-	// return super.getHeight() - BORDER;
-	// }
-	//
-	// @Override
-	// public int getWidth() {
-	// return super.getWidth() - BORDER;
-	// }
-
-	public PreviewPanel(BufferedImage image) throws IOException {	
-		this.image=image;
+	public PreviewPanel(BufferedImage image) throws IOException {
+		this.image = image;
 		ImageListener listener = new ImageListener(this);
 		addMouseMotionListener(listener);
 		addMouseListener(listener);
@@ -112,6 +102,10 @@ public class PreviewPanel extends JPanel {
 
 	public void setResultObject(List<GeneratedObject> list) {
 		generatedObjects = list;
+	}
+
+	public List<GeneratedObject> getGeneratedObjects() {
+		return generatedObjects;
 	}
 
 }
