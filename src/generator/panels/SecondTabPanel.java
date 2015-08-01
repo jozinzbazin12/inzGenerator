@@ -83,7 +83,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 				((JComponent) i).revalidate();
 			}
 		}
-		objectsPanel.revalidate();
+		objectsPanel.repaint();
 		previewPanel.repaint();
 	}
 

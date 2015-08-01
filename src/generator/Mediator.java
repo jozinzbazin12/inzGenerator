@@ -1,16 +1,5 @@
 package generator;
 
-import generator.algorithms.Algorithm;
-import generator.models.generation.GenerationModel;
-import generator.models.generation.ObjectListRow;
-import generator.models.result.GeneratedObject;
-import generator.models.result.ResultObject;
-import generator.panels.FirstTabPanel;
-import generator.panels.SecondTabPanel;
-import generator.utils.PropertiesKeys;
-import generator.windows.MainWindow;
-import generator.windows.ObjectWindow;
-
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -32,6 +22,20 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+
+import generator.algorithms.Algorithm;
+import generator.models.generation.GenerationModel;
+import generator.models.generation.ObjectFileListRow;
+import generator.models.generation.ObjectInfo;
+import generator.models.generation.ObjectListRow;
+import generator.models.result.GeneratedObject;
+import generator.models.result.ResultObject;
+import generator.panels.FirstTabPanel;
+import generator.panels.SecondTabPanel;
+import generator.utils.PropertiesKeys;
+import generator.windows.MainWindow;
+import generator.windows.ModelWindow;
+import generator.windows.ObjectWindow;
 
 public class Mediator {
 	private static final String PROPERTIES_FILE = "config.properties";
@@ -44,7 +48,8 @@ public class Mediator {
 	private static Properties properties;
 	private static Locale locale;
 	private static ObjectWindow objectWindow;
-	private static Map<String, GenerationModel> models=new HashMap<>();
+	private static Map<String, ObjectInfo> models = new HashMap<>();
+	private static ModelWindow modelWindow;
 
 	public static void main(String[] args) throws IOException {
 		properties = new Properties();
@@ -84,7 +89,6 @@ public class Mediator {
 				main(null);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -138,16 +142,18 @@ public class Mediator {
 			e.printStackTrace();
 			return;
 		}
-		for(GeneratedObject i:resultObject.getGeneratedObjects()){
-			if(models.get(i.getObjectFile())==null){
-				GenerationModel model = new GenerationModel("dupa", i.getObjectFile());
-				models.put(i.getObjectFile(), model);
+		models.clear();
+		for (GeneratedObject i : resultObject.getGeneratedObjects()) {
+			GenerationModel model = new GenerationModel(getFileNameFromPath(i.getObjectFile()), i.getObjectFile());
+			ObjectInfo obj = new ObjectInfo(model);
+			if (models.get(i.getObjectFile()) == null) {
+				models.put(i.getObjectFile(), obj);
 				i.setModel(model);
-			}
-			else{
-				i.setModel(models.get(i.getObjectFile()));
+			} else {
+				i.setModel(models.get(i.getObjectFile()).getModel());
 			}
 		}
+		updateModelsPanel();
 		setMapFileName(resultObject.getMapObject().getMapFileName());
 		updateObjectList(resultObject.getGeneratedObjects());
 		printOnPreview();
@@ -200,7 +206,7 @@ public class Mediator {
 	public static void updateObjectList(List<GeneratedObject> objects) {
 		secondTabPanel.updateObjectListPanel(objects);
 	}
-	
+
 	public static void updateObjectList() {
 		secondTabPanel.updateObjectListPanel(resultObject.getGeneratedObjects());
 	}
@@ -211,6 +217,14 @@ public class Mediator {
 		printOnPreview();
 	}
 
+	public static void deleteObject(Set<ObjectFileListRow> clicked) {
+		for (ObjectFileListRow i : clicked) {
+			models.remove(i.getObject().getModel().getPath());
+		}
+
+		firstTabPanel.updateObjectFiles(models.values());
+
+	}
 
 	public static void registerObjectWindow(ObjectWindow window) {
 		objectWindow = window;
@@ -230,21 +244,51 @@ public class Mediator {
 
 	public static void highlight(GeneratedObject obj) {
 		secondTabPanel.highlight(obj);
-		
+
 	}
 
 	public static void unHighlight() {
-		secondTabPanel.unHighlight();		
+		secondTabPanel.unHighlight();
 	}
 
 	public static void refreshObjects() {
 		secondTabPanel.refreshObjects();
 	}
-	
-	public static void refreshPreview(){
+
+	public static void refreshPreview() {
 		secondTabPanel.refreshPreview();
 	}
-	public static Dimension getMapDimensions(){
+
+	public static Dimension getMapDimensions() {
 		return secondTabPanel.getImageSize();
 	}
+
+	public static void loadObjectFile(String path) {
+		if (models.get(path) == null) {
+			GenerationModel model = new GenerationModel(getFileNameFromPath(path), path);
+			ObjectInfo obj = new ObjectInfo(model);
+			models.put(path, obj);
+		}
+	}
+
+	public static void updateModelsPanel() {
+		firstTabPanel.updateObjectFiles(models.values());
+	}
+
+	private static String getFileNameFromPath(String path) {
+		return path.substring(path.lastIndexOf("\\") + 1);
+	}
+
+	public static Map<String, ObjectInfo> getModels() {
+		return models;
+	}
+
+	public static void changeObjectsFileName(String path) {
+		modelWindow.changeFile(path, getFileNameFromPath(path));
+	}
+
+	public static void registerModelWindow(ModelWindow mw) {
+		modelWindow = mw;
+	}
+
 }

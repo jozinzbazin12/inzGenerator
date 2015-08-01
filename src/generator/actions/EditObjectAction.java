@@ -14,11 +14,11 @@ public class EditObjectAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new ObjectWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT),Mediator.getGeneratedObject());
-		
+		new ObjectWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), Mediator.getGeneratedObject());
+
 	}
 
-	public EditObjectAction(String name){
+	public EditObjectAction(String name) {
 		super(name);
 	}
 }

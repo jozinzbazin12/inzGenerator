@@ -14,7 +14,7 @@ public class ResultObject {
 	@XmlElement(name = "Map", required = true)
 	private MapObject mapObject = new MapObject();
 	@XmlElement(name = "Object", required = true)
-	private List<GeneratedObject> generatedObjects=new ArrayList<GeneratedObject>();
+	private List<GeneratedObject> generatedObjects=new ArrayList<>();
 
 	public ResultObject(List<GeneratedObject> generatedObjects) {
 		this.generatedObjects = generatedObjects;

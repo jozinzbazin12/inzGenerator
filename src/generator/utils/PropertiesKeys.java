@@ -54,4 +54,10 @@ public final class PropertiesKeys {
 	public static final String CANCEL = "cancel";
 	public static final String OK = "ok";
 	public static final String EDIT_OBJECT = "editObject";
+	public static final String OBJECT_FILE_NAME = "objectFileName";
+	public static final String OBJECT_FILE_LOCATION = "objectFileLocation";
+	public static final String OBJECTS = "objects";
+	public static final String OBJ_FILES = "objFiles";
+	public static final String LOAD_OBJECT = "loadObject";
+	public static final String MAP_OPTIONS_BORDER = "mapOptionsBorder";
 }

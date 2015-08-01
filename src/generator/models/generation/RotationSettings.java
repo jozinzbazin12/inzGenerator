@@ -40,4 +40,31 @@ public class RotationSettings {
 		minZ = minz;
 		maxZ = maxz;
 	}
+
+	public RotationSettings() {
+	}
+
+	public void setMinX(double minX) {
+		this.minX = minX;
+	}
+
+	public void setMaxX(double maxX) {
+		this.maxX = maxX;
+	}
+
+	public void setMinY(double minY) {
+		this.minY = minY;
+	}
+
+	public void setMaxY(double maxY) {
+		this.maxY = maxY;
+	}
+
+	public void setMinZ(double minZ) {
+		this.minZ = minZ;
+	}
+
+	public void setMaxZ(double maxZ) {
+		this.maxZ = maxZ;
+	}
 }

@@ -30,18 +30,40 @@ import javax.swing.border.EmptyBorder;
 
 public class ObjectListRow extends JPanel implements MouseListener, Comparable<ObjectListRow> {
 
+	private static final String DELETE_ACTION = "deleteAction";
+	private static final String EDIT_ACTION = "editAction";
+	private static final String NEW_ACTION = "newAction";
 	private static final long serialVersionUID = 5353030562828445813L;
 	private static ObjectListRow clicked = null;
 	private static ObjectListRow highlighted = null;
 	private int index;
 	private Color backgroundColor;
 	private GeneratedObject object;
-	private static JPopupMenu menu;
+	private static JPopupMenu menu = new JPopupMenu();
+	private static final DeleteObjectAction deleteAction = new DeleteObjectAction(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
+	private static final EditObjectAction editAction = new EditObjectAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
+	private static final NewObjectAction newAction = new NewObjectAction(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
 	private JLabel name;
 	private JLabel position;
 	private JLabel scale;
 	private JLabel rotation;
 	private JPanel color;
+
+	static {
+		JMenuItem neww = new JMenuItem(newAction);
+		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+		menu.add(neww);
+
+		menu.add(new JSeparator());
+
+		JMenuItem edit = new JMenuItem(editAction);
+		edit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK));
+		menu.add(edit);
+
+		JMenuItem delete = new JMenuItem(deleteAction);
+		delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK));
+		menu.add(delete);
+	}
 
 	public static Component createTitle() {
 		JPanel title = new JPanel();
@@ -96,34 +118,18 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 		add(rotation);
 		add(color);
 
-		menu = new JPopupMenu();
-		DeleteObjectAction deleteAction = new DeleteObjectAction(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
-		EditObjectAction editAction = new EditObjectAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
-		NewObjectAction newAction = new NewObjectAction(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
-
-		JMenuItem neww = new JMenuItem(newAction);
-		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
-		menu.add(neww);
-
-		menu.add(new JSeparator());
-
-		JMenuItem edit = new JMenuItem(editAction);
-		edit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK));
-		menu.add(edit);
-
-		JMenuItem delete = new JMenuItem(deleteAction);
-		delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK));
-		menu.add(delete);
-
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), "newAction");
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK), "editAction");
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK), "deleteAction");
-
-		getActionMap().put("newAction", newAction);
-		getActionMap().put("editAction", editAction);
-		getActionMap().put("deleteAction", deleteAction);
-
+			createShorcruts();
 		addMouseListener(this);
+	}
+
+	private void createShorcruts() {
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), NEW_ACTION);
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK), EDIT_ACTION);
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK), DELETE_ACTION);
+
+		getActionMap().put(NEW_ACTION, newAction);
+		getActionMap().put(EDIT_ACTION, editAction);
+		getActionMap().put(DELETE_ACTION, deleteAction);
 	}
 
 	private void setbackground(int index) {
@@ -164,8 +170,8 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 
 	public static void unHighlight() {
 		if (highlighted != null) {
-			highlighted.setBackground(new Color(highlighted.getBackgroundColor().getRed(), highlighted.getBackgroundColor().getGreen(), highlighted
-					.getBackgroundColor().getBlue()));
+			highlighted.setBackground(new Color(highlighted.getBackgroundColor().getRed(), highlighted.getBackgroundColor().getGreen(),
+					highlighted.getBackgroundColor().getBlue()));
 			highlighted.repaint();
 			highlighted.getObject().swapColors();
 			Mediator.refreshPreview();
@@ -238,7 +244,7 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 		position.setText(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", object.getBasic().getX(), object.getBasic().getY(), object.getBasic().getZ()));
 		scale.setText(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", object.getBasic().getSx(), object.getBasic().getSy(), object.getBasic().getSz()));
 		rotation.setText(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", object.getBasic().getRx(), object.getBasic().getRy(), object.getBasic().getRz()));
-		//color.setBackground(pointColor);
+		// color.setBackground(pointColor);
 	}
 
 }
