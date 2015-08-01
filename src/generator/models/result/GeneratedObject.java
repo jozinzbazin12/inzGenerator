@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GeneratedObject implements Comparable<GeneratedObject> {
 	@XmlAttribute(name = "objectFile", required = true)
-	private String objectFile;
+	private String objectPath;
 	@XmlElement(name = "Settings", required = true)
 	private BasicModelData basic;
 	@XmlTransient
@@ -22,6 +22,8 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 	private Color color;
 	@XmlTransient
 	private Color prevColor;
+	@XmlTransient
+	private String objectName;
 
 	public BasicModelData getBasic() {
 		return basic;
@@ -29,8 +31,9 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 
 	public GeneratedObject(GenerationModel model, BasicModelData data) {
 		this.model = model;
-		objectFile = model.getName();
+		objectName = model.getName();
 		basic = data;
+		objectPath = model.getPath();
 		color = model.getColor();
 		setPrevColor();
 	}
@@ -42,10 +45,6 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 		prevColor = new Color(255 - r, 255 - g, 255 - b);
 	}
 
-	public String getObjectFile() {
-		return objectFile;
-	}
-
 	public GeneratedObject() {
 	}
 
@@ -53,15 +52,11 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 		this.basic = basic;
 	}
 
-	public void setObjectFile(String objectFile) {
-		this.objectFile = objectFile;
-	}
-
 	@Override
 	public int compareTo(GeneratedObject o) {
-		if (o.getObjectFile() == null || objectFile == null)
+		if (o.getObjectName() == null || objectName == null)
 			return 0;
-		return objectFile.compareTo(o.getObjectFile());
+		return objectName.compareTo(o.getObjectName());
 	}
 
 	public GenerationModel getModel() {
@@ -70,7 +65,7 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 
 	public void setModel(GenerationModel model) {
 		this.model = model;
-		color=model.getColor();
+		color = model.getColor();
 		setPrevColor();
 	}
 
@@ -82,5 +77,21 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 		Color x = color;
 		color = prevColor;
 		prevColor = x;
+	}
+
+	public String getObjectPath() {
+		return objectPath;
+	}
+
+	public void setObjectPath(String objectPath) {
+		this.objectPath = objectPath;
+	}
+
+	public String getObjectName() {
+		return objectName;
+	}
+
+	public void setObjectName(String objectName) {
+		this.objectName = objectName;
 	}
 }

@@ -90,7 +90,7 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 		setMaximumSize(new Dimension(2000, 20));
 		setLayout(new GridLayout(0, 5));
 		setbackground(index);
-		name = new JLabel(obj.getObjectFile());
+		name = new JLabel(obj.getObjectName());
 		position = new JLabel(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", obj.getBasic().getX(), obj.getBasic().getY(), obj.getBasic().getZ()));
 		scale = new JLabel(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", obj.getBasic().getSx(), obj.getBasic().getSy(), obj.getBasic().getSz()));
 		rotation = new JLabel(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", obj.getBasic().getRx(), obj.getBasic().getRy(), obj.getBasic().getRz()));
@@ -209,7 +209,7 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 
 	@Override
 	public int compareTo(ObjectListRow o) {
-		return object.getObjectFile().compareTo(o.getObject().getObjectFile());
+		return object.getObjectName().compareTo(o.getObject().getObjectName());
 	}
 
 	public GeneratedObject getObject() {
@@ -240,7 +240,7 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 	}
 
 	public void refresh() {
-		name.setText(object.getObjectFile());
+		name.setText(object.getObjectName());
 		position.setText(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", object.getBasic().getX(), object.getBasic().getY(), object.getBasic().getZ()));
 		scale.setText(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", object.getBasic().getSx(), object.getBasic().getSy(), object.getBasic().getSz()));
 		rotation.setText(MessageFormat.format("X: {0}, Y: {1}, Z: {2}", object.getBasic().getRx(), object.getBasic().getRy(), object.getBasic().getRz()));

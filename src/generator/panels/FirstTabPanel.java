@@ -36,6 +36,7 @@ import generator.algorithms.FullRandomAlgorithm;
 import generator.algorithms.RegularAlgorithm;
 import generator.models.generation.ObjectFileListRow;
 import generator.models.generation.ObjectInfo;
+import generator.models.result.BasicModelData;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
 
@@ -76,7 +77,7 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		mapWidthLabel.setText(name);
 	}
 
-	private void createOptionsPanel() {
+	private void createMapOptionsPanel() {
 		options = new JPanel();
 		options.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_OPTIONS_BORDER)));
 		options.setLayout(new GridLayout(13, 0, 5, 5));
@@ -104,45 +105,38 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		options.add(controls);
 
 		JPanel legendPanel = new JPanel();
-		legendPanel.setLayout(new GridLayout(0, 3));
+		legendPanel.setLayout(new GridLayout(0, 2));
 		JLabel attributelabel = new JLabel(Mediator.getMessage(PropertiesKeys.ATTRIBUTE));
 		legendPanel.add(attributelabel);
-		JLabel minLabel = new JLabel(Mediator.getMessage(PropertiesKeys.MIN));
+		JLabel valueLabel = new JLabel(Mediator.getMessage(PropertiesKeys.VALUE));
 		legendPanel.add(attributelabel);
-		JLabel maxLabel = new JLabel(Mediator.getMessage(PropertiesKeys.MAX));
-		legendPanel.add(attributelabel);
-		legendPanel.add(minLabel);
-		legendPanel.add(maxLabel);
+		legendPanel.add(valueLabel);
 
 		options.add(legendPanel);
-		options.add(createSpinner(-10000, 10000, Consts.MIN_X, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X)));
-		options.add(createSpinner(-10000, 10000, Consts.MIN_Y, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y)));
-		options.add(createSpinner(-10000, 10000, Consts.MIN_Z, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z)));
+		options.add(createSpinner(-10000, 10000, Consts.X, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X)));
+		options.add(createSpinner(-10000, 10000, Consts.Y, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y)));
+		options.add(createSpinner(-10000, 10000, Consts.Z, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z)));
 
-		options.add(createSpinner(-180, 180, Consts.MIN_RX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X)));
-		options.add(createSpinner(-180, 180, Consts.MIN_RY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y)));
-		options.add(createSpinner(-180, 180, Consts.MIN_RZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z)));
+		options.add(createSpinner(-180, 180, Consts.RX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X)));
+		options.add(createSpinner(-180, 180, Consts.RY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y)));
+		options.add(createSpinner(-180, 180, Consts.RZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z)));
 
-		options.add(createSpinner(-1000, 1000, Consts.MIN_SX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X)));
-		options.add(createSpinner(-1000, 1000, Consts.MIN_SY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y)));
-		options.add(createSpinner(-1000, 1000, Consts.MIN_SZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z)));
+		options.add(createSpinner(-1000, 1000, Consts.SX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X)));
+		options.add(createSpinner(-1000, 1000, Consts.SY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y)));
+		options.add(createSpinner(-1000, 1000, Consts.SZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z)));
 
-		
 		add(options);
 	}
 
-	private JPanel createSpinner(double min, double max, String key1, String description) {
+	private JPanel createSpinner(double min, double max, String key, String description) {
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(0, 3));
+		panel.setLayout(new GridLayout(0, 2));
 		JLabel attributelabel = new JLabel(description);
 		panel.add(attributelabel);
-		JSpinner minSpinner = new JSpinner(new SpinnerNumberModel(0.0, min, max, 1));
+		JSpinner spinner = new JSpinner(new SpinnerNumberModel(0.0, min, max, 1));
 		panel.add(attributelabel);
-		JSpinner maxSpinner = new JSpinner(new SpinnerNumberModel(0.0, min, max, 1));
-		panel.add(attributelabel);
-		panel.add(minSpinner);
-		panel.add(maxSpinner);
-		arguments.put(key1, minSpinner);
+		panel.add(spinner);
+		arguments.put(key, spinner);
 		return panel;
 	}
 
@@ -183,7 +177,7 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 	public FirstTabPanel() {
 		arguments = new HashMap<String, JSpinner>();
 		setLayout(new GridLayout(0, 3));
-		createOptionsPanel();
+		createMapOptionsPanel();
 		createOptionsPanel2();
 		createObjectFilesPanel();
 		Mediator.registerFirstTabPanel(this);
@@ -237,5 +231,31 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		listScroller.addMouseListener(this);
 		objectsPanel.add(listScroller);
 		objectsPanel.revalidate();
+	}
+
+	private double getValue(String key) {
+		return (double) arguments.get(key).getValue();
+	}
+
+	public BasicModelData getMapSettings() {
+		BasicModelData data = new BasicModelData();
+		data.setPosition(getValue(Consts.X), getValue(Consts.Y), getValue(Consts.Z));
+		data.setRotation(getValue(Consts.RX), getValue(Consts.RY), getValue(Consts.RZ));
+		data.setScale(getValue(Consts.SX), getValue(Consts.SY), getValue(Consts.SZ));
+		return data;
+	}
+	
+	public void setArgumentValue(BasicModelData data){
+		arguments.get(Consts.X).setValue(data.getX());
+		arguments.get(Consts.Y).setValue(data.getY());
+		arguments.get(Consts.Z).setValue(data.getZ());
+		
+		arguments.get(Consts.RX).setValue(data.getRx());
+		arguments.get(Consts.RY).setValue(data.getRy());
+		arguments.get(Consts.RZ).setValue(data.getRz());
+		
+		arguments.get(Consts.SX).setValue(data.getSx());
+		arguments.get(Consts.SY).setValue(data.getSy());
+		arguments.get(Consts.SZ).setValue(data.getSz());
 	}
 }

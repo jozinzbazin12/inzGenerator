@@ -112,6 +112,7 @@ public class Mediator {
 
 	public static void saveXMLFile(String name) {
 		JAXBContext context;
+		resultObject.getMapObject().setBasic(firstTabPanel.getMapSettings());
 		try {
 			context = JAXBContext.newInstance("generator.models.result");
 			Marshaller marshaller = context.createMarshaller();
@@ -144,15 +145,17 @@ public class Mediator {
 		}
 		models.clear();
 		for (GeneratedObject i : resultObject.getGeneratedObjects()) {
-			GenerationModel model = new GenerationModel(getFileNameFromPath(i.getObjectFile()), i.getObjectFile());
+			i.setObjectName(getFileNameFromPath(i.getObjectPath()));
+			GenerationModel model = new GenerationModel(getFileNameFromPath(i.getObjectPath()), i.getObjectPath());
 			ObjectInfo obj = new ObjectInfo(model);
-			if (models.get(i.getObjectFile()) == null) {
-				models.put(i.getObjectFile(), obj);
+			if (models.get(i.getObjectPath()) == null) {
+				models.put(i.getObjectPath(), obj);
 				i.setModel(model);
 			} else {
-				i.setModel(models.get(i.getObjectFile()).getModel());
+				i.setModel(models.get(i.getObjectPath()).getModel());
 			}
 		}
+		firstTabPanel.setArgumentValue(resultObject.getMapObject().getBasic());
 		updateModelsPanel();
 		setMapFileName(resultObject.getMapObject().getMapFileName());
 		updateObjectList(resultObject.getGeneratedObjects());

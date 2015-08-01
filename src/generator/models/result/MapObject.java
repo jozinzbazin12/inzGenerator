@@ -3,6 +3,7 @@ package generator.models.result;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MapObject {
@@ -11,10 +12,8 @@ public class MapObject {
 	private String mapFileName;
 	@XmlAttribute(name = "textureFile", required = true)
 	private String textureFileName;
-	@XmlAttribute(name = "lengthX")
-	private double lengthX;
-	@XmlAttribute(name = "lengthZ")
-	private double lengthZ;
+	@XmlElement(name = "Settings", required = true)
+	private BasicModelData basic;
 
 	public String getMapFileName() {
 		return mapFileName;
@@ -32,20 +31,12 @@ public class MapObject {
 		this.textureFileName = textureFileName;
 	}
 
-	public double getLengthX() {
-		return lengthX;
+	public void setBasic(BasicModelData basic) {
+		this.basic = basic;
 	}
 
-	public void setLengthX(double lengthX) {
-		this.lengthX = lengthX;
-	}
-
-	public double getLengthZ() {
-		return lengthZ;
-	}
-
-	public void setLengthZ(double lengthZ) {
-		this.lengthZ = lengthZ;
+	public BasicModelData getBasic() {
+		return basic;
 	}
 
 }

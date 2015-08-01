@@ -60,4 +60,5 @@ public final class PropertiesKeys {
 	public static final String OBJ_FILES = "objFiles";
 	public static final String LOAD_OBJECT = "loadObject";
 	public static final String MAP_OPTIONS_BORDER = "mapOptionsBorder";
+	public static final String VALUE = "value";
 }
