@@ -18,8 +18,7 @@ public class ImageChooser extends JFileChooser {
 
 	public ImageChooser() {
 		super();
-		String userDir = System.getProperty("user.home");
-		File desktop = new File(userDir + "/Desktop");
+		File desktop = new File(Mediator.getLastPath());
 		if (desktop != null)
 			setCurrentDirectory(desktop);
 		setAcceptAllFileFilterUsed(false);
@@ -27,7 +26,7 @@ public class ImageChooser extends JFileChooser {
 		addChoosableFileFilter(new ImageFilter(BMP, Mediator.getMessage(PropertiesKeys.BMP_FILES)));
 		addChoosableFileFilter(new ImageFilter(GIF, Mediator.getMessage(PropertiesKeys.GIF_FILES)));
 		addChoosableFileFilter(new ImageFilter(JPG, Mediator.getMessage(PropertiesKeys.JPEG_FILES)));
-		addChoosableFileFilter(new ImageFilter(PNG, Mediator.getMessage(PropertiesKeys.PNG_FILES)));		
+		addChoosableFileFilter(new ImageFilter(PNG, Mediator.getMessage(PropertiesKeys.PNG_FILES)));
 		addChoosableFileFilter(new FileFilter() {
 
 			@Override

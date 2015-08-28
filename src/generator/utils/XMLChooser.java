@@ -10,12 +10,13 @@ import javax.swing.filechooser.FileFilter;
 public class XMLChooser extends JFileChooser {
 
 	private static final long serialVersionUID = 309017384708176503L;
+
 	public XMLChooser() {
 		super();
-		String userDir = System.getProperty("user.home");
-		File desktop = new File(userDir + "/Desktop");
-		if (desktop != null)
+		File desktop = new File(Mediator.getLastPath());
+		if (desktop != null) {
 			setCurrentDirectory(desktop);
+		}
 		setAcceptAllFileFilterUsed(false);
 		setFileFilter(new XMLFilter(Mediator.getMessage(PropertiesKeys.XML_FILES)));
 		addChoosableFileFilter(new FileFilter() {

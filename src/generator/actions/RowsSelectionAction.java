@@ -14,6 +14,5 @@ public class RowsSelectionAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		ObjectFileListRow.toggleAll(((JCheckBox) e.getSource()).isSelected());
-
 	}
 }

@@ -61,4 +61,11 @@ public final class PropertiesKeys {
 	public static final String LOAD_OBJECT = "loadObject";
 	public static final String MAP_OPTIONS_BORDER = "mapOptionsBorder";
 	public static final String VALUE = "value";
+	public static final String LENGTH= "length";
+	public static final String SIZE = "size";
+	public static final String LIGHT = "light";
+	public static final String AMBIENT = "ambient";
+	public static final String DIFFUSE = "diffuse";
+	public static final String SPECULAR = "specular";
+	public static final String LIGHT_POSITION = "lightPosition";
 }

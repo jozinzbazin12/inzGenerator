@@ -19,6 +19,7 @@ public class SaveXMLAction extends AbstractAction {
 		String fileName=null;
 		int rVal = c.showSaveDialog(new JFrame());
 		if (rVal == JFileChooser.APPROVE_OPTION) {
+			Mediator.setLastPath(c.getSelectedFile().getParent());
 			fileName = (c.getSelectedFile().getAbsolutePath());
 		}
 		if (rVal == JFileChooser.CANCEL_OPTION) {

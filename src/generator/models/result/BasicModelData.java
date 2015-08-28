@@ -8,22 +8,31 @@ import javax.xml.bind.annotation.XmlElement;
 public class BasicModelData {
 	@XmlElement(name = "posX", required = true)
 	private double x;
+
 	@XmlElement(name = "posY", required = true)
 	private double y;
+
 	@XmlElement(name = "posZ", required = true)
 	private double z;
+
 	@XmlElement(name = "scaleX", required = true)
 	private double sx;
+
 	@XmlElement(name = "scaleY", required = true)
 	private double sy;
+
 	@XmlElement(name = "scaleZ", required = true)
 	private double sz;
+
 	@XmlElement(name = "rotationX", required = true)
 	private double rx;
+
 	@XmlElement(name = "rotationY", required = true)
 	private double ry;
+
 	@XmlElement(name = "rotationZ", required = true)
 	private double rz;
+
 	@XmlElement(name = "relative", required = true)
 	private boolean isRelative;
 

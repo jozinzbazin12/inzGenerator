@@ -20,6 +20,7 @@ public class LoadModelAction extends AbstractAction {
 		File[] files = null;
 		int rVal = c.showOpenDialog(new JFrame());
 		if (rVal == JFileChooser.APPROVE_OPTION) {
+			Mediator.setLastPath(c.getSelectedFile().getParent());
 			files = c.getSelectedFiles();
 		}
 		if (rVal == JFileChooser.CANCEL_OPTION) {

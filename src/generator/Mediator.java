@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -50,6 +51,7 @@ public class Mediator {
 	private static ObjectWindow objectWindow;
 	private static Map<String, ObjectInfo> models = new HashMap<>();
 	private static ModelWindow modelWindow;
+	private static String lastPath = System.getProperty("user.home") + "/Desktop";
 
 	public static void main(String[] args) throws IOException {
 		properties = new Properties();
@@ -113,6 +115,7 @@ public class Mediator {
 	public static void saveXMLFile(String name) {
 		JAXBContext context;
 		resultObject.getMapObject().setBasic(firstTabPanel.getMapSettings());
+		resultObject.getMapObject().setLightData(firstTabPanel.getLightSettings());
 		try {
 			context = JAXBContext.newInstance("generator.models.result");
 			Marshaller marshaller = context.createMarshaller();
@@ -155,7 +158,7 @@ public class Mediator {
 				i.setModel(models.get(i.getObjectPath()).getModel());
 			}
 		}
-		firstTabPanel.setArgumentValue(resultObject.getMapObject().getBasic());
+		firstTabPanel.setArgumentValue(resultObject.getMapObject());
 		updateModelsPanel();
 		setMapFileName(resultObject.getMapObject().getMapFileName());
 		updateObjectList(resultObject.getGeneratedObjects());
@@ -168,7 +171,13 @@ public class Mediator {
 	}
 
 	public static String getMessage(String message) {
-		return messages.getString(message);
+		String result;
+		try {
+			result = messages.getString(message);
+		} catch (MissingResourceException e) {
+			result = message;
+		}
+		return result;
 	}
 
 	public static void registerFirstTabPanel(FirstTabPanel panel) {
@@ -292,6 +301,14 @@ public class Mediator {
 
 	public static void registerModelWindow(ModelWindow mw) {
 		modelWindow = mw;
+	}
+
+	public static String getLastPath() {
+		return lastPath;
+	}
+
+	public static void setLastPath(String lastPath) {
+		Mediator.lastPath = lastPath;
 	}
 
 }
