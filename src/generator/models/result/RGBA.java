@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BasicLightData {
+public class RGBA {
 
 	@XmlAttribute(name = "r")
 	private double r;
@@ -51,13 +51,13 @@ public class BasicLightData {
 		this.a = a;
 	}
 
-	public BasicLightData(double r, double g, double b, double a) {
+	public RGBA(double r, double g, double b, double a) {
 		this.r = r;
 		this.g = g;
 		this.b = b;
 		this.a = a;
 	}
 
-	public BasicLightData() {
+	public RGBA() {
 	}
 }

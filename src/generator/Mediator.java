@@ -30,6 +30,8 @@ import generator.models.generation.ObjectFileListRow;
 import generator.models.generation.ObjectInfo;
 import generator.models.generation.ObjectListRow;
 import generator.models.result.GeneratedObject;
+import generator.models.result.MapObject;
+import generator.models.result.Material;
 import generator.models.result.ResultObject;
 import generator.models.result.Texture;
 import generator.panels.FirstTabPanel;
@@ -118,10 +120,19 @@ public class Mediator {
 
 	public static void setTextureFile(String path) {
 		try {
-			if (resultObject.getMapObject().getTexture() == null) {
-				resultObject.getMapObject().setTexture(new Texture());
+			MapObject mapObject = resultObject.getMapObject();
+			Material material = mapObject.getMaterial();
+			if (material == null) {
+				material = new Material();
+				mapObject.setMaterial(material);
 			}
-			resultObject.getMapObject().getTexture().setPath(path);
+			Texture texture = material.getTexture();
+			if (texture == null) {
+				texture = new Texture();
+				mapObject.getMaterial().setTexture(texture);
+			}
+
+			texture.setPath(path);
 			firstTabPanel.setTexturePath(path);
 			mainWindow.getContentPane().revalidate();
 		} catch (IOException e) {
@@ -134,7 +145,7 @@ public class Mediator {
 		JAXBContext context;
 		resultObject.getMapObject().setBasic(firstTabPanel.getMapSettings());
 		resultObject.getMapObject().setLightData(firstTabPanel.getLightSettings());
-		resultObject.getMapObject().setTexture(firstTabPanel.getTexture());
+		resultObject.getMapObject().setMaterial(firstTabPanel.getMaterial());
 		try {
 			context = JAXBContext.newInstance("generator.models.result");
 			Marshaller marshaller = context.createMarshaller();

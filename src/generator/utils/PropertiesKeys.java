@@ -61,7 +61,7 @@ public final class PropertiesKeys {
 	public static final String LOAD_OBJECT = "loadObject";
 	public static final String MAP_OPTIONS_BORDER = "mapOptionsBorder";
 	public static final String VALUE = "value";
-	public static final String LENGTH= "length";
+	public static final String LENGTH = "length";
 	public static final String SIZE = "size";
 	public static final String LIGHT = "light";
 	public static final String AMBIENT = "ambient";
@@ -74,4 +74,7 @@ public final class PropertiesKeys {
 	public static final String TEXTURE = "texture";
 	public static final String OPEN_TEXTURE = "openTexture";
 	public static final String TEXTURE_SCALE = "textureScale";
+	public static final String MATERIAL = "material";
+	public static final String OPACITY = "opacity";
+	public static final String SHINESS = "shiness";
 }

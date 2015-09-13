@@ -54,4 +54,21 @@ public class Consts {
 	public static final String LIGHT_POSITION_MODE = "lpm";
 	public static final String SCALE = "scale";
 
+	public static final String MATERIAL_AMBIENT_R = "mar";
+	public static final String MATERIAL_AMBIENT_G = "mag";
+	public static final String MATERIAL_AMBIENT_B = "mab";
+	public static final String MATERIAL_AMBIENT_A = "maa";
+
+	public static final String MATERIAL_DIFFUSE_R = "mdr";
+	public static final String MATERIAL_DIFFUSE_G = "mdg";
+	public static final String MATERIAL_DIFFUSE_B = "mdb";
+	public static final String MATERIAL_DIFFUSE_A = "mda";
+
+	public static final String MATERIAL_SPECULAR_R = "msr";
+	public static final String MATERIAL_SPECULAR_G = "msg";
+	public static final String MATERIAL_SPECULAR_B = "msb";
+	public static final String MATERIAL_SPECULAR_A = "msa";
+
+	public static final String MATERIAL_D = "md";
+	public static final String MATERIAL_NS = "mns";
 }

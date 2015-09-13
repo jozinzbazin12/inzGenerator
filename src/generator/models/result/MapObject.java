@@ -11,14 +11,14 @@ public class MapObject {
 	@XmlAttribute(name = "mapFile", required = true)
 	private String mapFileName;
 
-	@XmlElement(name = "Texture", required = true)
-	private Texture texture;
-
 	@XmlElement(name = "Settings", required = true)
 	private BasicMapData basic;
 
 	@XmlElement(name = "Light", required = true)
 	private LightData lightData;
+
+	@XmlElement(name = "Material", required = true)
+	private Material material;
 
 	public String getMapFileName() {
 		return mapFileName;
@@ -44,11 +44,11 @@ public class MapObject {
 		this.lightData = lightData;
 	}
 
-	public Texture getTexture() {
-		return texture;
+	public Material getMaterial() {
+		return material;
 	}
 
-	public void setTexture(Texture texture) {
-		this.texture = texture;
+	public void setMaterial(Material material) {
+		this.material = material;
 	}
 }

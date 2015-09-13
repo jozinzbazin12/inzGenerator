@@ -21,13 +21,13 @@ public class LightData {
 	private double mode;
 
 	@XmlElement(name = "Ambient")
-	private BasicLightData ambient;
+	private RGBA ambient;
 
 	@XmlElement(name = "Diffuse")
-	private BasicLightData diffuse;
+	private RGBA diffuse;
 
 	@XmlElement(name = "Specular")
-	private BasicLightData specular;
+	private RGBA specular;
 
 	public double getX() {
 		return x;
@@ -53,31 +53,31 @@ public class LightData {
 		this.z = z;
 	}
 
-	public BasicLightData getAmbient() {
+	public RGBA getAmbient() {
 		return ambient;
 	}
 
-	public void setAmbient(BasicLightData ambient) {
+	public void setAmbient(RGBA ambient) {
 		this.ambient = ambient;
 	}
 
-	public BasicLightData getDiffuse() {
+	public RGBA getDiffuse() {
 		return diffuse;
 	}
 
-	public void setDiffuse(BasicLightData diffuse) {
+	public void setDiffuse(RGBA diffuse) {
 		this.diffuse = diffuse;
 	}
 
-	public BasicLightData getSpecular() {
+	public RGBA getSpecular() {
 		return specular;
 	}
 
-	public void setSpecular(BasicLightData specular) {
+	public void setSpecular(RGBA specular) {
 		this.specular = specular;
 	}
 
-	public void setLight(BasicLightData ambient, BasicLightData diffuse, BasicLightData specular) {
+	public void setLight(RGBA ambient, RGBA diffuse, RGBA specular) {
 		this.ambient = ambient;
 		this.diffuse = diffuse;
 		this.specular = specular;
