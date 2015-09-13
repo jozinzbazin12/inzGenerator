@@ -11,13 +11,13 @@ public class Material {
 	private Texture texture;
 
 	@XmlElement(name = "Ka")
-	private RGBA ambient;
+	private RGB ambient;
 
 	@XmlElement(name = "Kd")
-	private RGBA diffuse;
+	private RGB diffuse;
 
 	@XmlElement(name = "Ks")
-	private RGBA specular;
+	private RGB specular;
 
 	@XmlElement(name = "Ns")
 	private double ns;
@@ -25,27 +25,27 @@ public class Material {
 	@XmlElement(name = "d")
 	private double d;
 
-	public RGBA getAmbient() {
+	public RGB getAmbient() {
 		return ambient;
 	}
 
-	public void setAmbient(RGBA ambient) {
+	public void setAmbient(RGB ambient) {
 		this.ambient = ambient;
 	}
 
-	public RGBA getDiffuse() {
+	public RGB getDiffuse() {
 		return diffuse;
 	}
 
-	public void setDiffuse(RGBA diffuse) {
+	public void setDiffuse(RGB diffuse) {
 		this.diffuse = diffuse;
 	}
 
-	public RGBA getSpecular() {
+	public RGB getSpecular() {
 		return specular;
 	}
 
-	public void setSpecular(RGBA specular) {
+	public void setSpecular(RGB specular) {
 		this.specular = specular;
 	}
 

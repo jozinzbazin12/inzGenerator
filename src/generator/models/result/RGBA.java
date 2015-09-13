@@ -5,43 +5,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RGBA {
-
-	@XmlAttribute(name = "r")
-	private double r;
-
-	@XmlAttribute(name = "g")
-	private double g;
-
-	@XmlAttribute(name = "b")
-	private double b;
+public class RGBA extends RGB {
 
 	@XmlAttribute(name = "a")
 	private double a;
-
-	public double getR() {
-		return r;
-	}
-
-	public void setR(double r) {
-		this.r = r;
-	}
-
-	public double getG() {
-		return g;
-	}
-
-	public void setG(double g) {
-		this.g = g;
-	}
-
-	public double getB() {
-		return b;
-	}
-
-	public void setB(double b) {
-		this.b = b;
-	}
 
 	public double getA() {
 		return a;
@@ -52,9 +19,7 @@ public class RGBA {
 	}
 
 	public RGBA(double r, double g, double b, double a) {
-		this.r = r;
-		this.g = g;
-		this.b = b;
+		super(r, g, b);
 		this.a = a;
 	}
 

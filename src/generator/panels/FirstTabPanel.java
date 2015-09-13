@@ -26,11 +26,12 @@ import javax.swing.SwingConstants;
 import generator.Mediator;
 import generator.actions.LoadMapAction;
 import generator.actions.LoadTextureAction;
-import generator.models.result.RGBA;
 import generator.models.result.BasicMapData;
 import generator.models.result.LightData;
 import generator.models.result.MapObject;
 import generator.models.result.Material;
+import generator.models.result.RGB;
+import generator.models.result.RGBA;
 import generator.models.result.Texture;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
@@ -134,6 +135,16 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		return lightLegend;
 	}
 
+	private JPanel createMaterialsSettingsTitle() {
+		JPanel lightLegend = new JPanel();
+		lightLegend.setLayout(new GridLayout(0, 4));
+		lightLegend.add(new JLabel());
+		lightLegend.add(new JLabel("R", SwingConstants.CENTER));
+		lightLegend.add(new JLabel("G", SwingConstants.CENTER));
+		lightLegend.add(new JLabel("B", SwingConstants.CENTER));
+		return lightLegend;
+	}
+
 	private void createTextureOptionsPanel() {
 		JPanel textureOptions = new JPanel();
 		textureOptions.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE_OPTIONS)));
@@ -152,13 +163,13 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		textureOptions.add(createSpinner(0.01, 9999, Consts.SCALE, Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE), 1));
 
 		textureOptions.add(new JLabel(Mediator.getMessage(PropertiesKeys.MATERIAL), SwingConstants.CENTER));
-		textureOptions.add(createLightSettingsTitle());
-		textureOptions.add(createLightSpinners(0, 1, Consts.MATERIAL_AMBIENT_R, Consts.MATERIAL_AMBIENT_G,
-				Consts.MATERIAL_AMBIENT_B, Consts.MATERIAL_AMBIENT_A, Mediator.getMessage(PropertiesKeys.AMBIENT), 0.5));
-		textureOptions.add(createLightSpinners(0, 1, Consts.MATERIAL_DIFFUSE_R, Consts.MATERIAL_DIFFUSE_G,
-				Consts.MATERIAL_DIFFUSE_B, Consts.MATERIAL_DIFFUSE_A, Mediator.getMessage(PropertiesKeys.DIFFUSE), 0.8));
-		textureOptions.add(createLightSpinners(0, 1, Consts.MATERIAL_SPECULAR_R, Consts.MATERIAL_SPECULAR_G,
-				Consts.MATERIAL_SPECULAR_B, Consts.MATERIAL_SPECULAR_A, Mediator.getMessage(PropertiesKeys.SPECULAR), 0.5));
+		textureOptions.add(createMaterialsSettingsTitle());
+		textureOptions.add(createMaterialSpinners(0, 1, Consts.MATERIAL_AMBIENT_R, Consts.MATERIAL_AMBIENT_G,
+				Consts.MATERIAL_AMBIENT_B, Mediator.getMessage(PropertiesKeys.AMBIENT), 0.5));
+		textureOptions.add(createMaterialSpinners(0, 1, Consts.MATERIAL_DIFFUSE_R, Consts.MATERIAL_DIFFUSE_G,
+				Consts.MATERIAL_DIFFUSE_B, Mediator.getMessage(PropertiesKeys.DIFFUSE), 0.8));
+		textureOptions.add(createMaterialSpinners(0, 1, Consts.MATERIAL_SPECULAR_R, Consts.MATERIAL_SPECULAR_G,
+				Consts.MATERIAL_SPECULAR_B, Mediator.getMessage(PropertiesKeys.SPECULAR), 0.5));
 
 		textureOptions.add(createSpinner(0, 1, Consts.MATERIAL_D, Mediator.getMessage(PropertiesKeys.OPACITY), 1));
 		textureOptions.add(createSpinner(0, 1000, Consts.MATERIAL_NS, Mediator.getMessage(PropertiesKeys.SHINESS), 1));
@@ -214,6 +225,25 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		arguments.put(keyG, spinnerG);
 		arguments.put(keyB, spinnerB);
 		arguments.put(keyA, spinnerA);
+		return panel;
+	}
+
+	private JPanel createMaterialSpinners(double min, double max, String keyR, String keyG, String keyB, String description,
+			double defValue) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(0, 4));
+		JLabel attributelabel = new JLabel(description);
+		panel.add(attributelabel);
+		JSpinner spinnerR = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		JSpinner spinnerG = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		JSpinner spinnerB = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		panel.add(attributelabel);
+		panel.add(spinnerR);
+		panel.add(spinnerG);
+		panel.add(spinnerB);
+		arguments.put(keyR, spinnerR);
+		arguments.put(keyG, spinnerG);
+		arguments.put(keyB, spinnerB);
 		return panel;
 	}
 
@@ -281,12 +311,12 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 
 	public Material getMaterial() {
 		Material mtl = new Material();
-		RGBA ambient = new RGBA(getValue(Consts.MATERIAL_AMBIENT_R), getValue(Consts.MATERIAL_AMBIENT_G),
-				getValue(Consts.MATERIAL_AMBIENT_B), getValue(Consts.MATERIAL_AMBIENT_A));
-		RGBA diffuse = new RGBA(getValue(Consts.MATERIAL_DIFFUSE_R), getValue(Consts.MATERIAL_DIFFUSE_G),
-				getValue(Consts.MATERIAL_DIFFUSE_B), getValue(Consts.MATERIAL_DIFFUSE_A));
-		RGBA specular = new RGBA(getValue(Consts.MATERIAL_SPECULAR_R), getValue(Consts.MATERIAL_SPECULAR_G),
-				getValue(Consts.MATERIAL_SPECULAR_B), getValue(Consts.MATERIAL_SPECULAR_A));
+		RGB ambient = new RGB(getValue(Consts.MATERIAL_AMBIENT_R), getValue(Consts.MATERIAL_AMBIENT_G),
+				getValue(Consts.MATERIAL_AMBIENT_B));
+		RGB diffuse = new RGB(getValue(Consts.MATERIAL_DIFFUSE_R), getValue(Consts.MATERIAL_DIFFUSE_G),
+				getValue(Consts.MATERIAL_DIFFUSE_B));
+		RGB specular = new RGB(getValue(Consts.MATERIAL_SPECULAR_R), getValue(Consts.MATERIAL_SPECULAR_G),
+				getValue(Consts.MATERIAL_SPECULAR_B));
 		mtl.setAmbient(ambient);
 		mtl.setDiffuse(diffuse);
 		mtl.setSpecular(specular);
@@ -336,28 +366,25 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 
 		Material mtl = data.getMaterial();
 		if (mtl != null) {
-			RGBA ambient = mtl.getAmbient();
+			RGB ambient = mtl.getAmbient();
 			if (ambient != null) {
 				arguments.get(Consts.MATERIAL_AMBIENT_R).setValue(ambient.getR());
 				arguments.get(Consts.MATERIAL_AMBIENT_G).setValue(ambient.getG());
 				arguments.get(Consts.MATERIAL_AMBIENT_B).setValue(ambient.getB());
-				arguments.get(Consts.MATERIAL_AMBIENT_A).setValue(ambient.getA());
 			}
 
-			RGBA diffuse = mtl.getDiffuse();
+			RGB diffuse = mtl.getDiffuse();
 			if (diffuse != null) {
 				arguments.get(Consts.MATERIAL_DIFFUSE_R).setValue(diffuse.getR());
 				arguments.get(Consts.MATERIAL_DIFFUSE_G).setValue(diffuse.getG());
 				arguments.get(Consts.MATERIAL_DIFFUSE_B).setValue(diffuse.getB());
-				arguments.get(Consts.MATERIAL_DIFFUSE_A).setValue(diffuse.getA());
 			}
 
-			RGBA specular = mtl.getSpecular();
+			RGB specular = mtl.getSpecular();
 			if (mtl != null) {
 				arguments.get(Consts.MATERIAL_SPECULAR_R).setValue(specular.getR());
 				arguments.get(Consts.MATERIAL_SPECULAR_G).setValue(specular.getG());
 				arguments.get(Consts.MATERIAL_SPECULAR_B).setValue(specular.getB());
-				arguments.get(Consts.MATERIAL_SPECULAR_A).setValue(specular.getA());
 			}
 			arguments.get(Consts.MATERIAL_D).setValue(mtl.getD());
 			arguments.get(Consts.MATERIAL_NS).setValue(mtl.getNs());
