@@ -1,165 +1,99 @@
 package generator.panels;
 
-import generator.Mediator;
-import generator.actions.NewObjectAction;
-import generator.models.generation.ObjectListRow;
-import generator.models.result.GeneratedObject;
-import generator.utils.PropertiesKeys;
-
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
+
+import generator.Mediator;
+import generator.actions.LoadModelAction;
+import generator.algorithms.Algorithm;
+import generator.algorithms.FullRandomAlgorithm;
+import generator.algorithms.RegularAlgorithm;
+import generator.models.generation.ObjectFileListRow;
+import generator.models.generation.ObjectInfo;
+import generator.utils.PropertiesKeys;
 
 public class SecondTabPanel extends JPanel implements MouseListener {
 
+	private static final String NEW_ACTION = "newAction";
 	private static final long serialVersionUID = -2087487239161953473L;
-	private static JPopupMenu menu;
-	private PreviewPanel previewPanel;
-	private Dimension imageSize;
+	private Map<String, JSpinner> arguments;
 
+	private JPanel options2;
+	private JComboBox<Algorithm> algorithmList;
+	private JPopupMenu menu;
+	private JPanel view;
 	private JPanel objectsPanel;
 
-	private JPanel view;
-	private List<ObjectListRow> rows;
-
-	public void refreshObjects() {
-		for (ObjectListRow i : rows) {
-			i.refresh();
-		}
-		objectsPanel.revalidate();
+	public Algorithm getAlgorithm() {
+		return (Algorithm) algorithmList.getSelectedItem();
 	}
 
-	public GeneratedObject getGeneratedObject() {
-		return ObjectListRow.getClicked().getObject();
+	private void createAlgotithmsPanel() {
+		options2 = new JPanel();
+		options2.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_OPTIONS)));
+		options2.setLayout(new GridLayout(12, 2, 5, 5));
+		algorithmList = new JComboBox<>();
+		algorithmList.addItem(new FullRandomAlgorithm(Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM)));
+		algorithmList.addItem(new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM)));
+		options2.add(algorithmList);
+		add(options2);
 	}
 
-	public void highlight(GeneratedObject obj) {
-		for (ObjectListRow i : rows) {
-			if (i.getObject() == obj) {
-				i.highlight();
-				i.repaint();
-				break;
-			}
-		}
-	}
+	private void createObjectFilesPanel() {
+		objectsPanel = new JPanel();
+		objectsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.OBJECTS)));
+		objectsPanel.setLayout(new GridLayout(0, 1));
+		view = new JPanel();
+		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
+		view.add(ObjectFileListRow.createTitle());
 
-	public void setClicked(GeneratedObject obj) {
-		for (ObjectListRow i : rows) {
-			if (i.getObject() == obj) {
-				ObjectListRow.setClicked(i);
-				objectsPanel.revalidate();
-				i.revalidate();
-				break;
-			}
-		}
-	}
+		menu = new JPopupMenu();
+		LoadModelAction newAction = new LoadModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT));
+		JMenuItem neww = new JMenuItem(newAction);
+		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK));
+		menu.add(neww);
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK),
+				NEW_ACTION);
+		getActionMap().put(NEW_ACTION, newAction);
 
-	public void deleteObject(ObjectListRow objectListRow) {
-		view.remove(objectListRow.getIndex() + 1);
-		ObjectListRow.setClicked(null);
-		int count = 0;
-		for (Object i : view.getComponents()) {
-			if (i instanceof ObjectListRow) {
-				((ObjectListRow) i).setIndex(count++);
-				((JComponent) i).revalidate();
-			}
-		}
-		objectsPanel.repaint();
-		previewPanel.repaint();
-	}
-
-	public File addPreview(String imgName) throws IOException {
-		remove(previewPanel);
-		File file = new File(imgName);
-		BufferedImage image = ImageIO.read(file);
-		if (image == null)
-			throw new IOException();
-		imageSize = new Dimension(image.getWidth(), image.getHeight());
-		previewPanel = new PreviewPanel(image);
-		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
-		add(previewPanel);
-		return file;
-	}
-
-	public void printOnPreview(List<GeneratedObject> list) {
-		previewPanel.setResultObject(list);
-		previewPanel.repaint();
+		JScrollPane listScroller = new JScrollPane(view);
+		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		listScroller.addMouseListener(this);
+		objectsPanel.add(listScroller);
+		add(objectsPanel);
 	}
 
 	public SecondTabPanel() {
+		arguments = new HashMap<String, JSpinner>();
 		setLayout(new GridLayout(0, 2));
-		objectsPanel = new JPanel();
-		objectsPanel.setLayout(new GridLayout(0, 1));
-		objectsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.GENERATED_OBJECTS)));
-		objectsPanel.add(createObjectListPanel());
-		add(objectsPanel);
-		previewPanel = new PreviewPanel();
-		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
-		add(previewPanel);
+		createObjectFilesPanel();
+		createAlgotithmsPanel();
 		Mediator.registerSecondTabPanel(this);
+
 	}
 
-	public JScrollPane createObjectListPanel() {
-		JPanel view = new JPanel();
-		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
-		view.add(ObjectListRow.createTitle());
-
-		JScrollPane listScroller = new JScrollPane(view);
-		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		menu = new JPopupMenu();
-		NewObjectAction newAction = new NewObjectAction(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
-		JMenuItem neww = new JMenuItem(newAction);
-		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
-		menu.add(neww);
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), "newAction");
-		getActionMap().put("newAction", newAction);
-		listScroller.addMouseListener(this);
-
-		return listScroller;
-	}
-
-	public void updateObjectListPanel(List<GeneratedObject> objects) {
-		objectsPanel.removeAll();
-		view = new JPanel();
-		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
-		view.add(ObjectListRow.createTitle());
-		int count = 0;
-		rows = new ArrayList<ObjectListRow>();
-		Collections.sort(objects);
-		for (GeneratedObject i : objects) {
-			ObjectListRow objectListRow = new ObjectListRow(i, count++);
-			rows.add(objectListRow);
-			view.add(objectListRow);
-		}
-		JScrollPane listScroller = new JScrollPane(view);
-		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		listScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		listScroller.addMouseListener(this);
-		objectsPanel.add(listScroller);
-		objectsPanel.revalidate();
-	}
-
-	public Dimension getImageSize() {
-		return imageSize;
+	public Map<String, JSpinner> getArguments() {
+		return arguments;
 	}
 
 	@Override
@@ -187,13 +121,24 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 	}
 
-	public void unHighlight() {
-		ObjectListRow.unHighlight();
-	}
+	public void updateObjectFiles(Collection<ObjectInfo> collection) {
+		objectsPanel.removeAll();
+		view = new JPanel();
+		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
+		view.add(ObjectFileListRow.createTitle());
 
-	public void refreshPreview() {
-		previewPanel.repaint();
-
+		List<ObjectInfo> modelsList = new ArrayList<>(collection);
+		Collections.sort(modelsList);
+		int count = 0;
+		for (ObjectInfo i : modelsList) {
+			view.add(new ObjectFileListRow(i, count++));
+		}
+		JScrollPane listScroller = new JScrollPane(view);
+		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		listScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		listScroller.addMouseListener(this);
+		objectsPanel.add(listScroller);
+		objectsPanel.revalidate();
 	}
 
 }

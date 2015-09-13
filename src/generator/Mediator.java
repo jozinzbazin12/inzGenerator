@@ -33,6 +33,7 @@ import generator.models.result.GeneratedObject;
 import generator.models.result.ResultObject;
 import generator.panels.FirstTabPanel;
 import generator.panels.SecondTabPanel;
+import generator.panels.ThirdTabPanel;
 import generator.utils.PropertiesKeys;
 import generator.windows.MainWindow;
 import generator.windows.ModelWindow;
@@ -43,6 +44,7 @@ public class Mediator {
 	private static final String LANGUAGE_KEY = "language";
 	private static MainWindow mainWindow;
 	private static SecondTabPanel secondTabPanel;
+	private static ThirdTabPanel thirdTabPanel;
 	private static ResourceBundle messages;
 	private static FirstTabPanel firstTabPanel;
 	private static ResultObject resultObject = new ResultObject();
@@ -85,7 +87,8 @@ public class Mediator {
 		try {
 			saveProperties();
 			int dialogResult = JOptionPane.showConfirmDialog(null, Mediator.getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING),
-					Mediator.getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					Mediator.getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING), JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
 			if (dialogResult == JOptionPane.YES_OPTION) {
 				mainWindow.dispose();
 				main(null);
@@ -101,15 +104,15 @@ public class Mediator {
 
 	public static void setMapFileName(String imgName) {
 		try {
-			resultObject.getMapObject().setMapFileName(secondTabPanel.addPreview(imgName).getAbsolutePath());
+			resultObject.getMapObject().setMapFileName(thirdTabPanel.addPreview(imgName).getAbsolutePath());
 			firstTabPanel.setMapFileName(imgName);
 			mainWindow.getContentPane().revalidate();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.FILE_NOT_IMAGE),
 					messages.getString(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
 		}
-		firstTabPanel.setMapHeight(String.valueOf(secondTabPanel.getImageSize().height) + " px");
-		firstTabPanel.setMapWidth(String.valueOf(secondTabPanel.getImageSize().width) + " px");
+		firstTabPanel.setMapHeight(String.valueOf(thirdTabPanel.getImageSize().height) + " px");
+		firstTabPanel.setMapWidth(String.valueOf(thirdTabPanel.getImageSize().width) + " px");
 	}
 
 	public static void saveXMLFile(String name) {
@@ -126,8 +129,8 @@ public class Mediator {
 			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.SAVE_XML_SUCCESS),
 					messages.getString(PropertiesKeys.SAVE_XML_SUCCESS), JOptionPane.INFORMATION_MESSAGE);
 		} catch (JAXBException | IOException e) {
-			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.SAVE_XML_ERROR), messages.getString(PropertiesKeys.SAVE_XML_ERROR),
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.SAVE_XML_ERROR),
+					messages.getString(PropertiesKeys.SAVE_XML_ERROR), JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 
@@ -141,8 +144,8 @@ public class Mediator {
 			Unmarshaller um = context.createUnmarshaller();
 			resultObject = (ResultObject) um.unmarshal(file);
 		} catch (JAXBException e) {
-			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.LOAD_XML_ERROR), messages.getString(PropertiesKeys.LOAD_XML_ERROR),
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.LOAD_XML_ERROR),
+					messages.getString(PropertiesKeys.LOAD_XML_ERROR), JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 			return;
 		}
@@ -165,9 +168,12 @@ public class Mediator {
 		printOnPreview();
 	}
 
-	public static void registerSecondTabPanel(SecondTabPanel secp) {
-		secondTabPanel = secp;
+	public static void registerSecondTabPanel(SecondTabPanel secondPanel) {
+		secondTabPanel = secondPanel;
+	}
 
+	public static void registerThirdTabPanel(ThirdTabPanel thridPanel) {
+		thirdTabPanel = thridPanel;
 	}
 
 	public static String getMessage(String message) {
@@ -186,7 +192,7 @@ public class Mediator {
 	}
 
 	public static Algorithm getAlgorithm() {
-		return firstTabPanel.getAlgorithm();
+		return secondTabPanel.getAlgorithm();
 
 	}
 
@@ -199,8 +205,8 @@ public class Mediator {
 	}
 
 	public static void printOnPreview() {
-		secondTabPanel.printOnPreview(resultObject.getGeneratedObjects());
-		secondTabPanel.revalidate();
+		thirdTabPanel.printOnPreview(resultObject.getGeneratedObjects());
+		thirdTabPanel.revalidate();
 	}
 
 	public static double getGenerationInfoArguments(String key) {
@@ -216,16 +222,16 @@ public class Mediator {
 	}
 
 	public static void updateObjectList(List<GeneratedObject> objects) {
-		secondTabPanel.updateObjectListPanel(objects);
+		thirdTabPanel.updateObjectListPanel(objects);
 	}
 
 	public static void updateObjectList() {
-		secondTabPanel.updateObjectListPanel(resultObject.getGeneratedObjects());
+		thirdTabPanel.updateObjectListPanel(resultObject.getGeneratedObjects());
 	}
 
 	public static void deleteObject(ObjectListRow objectListRow) {
 		resultObject.getGeneratedObjects().remove(objectListRow.getIndex());
-		secondTabPanel.deleteObject(objectListRow);
+		thirdTabPanel.deleteObject(objectListRow);
 		printOnPreview();
 	}
 
@@ -234,7 +240,7 @@ public class Mediator {
 			models.remove(i.getObject().getModel().getPath());
 		}
 
-		firstTabPanel.updateObjectFiles(models.values());
+		secondTabPanel.updateObjectFiles(models.values());
 
 	}
 
@@ -247,32 +253,32 @@ public class Mediator {
 	}
 
 	public static GeneratedObject getGeneratedObject() {
-		return secondTabPanel.getGeneratedObject();
+		return thirdTabPanel.getGeneratedObject();
 	}
 
 	public static void setClicked(GeneratedObject obj) {
-		secondTabPanel.setClicked(obj);
+		thirdTabPanel.setClicked(obj);
 	}
 
 	public static void highlight(GeneratedObject obj) {
-		secondTabPanel.highlight(obj);
+		thirdTabPanel.highlight(obj);
 
 	}
 
 	public static void unHighlight() {
-		secondTabPanel.unHighlight();
+		thirdTabPanel.unHighlight();
 	}
 
 	public static void refreshObjects() {
-		secondTabPanel.refreshObjects();
+		thirdTabPanel.refreshObjects();
 	}
 
 	public static void refreshPreview() {
-		secondTabPanel.refreshPreview();
+		thirdTabPanel.refreshPreview();
 	}
 
 	public static Dimension getMapDimensions() {
-		return secondTabPanel.getImageSize();
+		return thirdTabPanel.getImageSize();
 	}
 
 	public static void loadObjectFile(String path) {
@@ -284,7 +290,7 @@ public class Mediator {
 	}
 
 	public static void updateModelsPanel() {
-		firstTabPanel.updateObjectFiles(models.values());
+		secondTabPanel.updateObjectFiles(models.values());
 	}
 
 	private static String getFileNameFromPath(String path) {

@@ -68,4 +68,5 @@ public final class PropertiesKeys {
 	public static final String DIFFUSE = "diffuse";
 	public static final String SPECULAR = "specular";
 	public static final String LIGHT_POSITION = "lightPosition";
+	public static final String THIRD_TAB_NAME = "thirdTabName";
 }

@@ -8,6 +8,7 @@ import generator.listeners.ChangeLanguageListener;
 import generator.models.LangugeOption;
 import generator.panels.FirstTabPanel;
 import generator.panels.SecondTabPanel;
+import generator.panels.ThirdTabPanel;
 import generator.utils.PropertiesKeys;
 
 import java.awt.BorderLayout;
@@ -40,9 +41,10 @@ public class MainWindow extends JFrame {
 
 	public void createWindow() {
 		createMenu();
-		FirstTabPanel first = new FirstTabPanel();
-		SecondTabPanel secondTab = new SecondTabPanel();
-		preparePanels(first, secondTab);
+		JPanel first = new FirstTabPanel();
+		JPanel second = new SecondTabPanel();
+		JPanel third = new ThirdTabPanel();
+		preparePanels(first, second, third);
 		revalidate();
 	}
 
@@ -98,10 +100,11 @@ public class MainWindow extends JFrame {
 		return languageOption;
 	}
 
-	private void preparePanels(JPanel first, JPanel second) {
+	private void preparePanels(JPanel first, JPanel second, JPanel third) {
 		tab = new JTabbedPane();
 		tab.addTab(Mediator.getMessage(PropertiesKeys.FIRST_TAB_NAME), first);
 		tab.addTab(Mediator.getMessage(PropertiesKeys.SECOND_TAB_NAME), second);
+		tab.addTab(Mediator.getMessage(PropertiesKeys.THIRD_TAB_NAME), third);
 		tab.setPreferredSize(new Dimension(getWidth(), (int) (getHeight() * 0.9)));
 		tab.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK), new Action() {
 
