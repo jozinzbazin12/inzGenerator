@@ -1,58 +1,52 @@
 package generator.panels;
 
-import generator.listeners.ImageListener;
-import generator.models.result.GeneratedObject;
-
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
 
 import javax.swing.JPanel;
 
+import generator.listeners.ImageListener;
+
 public class PreviewPanel extends JPanel {
-	private static final long serialVersionUID = -9061500843600921283L;
-	private BufferedImage image;
-	private Point currentPoint;
-	private Point previousPoint = new Point();
-	private double zoom = 0;
-	private List<GeneratedObject> generatedObjects;
+
+	private static final long serialVersionUID = 5712708696866492460L;
+	protected BufferedImage image;
+	protected Point currentPoint;
+	protected Point previousPoint = new Point();
+	protected double zoom = 0;
+	protected int width;
+	protected int height;
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (image != null) {
-			if (currentPoint == null)
-				setDefaultZoom();
-			int width = getResizedWidth();
-			int height = getResizedHeight();
-			if (width <= 0)
-				width = 1;
-			if (height <= 0)
-				height = 1;
-			Image scaledInstance = image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
-			g.drawImage(scaledInstance, (int) currentPoint.getX(), (int) currentPoint.getY(), null);
-			g.setColor(Color.red);
-			g.drawLine(width / 2 + currentPoint.x, currentPoint.y - 1000, width / 2 + currentPoint.x, height + currentPoint.y + 1000);
-			g.drawLine(currentPoint.x - 1000, height / 2 + currentPoint.y, width + currentPoint.x + 1000, height / 2 + currentPoint.y);
-			if (generatedObjects != null) {
-				for (GeneratedObject i : generatedObjects) {
-					g.setColor(i.getColor());
-					g.fillRect((int) ((i.getBasic().getX()+image.getWidth()/2) * (1 + zoom) + currentPoint.x), (int) ((image.getHeight()/2-i.getBasic().getZ()) * (1 + zoom) + currentPoint.y), 4, 4);
-				}
-			}
+			drawImage(g);
 		}
 
 	}
 
-	private int getResizedHeight() {
+	protected void drawImage(Graphics g) {
+		if (currentPoint == null)
+			setDefaultZoom();
+		width = getResizedWidth();
+		height = getResizedHeight();
+		if (width <= 0)
+			width = 1;
+		if (height <= 0)
+			height = 1;
+		Image scaledInstance = image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
+		g.drawImage(scaledInstance, (int) currentPoint.getX(), (int) currentPoint.getY(), null);
+	}
+
+	protected int getResizedHeight() {
 		return (int) (image.getHeight() + image.getHeight() * zoom);
 	}
 
-	private int getResizedWidth() {
+	protected int getResizedWidth() {
 		return (int) (image.getWidth() + image.getWidth() * zoom);
 	}
 
@@ -99,13 +93,4 @@ public class PreviewPanel extends JPanel {
 	public void setZoom(double zoom) {
 		this.zoom = zoom;
 	}
-
-	public void setResultObject(List<GeneratedObject> list) {
-		generatedObjects = list;
-	}
-
-	public List<GeneratedObject> getGeneratedObjects() {
-		return generatedObjects;
-	}
-
 }

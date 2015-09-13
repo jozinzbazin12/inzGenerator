@@ -31,6 +31,7 @@ import generator.models.generation.ObjectInfo;
 import generator.models.generation.ObjectListRow;
 import generator.models.result.GeneratedObject;
 import generator.models.result.ResultObject;
+import generator.models.result.Texture;
 import generator.panels.FirstTabPanel;
 import generator.panels.SecondTabPanel;
 import generator.panels.ThirdTabPanel;
@@ -102,7 +103,7 @@ public class Mediator {
 		mainWindow = mw;
 	}
 
-	public static void setMapFileName(String imgName) {
+	public static void setMapFile(String imgName) {
 		try {
 			resultObject.getMapObject().setMapFileName(thirdTabPanel.addPreview(imgName).getAbsolutePath());
 			firstTabPanel.setMapFileName(imgName);
@@ -115,10 +116,25 @@ public class Mediator {
 		firstTabPanel.setMapWidth(String.valueOf(thirdTabPanel.getImageSize().width) + " px");
 	}
 
+	public static void setTextureFile(String path) {
+		try {
+			if (resultObject.getMapObject().getTexture() == null) {
+				resultObject.getMapObject().setTexture(new Texture());
+			}
+			resultObject.getMapObject().getTexture().setPath(path);
+			firstTabPanel.setTexturePath(path);
+			mainWindow.getContentPane().revalidate();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.FILE_NOT_IMAGE),
+					messages.getString(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
+		}
+	}
+
 	public static void saveXMLFile(String name) {
 		JAXBContext context;
 		resultObject.getMapObject().setBasic(firstTabPanel.getMapSettings());
 		resultObject.getMapObject().setLightData(firstTabPanel.getLightSettings());
+		resultObject.getMapObject().setTexture(firstTabPanel.getTexture());
 		try {
 			context = JAXBContext.newInstance("generator.models.result");
 			Marshaller marshaller = context.createMarshaller();
@@ -133,7 +149,6 @@ public class Mediator {
 					messages.getString(PropertiesKeys.SAVE_XML_ERROR), JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
-
 	}
 
 	public static void loadXMLFile(String name) {
@@ -163,7 +178,7 @@ public class Mediator {
 		}
 		firstTabPanel.setArgumentValue(resultObject.getMapObject());
 		updateModelsPanel();
-		setMapFileName(resultObject.getMapObject().getMapFileName());
+		setMapFile(resultObject.getMapObject().getMapFileName());
 		updateObjectList(resultObject.getGeneratedObjects());
 		printOnPreview();
 	}
@@ -181,19 +196,17 @@ public class Mediator {
 		try {
 			result = messages.getString(message);
 		} catch (MissingResourceException e) {
-			result = message;
+			result = "???" + message;
 		}
 		return result;
 	}
 
 	public static void registerFirstTabPanel(FirstTabPanel panel) {
 		firstTabPanel = panel;
-
 	}
 
 	public static Algorithm getAlgorithm() {
 		return secondTabPanel.getAlgorithm();
-
 	}
 
 	public static ResultObject getResultObject() {
@@ -241,7 +254,6 @@ public class Mediator {
 		}
 
 		secondTabPanel.updateObjectFiles(models.values());
-
 	}
 
 	public static void registerObjectWindow(ObjectWindow window) {
@@ -262,7 +274,6 @@ public class Mediator {
 
 	public static void highlight(GeneratedObject obj) {
 		thirdTabPanel.highlight(obj);
-
 	}
 
 	public static void unHighlight() {
@@ -316,5 +327,4 @@ public class Mediator {
 	public static void setLastPath(String lastPath) {
 		Mediator.lastPath = lastPath;
 	}
-
 }

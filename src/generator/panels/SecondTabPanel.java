@@ -89,7 +89,6 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 		createObjectFilesPanel();
 		createAlgotithmsPanel();
 		Mediator.registerSecondTabPanel(this);
-
 	}
 
 	public Map<String, JSpinner> getArguments() {

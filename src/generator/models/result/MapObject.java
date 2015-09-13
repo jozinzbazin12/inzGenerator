@@ -11,8 +11,8 @@ public class MapObject {
 	@XmlAttribute(name = "mapFile", required = true)
 	private String mapFileName;
 
-	@XmlAttribute(name = "textureFile", required = true)
-	private String textureFileName;
+	@XmlElement(name = "Texture", required = true)
+	private Texture texture;
 
 	@XmlElement(name = "Settings", required = true)
 	private BasicMapData basic;
@@ -26,14 +26,6 @@ public class MapObject {
 
 	public void setMapFileName(String mapFileName) {
 		this.mapFileName = mapFileName;
-	}
-
-	public String getTextureFileName() {
-		return textureFileName;
-	}
-
-	public void setTextureFileName(String textureFileName) {
-		this.textureFileName = textureFileName;
 	}
 
 	public void setBasic(BasicMapData basic) {
@@ -50,5 +42,13 @@ public class MapObject {
 
 	public void setLightData(LightData lightData) {
 		this.lightData = lightData;
+	}
+
+	public Texture getTexture() {
+		return texture;
+	}
+
+	public void setTexture(Texture texture) {
+		this.texture = texture;
 	}
 }

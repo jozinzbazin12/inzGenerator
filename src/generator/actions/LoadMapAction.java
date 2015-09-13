@@ -26,7 +26,7 @@ public class LoadMapAction extends AbstractAction {
 			fileName = null;
 		}
 		if (fileName != null) {
-			Mediator.setMapFileName(fileName);
+			Mediator.setMapFile(fileName);
 		}
 	}
 

@@ -33,7 +33,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 
 	private static final long serialVersionUID = -2087487239161953473L;
 	private static JPopupMenu menu;
-	private PreviewPanel previewPanel;
+	private ObjectsPreviewPanel previewPanel;
 	private Dimension imageSize;
 
 	private JPanel objectsPanel;
@@ -94,7 +94,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		if (image == null)
 			throw new IOException();
 		imageSize = new Dimension(image.getWidth(), image.getHeight());
-		previewPanel = new PreviewPanel(image);
+		previewPanel = new ObjectsPreviewPanel(image);
 		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
 		add(previewPanel);
 		return file;
@@ -112,7 +112,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		objectsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.GENERATED_OBJECTS)));
 		objectsPanel.add(createObjectListPanel());
 		add(objectsPanel);
-		previewPanel = new PreviewPanel();
+		previewPanel = new ObjectsPreviewPanel();
 		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
 		add(previewPanel);
 		Mediator.registerThirdTabPanel(this);

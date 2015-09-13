@@ -69,4 +69,9 @@ public final class PropertiesKeys {
 	public static final String SPECULAR = "specular";
 	public static final String LIGHT_POSITION = "lightPosition";
 	public static final String THIRD_TAB_NAME = "thirdTabName";
+	public static final String TEXTURE_OPTIONS = "textureOptions";
+	public static final String TEXTURE_PATH = "texturePath";
+	public static final String TEXTURE = "texture";
+	public static final String OPEN_TEXTURE = "openTexture";
+	public static final String TEXTURE_SCALE = "textureScale";
 }

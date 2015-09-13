@@ -3,14 +3,20 @@ package generator.panels;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSpinner;
@@ -19,10 +25,12 @@ import javax.swing.SwingConstants;
 
 import generator.Mediator;
 import generator.actions.LoadMapAction;
+import generator.actions.LoadTextureAction;
 import generator.models.result.BasicLightData;
 import generator.models.result.BasicMapData;
 import generator.models.result.LightData;
 import generator.models.result.MapObject;
+import generator.models.result.Texture;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
 
@@ -37,6 +45,8 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 	private JLabel mapWidthLabel;
 	private JLabel mapHeightLabel;
 	private JPopupMenu menu;
+	private JLabel texturePath;
+	private JPanel texture;
 
 	public String getMapName() {
 		return mapLabel.getText();
@@ -109,39 +119,71 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		options.add(lightLegend);
 
 		options.add(createLightSpinners(0, 1, Consts.LIGHT_AMBIENT_R, Consts.LIGHT_AMBIENT_G, Consts.LIGHT_AMBIENT_B,
-				Consts.LIGHT_AMBIENT_A, Mediator.getMessage(PropertiesKeys.AMBIENT)));
+				Consts.LIGHT_AMBIENT_A, Mediator.getMessage(PropertiesKeys.AMBIENT), 0.5));
 		options.add(createLightSpinners(0, 1, Consts.LIGHT_DIFFUSE_R, Consts.LIGHT_DIFFUSE_G, Consts.LIGHT_DIFFUSE_B,
-				Consts.LIGHT_DIFFUSE_A, Mediator.getMessage(PropertiesKeys.DIFFUSE)));
+				Consts.LIGHT_DIFFUSE_A, Mediator.getMessage(PropertiesKeys.DIFFUSE), 0.8));
 		options.add(createLightSpinners(0, 1, Consts.LIGHT_SPECULAR_R, Consts.LIGHT_SPECULAR_G, Consts.LIGHT_SPECULAR_B,
-				Consts.LIGHT_SPECULAR_A, Mediator.getMessage(PropertiesKeys.SPECULAR)));
+				Consts.LIGHT_SPECULAR_A, Mediator.getMessage(PropertiesKeys.SPECULAR), 0.5));
 		options.add(createLightSpinners(-10000, 10000, Consts.LIGHT_POSITION_X, Consts.LIGHT_POSITION_Y, Consts.LIGHT_POSITION_Z,
-				Consts.LIGHT_POSITION_MODE, Mediator.getMessage(PropertiesKeys.LIGHT_POSITION)));
+				Consts.LIGHT_POSITION_MODE, Mediator.getMessage(PropertiesKeys.LIGHT_POSITION), 1));
 
 		add(options);
 	}
 
-	private JPanel createSpinner(double min, double max, String key, String description) {
+	private void createTextureOptionsPanel() {
+		JPanel texturePanel = new JPanel();
+		texturePanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE_OPTIONS)));
+		texturePanel.setLayout(new GridLayout(2, 0));
+
+		texture = new JPanel();
+		texture.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE)));
+		texture.setLayout(new GridLayout(1, 0));
+		texturePanel.add(texture);
+
+		JPanel textureOptions = new JPanel();
+		textureOptions.setLayout(new GridLayout(8, 0));
+
+		texturePath = new JLabel();
+		texturePath.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE_PATH)));
+		textureOptions.add(texturePath);
+
+		JPanel buttonHolder = new JPanel();
+		buttonHolder.setLayout(new GridLayout(0, 2));
+		JButton open = new JButton(new LoadTextureAction(Mediator.getMessage(PropertiesKeys.OPEN_TEXTURE)));
+		buttonHolder.add(open);
+		textureOptions.add(buttonHolder);
+		textureOptions.add(createSpinner(0.01, 9999, Consts.SCALE, Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE), 1));
+
+		texturePanel.add(textureOptions);
+		add(texturePanel);
+	}
+
+	private JPanel createSpinner(double min, double max, String key, String description, double defValue) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		JLabel attributelabel = new JLabel(description);
 		panel.add(attributelabel);
-		JSpinner spinner = new JSpinner(new SpinnerNumberModel(0.0, min, max, 1));
+		JSpinner spinner = new JSpinner(new SpinnerNumberModel(defValue, min, max, 1));
 		panel.add(attributelabel);
 		panel.add(spinner);
 		arguments.put(key, spinner);
 		return panel;
 	}
 
+	private JPanel createSpinner(double min, double max, String key, String description) {
+		return createSpinner(min, max, key, description, 0.0);
+	}
+
 	private JPanel createLightSpinners(double min, double max, String keyR, String keyG, String keyB, String keyA,
-			String description) {
+			String description, double defValue) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 5));
 		JLabel attributelabel = new JLabel(description);
 		panel.add(attributelabel);
-		JSpinner spinnerR = new JSpinner(new SpinnerNumberModel(0.0, min, max, 0.01));
-		JSpinner spinnerG = new JSpinner(new SpinnerNumberModel(0.0, min, max, 0.01));
-		JSpinner spinnerB = new JSpinner(new SpinnerNumberModel(0.0, min, max, 0.01));
-		JSpinner spinnerA = new JSpinner(new SpinnerNumberModel(0.0, min, max, 0.01));
+		JSpinner spinnerR = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		JSpinner spinnerG = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		JSpinner spinnerB = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		JSpinner spinnerA = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
 		panel.add(attributelabel);
 		panel.add(spinnerR);
 		panel.add(spinnerG);
@@ -158,6 +200,7 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		arguments = new HashMap<String, JSpinner>();
 		setLayout(new GridLayout(0, 3));
 		createMapOptionsPanel();
+		createTextureOptionsPanel();
 		Mediator.registerFirstTabPanel(this);
 	}
 
@@ -252,5 +295,33 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 			arguments.get(Consts.LIGHT_POSITION_Z).setValue(light.getZ());
 			arguments.get(Consts.LIGHT_POSITION_MODE).setValue(light.getMode());
 		}
+		Texture txt = data.getTexture();
+		if (txt != null) {
+			setTextureScale(txt.getScale());
+			try {
+				setTexturePath(txt.getPath());
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(new JFrame(), Mediator.getMessage(PropertiesKeys.FILE_NOT_IMAGE),
+						Mediator.getMessage(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
+			}
+		}
+	}
+
+	public void setTexturePath(String path) throws IOException {
+		texture.removeAll();
+		BufferedImage pic = ImageIO.read(new File(path));
+		if (pic == null) {
+			throw new IOException("Not an image");
+		}
+		texture.add(new PreviewPanel(pic));
+		texturePath.setText(path);
+	}
+
+	public void setTextureScale(double scale) {
+		arguments.get(Consts.SCALE).setValue(scale);
+	}
+
+	public Texture getTexture() {
+		return new Texture(texturePath.getText(), getValue(Consts.SCALE));
 	}
 }

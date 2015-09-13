@@ -52,5 +52,6 @@ public class Consts {
 	public static final String LIGHT_POSITION_Y = "lpy";
 	public static final String LIGHT_POSITION_Z = "lpz";
 	public static final String LIGHT_POSITION_MODE = "lpm";
+	public static final String SCALE = "scale";
 
 }
