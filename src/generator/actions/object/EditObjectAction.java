@@ -1,6 +1,7 @@
 package generator.actions.object;
 
 import generator.Mediator;
+import generator.models.result.GeneratedObject;
 import generator.utils.PropertiesKeys;
 import generator.windows.ObjectWindow;
 
@@ -14,8 +15,10 @@ public class EditObjectAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new ObjectWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), Mediator.getGeneratedObject());
-
+		GeneratedObject generatedObject = Mediator.getGeneratedObject();
+		if (generatedObject != null) {
+			new ObjectWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), generatedObject);
+		}
 	}
 
 	public EditObjectAction(String name) {

@@ -50,7 +50,11 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	}
 
 	public GeneratedObject getGeneratedObject() {
-		return ObjectListRow.getClicked().getObject();
+		ObjectListRow clicked = ObjectListRow.getClicked();
+		if (clicked == null) {
+			return null;
+		}
+		return clicked.getObject();
 	}
 
 	public void highlight(GeneratedObject obj) {

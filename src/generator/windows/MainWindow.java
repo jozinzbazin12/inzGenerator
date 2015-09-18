@@ -3,12 +3,9 @@ package generator.windows;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Locale;
 
-import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -98,39 +95,7 @@ public class MainWindow extends JFrame {
 		tab.addTab(Mediator.getMessage(PropertiesKeys.SECOND_TAB_NAME), second);
 		tab.addTab(Mediator.getMessage(PropertiesKeys.THIRD_TAB_NAME), third);
 		tab.setPreferredSize(new Dimension(getWidth(), (int) (getHeight() * 0.9)));
-		tab.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK), new Action() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				tab.setSelectedIndex((tab.getSelectedIndex() + 1) % tab.getTabCount());
-			}
-
-			@Override
-			public void setEnabled(boolean b) {
-			}
-
-			@Override
-			public void removePropertyChangeListener(PropertyChangeListener listener) {
-			}
-
-			@Override
-			public void putValue(String key, Object value) {
-			}
-
-			@Override
-			public boolean isEnabled() {
-				return false;
-			}
-
-			@Override
-			public Object getValue(String key) {
-				return null;
-			}
-
-			@Override
-			public void addPropertyChangeListener(PropertyChangeListener listener) {
-			}
-		});
 		add(tab, BorderLayout.NORTH);
 	}
 

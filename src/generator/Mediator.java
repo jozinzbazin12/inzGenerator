@@ -339,7 +339,7 @@ public class Mediator {
 		Mediator.lastPath = lastPath;
 	}
 }
-// TODO cleanup
+
 // TODO skalowanie podgladu
 // TODO skroty
 // TODO cleanup propertiesow

@@ -3,6 +3,7 @@ package generator.actions.model;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 
@@ -18,12 +19,14 @@ public class EditModelAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		List<ObjectInfo> objects=new ArrayList<>();
-		for(ObjectFileListRow i:ObjectFileListRow.getSelectedRows()){
+		List<ObjectInfo> objects = new ArrayList<>();
+		Set<ObjectFileListRow> selectedRows = ObjectFileListRow.getSelectedRows();
+		for (ObjectFileListRow i : selectedRows) {
 			objects.add(i.getObject());
 		}
-		new ModelWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), objects);
-
+		if (!selectedRows.isEmpty()) {
+			new ModelWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), objects);
+		}
 	}
 
 	public EditModelAction(String name) {
