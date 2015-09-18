@@ -127,10 +127,7 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 	private JPanel createLightSettingsTitle() {
 		JPanel lightLegend = new JPanel();
 		lightLegend.setLayout(new GridLayout(0, 5));
-		lightLegend.add(new JLabel());
-		lightLegend.add(new JLabel("R", SwingConstants.CENTER));
-		lightLegend.add(new JLabel("G", SwingConstants.CENTER));
-		lightLegend.add(new JLabel("B", SwingConstants.CENTER));
+		addRGBLegend(lightLegend);
 		lightLegend.add(new JLabel("A", SwingConstants.CENTER));
 		return lightLegend;
 	}
@@ -138,11 +135,15 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 	private JPanel createMaterialsSettingsTitle() {
 		JPanel lightLegend = new JPanel();
 		lightLegend.setLayout(new GridLayout(0, 4));
+		addRGBLegend(lightLegend);
+		return lightLegend;
+	}
+
+	private void addRGBLegend(JPanel lightLegend) {
 		lightLegend.add(new JLabel());
 		lightLegend.add(new JLabel("R", SwingConstants.CENTER));
 		lightLegend.add(new JLabel("G", SwingConstants.CENTER));
 		lightLegend.add(new JLabel("B", SwingConstants.CENTER));
-		return lightLegend;
 	}
 
 	private void createTextureOptionsPanel() {
@@ -326,7 +327,7 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		return mtl;
 	}
 
-	public void setArgumentValue(MapObject data) {
+	public void setMapObject(MapObject data) {
 		BasicMapData basic = data.getBasic();
 		arguments.get(Consts.X).setValue(basic.getLengthX());
 		arguments.get(Consts.Y).setValue(basic.getLengthY());
@@ -415,5 +416,4 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 	public void setTextureScale(double scale) {
 		arguments.get(Consts.SCALE).setValue(scale);
 	}
-
 }

@@ -1,34 +1,18 @@
 package generator.actions;
 
 import generator.Mediator;
-import generator.utils.XMLChooser;
+import generator.utils.fileChoosers.XMLChooser;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-
-public class LoadXMLAction extends AbstractAction {
+public class LoadXMLAction extends AbstractLoadAction {
 
 	private static final long serialVersionUID = 7702791072284728221L;
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		JFileChooser c = new XMLChooser();
-		String fileName=null;
-		int rVal = c.showOpenDialog(new JFrame());
-		if (rVal == JFileChooser.APPROVE_OPTION) {
-			Mediator.setLastPath(c.getSelectedFile().getParent());
-			fileName = (c.getSelectedFile().getAbsolutePath());
-		}
-		if (rVal == JFileChooser.CANCEL_OPTION) {
-			fileName = null;
-		}
-		if(fileName!=null) Mediator.loadXMLFile(fileName);
+	public LoadXMLAction(String name) {
+		super(name, new XMLChooser());
 	}
 
-	public LoadXMLAction(String name) {
-		super(name);
+	@Override
+	protected void onSucess(String path) {
+		Mediator.loadXMLFile(path);
 	}
 }

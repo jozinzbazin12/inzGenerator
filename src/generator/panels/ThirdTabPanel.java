@@ -1,7 +1,7 @@
 package generator.panels;
 
 import generator.Mediator;
-import generator.actions.NewObjectAction;
+import generator.actions.object.NewObjectAction;
 import generator.models.generation.ObjectListRow;
 import generator.models.result.GeneratedObject;
 import generator.utils.PropertiesKeys;
@@ -31,6 +31,7 @@ import javax.swing.KeyStroke;
 
 public class ThirdTabPanel extends JPanel implements MouseListener {
 
+	private static final String NEW_ACTION = "newAction";
 	private static final long serialVersionUID = -2087487239161953473L;
 	private static JPopupMenu menu;
 	private ObjectsPreviewPanel previewPanel;
@@ -91,8 +92,9 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		remove(previewPanel);
 		File file = new File(imgName);
 		BufferedImage image = ImageIO.read(file);
-		if (image == null)
+		if (image == null) {
 			throw new IOException();
+		}
 		imageSize = new Dimension(image.getWidth(), image.getHeight());
 		previewPanel = new ObjectsPreviewPanel(image);
 		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
@@ -130,8 +132,9 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		JMenuItem neww = new JMenuItem(newAction);
 		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
 		menu.add(neww);
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), "newAction");
-		getActionMap().put("newAction", newAction);
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK),
+				NEW_ACTION);
+		getActionMap().put(NEW_ACTION, newAction);
 		listScroller.addMouseListener(this);
 
 		return listScroller;
@@ -193,7 +196,6 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 
 	public void refreshPreview() {
 		previewPanel.repaint();
-
 	}
 
 }

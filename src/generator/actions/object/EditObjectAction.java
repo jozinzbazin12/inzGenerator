@@ -1,4 +1,4 @@
-package generator.actions;
+package generator.actions.object;
 
 import generator.Mediator;
 import generator.utils.PropertiesKeys;

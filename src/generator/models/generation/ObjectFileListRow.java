@@ -27,9 +27,9 @@ import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 
 import generator.Mediator;
-import generator.actions.DeleteModelAction;
-import generator.actions.EditModelAction;
 import generator.actions.RowsSelectionAction;
+import generator.actions.model.DeleteModelAction;
+import generator.actions.model.EditModelAction;
 import generator.utils.PropertiesKeys;
 
 public class ObjectFileListRow extends JPanel implements MouseListener, ActionListener {
@@ -44,7 +44,8 @@ public class ObjectFileListRow extends JPanel implements MouseListener, ActionLi
 	private static JPopupMenu menu = new JPopupMenu();
 	private static ObjectFileListRow highlighted = null;
 	private Color backgroundColor;
-	private static final DeleteModelAction deleteAction = new DeleteModelAction(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
+	private static final DeleteModelAction deleteAction = new DeleteModelAction(
+			Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
 	private static final EditModelAction editAction = new EditModelAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
 	private static Set<ObjectFileListRow> selectedRows = new HashSet<>();
 	private static List<ObjectFileListRow> allRows = new ArrayList<>();
@@ -111,8 +112,8 @@ public class ObjectFileListRow extends JPanel implements MouseListener, ActionLi
 		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_LOCATION)));
 		for (Object i : title.getComponents()) {
 			if (i instanceof JLabel) {
-				((JComponent) i).setFont(new Font(((Component) i).getFont().getName(), Font.BOLD, 15));
-				((JComponent) i).setBorder(new EmptyBorder(0, 10, 0, 10));
+				((JLabel) i).setFont(new Font(((Component) i).getFont().getName(), Font.BOLD, 15));
+				((JLabel) i).setBorder(new EmptyBorder(0, 10, 0, 10));
 			}
 		}
 		title.setBackground(new Color(128, 128, 255));
@@ -120,24 +121,28 @@ public class ObjectFileListRow extends JPanel implements MouseListener, ActionLi
 	}
 
 	private void setbackground(int index) {
-		if (index % 2 == 0)
+		if (index % 2 == 0) {
 			backgroundColor = new Color(200, 192, 255);
-		else
+		} else {
 			backgroundColor = new Color(191, 223, 255);
+		}
 		setBackground(backgroundColor);
 	}
 
 	private void createShorcruts() {
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK), EDIT_ACTION);
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK), DELETE_ACTION);
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK),
+				EDIT_ACTION);
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK),
+				DELETE_ACTION);
 
 		getActionMap().put(EDIT_ACTION, editAction);
 		getActionMap().put(DELETE_ACTION, deleteAction);
 	}
 
 	public void highlight() {
-		if (highlighted != null)
+		if (highlighted != null) {
 			unHighlight();
+		}
 		highlighted = this;
 		setBackground(new Color(backgroundColor.getRed() - 20, backgroundColor.getGreen() - 20, backgroundColor.getBlue() - 20));
 		object.getModel().swapColors();
@@ -147,8 +152,8 @@ public class ObjectFileListRow extends JPanel implements MouseListener, ActionLi
 
 	public static void unHighlight() {
 		if (highlighted != null) {
-			highlighted.setBackground(new Color(highlighted.getBackgroundColor().getRed(), highlighted.getBackgroundColor().getGreen(),
-					highlighted.getBackgroundColor().getBlue()));
+			highlighted.setBackground(new Color(highlighted.getBackgroundColor().getRed(),
+					highlighted.getBackgroundColor().getGreen(), highlighted.getBackgroundColor().getBlue()));
 			highlighted.repaint();
 			highlighted.getObject().getModel().swapColors();
 			Mediator.refreshPreview();
@@ -166,8 +171,9 @@ public class ObjectFileListRow extends JPanel implements MouseListener, ActionLi
 			menu.setInvoker(this);
 			menu.show(e.getComponent(), e.getX(), e.getY());
 		}
-		if (selectedRows.size() == 0)
+		if (selectedRows.size() == 0) {
 			clicked = this;
+		}
 	}
 
 	@Override
@@ -196,12 +202,12 @@ public class ObjectFileListRow extends JPanel implements MouseListener, ActionLi
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(checkbox)) {
 			setClicked(null);
-			if (checkbox.isSelected() == true)
+			if (checkbox.isSelected() == true) {
 				selectedRows.add(this);
-			else
+			} else {
 				selectedRows.remove(this);
+			}
 		}
-
 	}
 
 	public boolean isSelected() {

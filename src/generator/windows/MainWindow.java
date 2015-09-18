@@ -1,16 +1,5 @@
 package generator.windows;
 
-import generator.Mediator;
-import generator.actions.GenerateObjectsAction;
-import generator.actions.LoadXMLAction;
-import generator.actions.SaveXMLAction;
-import generator.listeners.ChangeLanguageListener;
-import generator.models.LangugeOption;
-import generator.panels.FirstTabPanel;
-import generator.panels.SecondTabPanel;
-import generator.panels.ThirdTabPanel;
-import generator.utils.PropertiesKeys;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -19,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Locale;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
@@ -33,11 +21,22 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
+import generator.Mediator;
+import generator.actions.ExitAction;
+import generator.actions.LoadXMLAction;
+import generator.actions.SaveXMLAction;
+import generator.actions.object.GenerateObjectsAction;
+import generator.listeners.ChangeLanguageListener;
+import generator.models.LangugeOption;
+import generator.panels.FirstTabPanel;
+import generator.panels.SecondTabPanel;
+import generator.panels.ThirdTabPanel;
+import generator.utils.PropertiesKeys;
+
 public class MainWindow extends JFrame {
 	private static final String WINDOWS_LOOK = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
 	private static final long serialVersionUID = 2924752215725936696L;
 	private JTabbedPane tab;
-	private JMenuBar menuBar;
 
 	public void createWindow() {
 		createMenu();
@@ -49,7 +48,7 @@ public class MainWindow extends JFrame {
 	}
 
 	private void createMenu() {
-		menuBar = new JMenuBar();
+		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		JMenu menu = new JMenu(Mediator.getMessage(PropertiesKeys.FILE_MENU));
 
@@ -63,15 +62,7 @@ public class MainWindow extends JFrame {
 
 		menu.add(new JSeparator());
 
-		JMenuItem exitAction = new JMenuItem(new AbstractAction(Mediator.getMessage(PropertiesKeys.EXIT)) {
-
-			private static final long serialVersionUID = -5730350713517630878L;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
+		JMenuItem exitAction = new JMenuItem(new ExitAction(Mediator.getMessage(PropertiesKeys.EXIT)));
 
 		menu.add(exitAction);
 
@@ -95,8 +86,9 @@ public class MainWindow extends JFrame {
 		LangugeOption languageOption = new LangugeOption(name, locale);
 		group.add(languageOption);
 		languageOption.addActionListener(new ChangeLanguageListener());
-		if (languageOption.getLocale().equals(Mediator.getLocale()))
+		if (languageOption.getLocale().equals(Mediator.getLocale())) {
 			languageOption.setSelected(true);
+		}
 		return languageOption;
 	}
 
@@ -146,12 +138,12 @@ public class MainWindow extends JFrame {
 		super(name);
 		try {
 			UIManager.setLookAndFeel(WINDOWS_LOOK);
+			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
 		}
-		JFrame.setDefaultLookAndFeelDecorated(false);
+
 		setVisible(true);
 		setSize(1200, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-
 }

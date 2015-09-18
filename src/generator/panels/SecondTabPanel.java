@@ -24,7 +24,7 @@ import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
 
 import generator.Mediator;
-import generator.actions.LoadModelAction;
+import generator.actions.model.LoadModelAction;
 import generator.algorithms.Algorithm;
 import generator.algorithms.FullRandomAlgorithm;
 import generator.algorithms.RegularAlgorithm;

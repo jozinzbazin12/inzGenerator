@@ -1,4 +1,4 @@
-package generator.actions;
+package generator.actions.model;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;

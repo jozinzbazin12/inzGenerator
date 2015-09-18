@@ -1,4 +1,4 @@
-package generator.actions;
+package generator.actions.model;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -8,8 +8,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import generator.Mediator;
-import generator.utils.ObjChooser;
+import generator.utils.fileChoosers.ObjChooser;
 
+//TODO
 public class LoadModelAction extends AbstractAction {
 
 	private static final long serialVersionUID = 7702791072284728221L;
@@ -26,7 +27,7 @@ public class LoadModelAction extends AbstractAction {
 		if (rVal == JFileChooser.CANCEL_OPTION) {
 			files = null;
 		}
-		if (files!=null && files.length>0) {
+		if (files != null && files.length > 0) {
 			for (File i : files) {
 				Mediator.loadObjectFile(i.getAbsolutePath());
 			}

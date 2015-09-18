@@ -1,9 +1,9 @@
 package generator.models.generation;
 
 import generator.Mediator;
-import generator.actions.DeleteObjectAction;
-import generator.actions.EditObjectAction;
-import generator.actions.NewObjectAction;
+import generator.actions.object.DeleteObjectAction;
+import generator.actions.object.EditObjectAction;
+import generator.actions.object.NewObjectAction;
 import generator.models.result.GeneratedObject;
 import generator.utils.PropertiesKeys;
 
@@ -78,8 +78,8 @@ public class ObjectListRow extends JPanel implements MouseListener, Comparable<O
 		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.COLOR), SwingConstants.CENTER));
 		for (Object i : title.getComponents()) {
 			if (i instanceof JLabel) {
-				((JComponent) i).setFont(new Font(((Component) i).getFont().getName(), Font.BOLD, 15));
-				((JComponent) i).setBorder(new EmptyBorder(0, 10, 0, 10));
+				((JLabel) i).setFont(new Font(((Component) i).getFont().getName(), Font.BOLD, 15));
+				((JLabel) i).setBorder(new EmptyBorder(0, 10, 0, 10));
 			}
 		}
 		title.setBackground(new Color(128, 128, 255));

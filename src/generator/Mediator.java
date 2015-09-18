@@ -187,7 +187,7 @@ public class Mediator {
 				i.setModel(models.get(i.getObjectPath()).getModel());
 			}
 		}
-		firstTabPanel.setArgumentValue(resultObject.getMapObject());
+		firstTabPanel.setMapObject(resultObject.getMapObject());
 		updateModelsPanel();
 		setMapFile(resultObject.getMapObject().getMapFileName());
 		updateObjectList(resultObject.getGeneratedObjects());

@@ -39,9 +39,9 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 
 	public ObjectInfo(GenerationModel model) {
 		this.model = model;
-		positionSettings=new PositionSettings();
-		scaleSettings=new ScaleSettings();
-		rotationSettings=new RotationSettings();
+		positionSettings = new PositionSettings();
+		scaleSettings = new ScaleSettings();
+		rotationSettings = new RotationSettings();
 	}
 
 	public GenerationModel getModel() {
@@ -50,10 +50,12 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 
 	@Override
 	public int compareTo(ObjectInfo o) {
-		if (model == null)
+		if (model == null) {
 			return -1;
-		if (!(o instanceof ObjectInfo) || o.getModel() == null)
+		}
+		if (!(o instanceof ObjectInfo) || o.getModel() == null) {
 			return -1;
+		}
 		return model.compareTo(o.getModel());
 	}
 
@@ -68,6 +70,4 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 	public void setRotationSettings(RotationSettings rotationSettings) {
 		this.rotationSettings = rotationSettings;
 	}
-	
-	
 }

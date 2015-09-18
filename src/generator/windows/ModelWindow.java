@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import generator.Mediator;
-import generator.actions.LoadSingleModelAction;
+import generator.actions.model.LoadSingleModelAction;
 import generator.models.generation.ObjectInfo;
 import generator.models.generation.PositionSettings;
 import generator.models.generation.RotationSettings;
@@ -66,8 +66,9 @@ public class ModelWindow extends JFrame implements ActionListener {
 		fileOptions.add(pathField);
 		JButton openFile = new JButton(new LoadSingleModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT)));
 		fileOptions.add(openFile);
-		if (objects.size() > 1)
+		if (objects.size() > 1) {
 			openFile.setEnabled(false);
+		}
 		add(fileOptions, BorderLayout.NORTH);
 
 		JPanel panel = new JPanel();
@@ -86,17 +87,26 @@ public class ModelWindow extends JFrame implements ActionListener {
 		panel.add(legendPanel);
 
 		panel.setLayout(new GridLayout(12, 2, 5, 5));
-		panel.add(createSpinner(-10000, 10000, Consts.MIN_X, Consts.MAX_X, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X)));
-		panel.add(createSpinner(-10000, 10000, Consts.MIN_Y, Consts.MAX_Y, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y)));
-		panel.add(createSpinner(-10000, 10000, Consts.MIN_Z, Consts.MAX_Z, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z)));
+		panel.add(createSpinner(-10000, 10000, Consts.MIN_X, Consts.MAX_X,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X)));
+		panel.add(createSpinner(-10000, 10000, Consts.MIN_Y, Consts.MAX_Y,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y)));
+		panel.add(createSpinner(-10000, 10000, Consts.MIN_Z, Consts.MAX_Z,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z)));
 		panel.add(new JSeparator());
-		panel.add(createSpinner(-180, 180, Consts.MIN_RX, Consts.MAX_RX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X)));
-		panel.add(createSpinner(-180, 180, Consts.MIN_RY, Consts.MAX_RY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y)));
-		panel.add(createSpinner(-180, 180, Consts.MIN_RZ, Consts.MAX_RZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z)));
+		panel.add(createSpinner(-180, 180, Consts.MIN_RX, Consts.MAX_RX,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X)));
+		panel.add(createSpinner(-180, 180, Consts.MIN_RY, Consts.MAX_RY,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y)));
+		panel.add(createSpinner(-180, 180, Consts.MIN_RZ, Consts.MAX_RZ,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z)));
 		panel.add(new JSeparator());
-		panel.add(createSpinner(-1000, 1000, Consts.MIN_SX, Consts.MAX_SX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X)));
-		panel.add(createSpinner(-1000, 1000, Consts.MIN_SY, Consts.MAX_SY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y)));
-		panel.add(createSpinner(-1000, 1000, Consts.MIN_SZ, Consts.MAX_SZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z)));
+		panel.add(createSpinner(-1000, 1000, Consts.MIN_SX, Consts.MAX_SX,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X)));
+		panel.add(createSpinner(-1000, 1000, Consts.MIN_SY, Consts.MAX_SY,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y)));
+		panel.add(createSpinner(-1000, 1000, Consts.MIN_SZ, Consts.MAX_SZ,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z)));
 
 		setVisible(true);
 		add(panel, BorderLayout.CENTER);

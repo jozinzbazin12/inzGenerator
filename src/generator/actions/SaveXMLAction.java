@@ -1,7 +1,7 @@
 package generator.actions;
 
 import generator.Mediator;
-import generator.utils.XMLChooser;
+import generator.utils.fileChoosers.XMLChooser;
 
 import java.awt.event.ActionEvent;
 

@@ -2,7 +2,6 @@ package generator.panels;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -31,14 +30,6 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 				}
 			}
 		}
-
-	}
-
-	public void setDefaultZoom() {
-		double dw = image.getWidth() - getWidth();
-		double dh = image.getHeight() - getHeight();
-		zoom = -Math.max(dw / image.getWidth(), dh / image.getHeight());
-		currentPoint = new Point((getWidth() - getResizedWidth()) / 2, (getHeight() - getResizedHeight()) / 2);
 	}
 
 	public ObjectsPreviewPanel(BufferedImage image) throws IOException {

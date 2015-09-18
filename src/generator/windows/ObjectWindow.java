@@ -141,6 +141,5 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		if (e.getSource().equals(cancel)) {
 			dispose();
 		}
-
 	}
 }

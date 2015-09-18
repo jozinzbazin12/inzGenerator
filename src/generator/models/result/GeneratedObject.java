@@ -54,8 +54,9 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 
 	@Override
 	public int compareTo(GeneratedObject o) {
-		if (o.getObjectName() == null || objectName == null)
+		if (o.getObjectName() == null || objectName == null) {
 			return 0;
+		}
 		return objectName.compareTo(o.getObjectName());
 	}
 

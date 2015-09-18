@@ -26,18 +26,20 @@ public class PreviewPanel extends JPanel {
 		if (image != null) {
 			drawImage(g);
 		}
-
 	}
 
 	protected void drawImage(Graphics g) {
-		if (currentPoint == null)
+		if (currentPoint == null) {
 			setDefaultZoom();
+		}
 		width = getResizedWidth();
 		height = getResizedHeight();
-		if (width <= 0)
+		if (width <= 0) {
 			width = 1;
-		if (height <= 0)
+		}
+		if (height <= 0) {
 			height = 1;
+		}
 		Image scaledInstance = image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
 		g.drawImage(scaledInstance, (int) currentPoint.getX(), (int) currentPoint.getY(), null);
 	}

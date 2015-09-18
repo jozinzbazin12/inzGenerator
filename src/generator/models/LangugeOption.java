@@ -32,5 +32,4 @@ public class LangugeOption extends JRadioButtonMenuItem {
 	public void setLocale(Locale locale) {
 		this.locale = locale;
 	}
-
 }
