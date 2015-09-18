@@ -45,11 +45,14 @@ public class ImageListener extends MouseAdapter {
 			((JComponent) e.getSource()).repaint();
 		}
 		if (currentObject != null && SwingUtilities.isLeftMouseButton(e)) {
-			currentObject.getBasic()
-					.setX((e.getX() - panel.getCurrentPoint().x) / (1 + panel.getZoom()) - Mediator.getMapDimensions().width / 2);
-			currentObject.getBasic().setZ(
-					((e.getY() - panel.getCurrentPoint().y) / (1 + panel.getZoom()) - Mediator.getMapDimensions().height / 2)
-							* -1);
+			int mapWidth = Mediator.getMapDimensions().width;
+			int mapHeight = Mediator.getMapDimensions().height;
+			currentObject.getBasic().setX((Mediator.getMapWidth()
+					* (-2 * e.getX() + panel.getZoom() * mapWidth + 2 * panel.getCurrentPoint().x + mapWidth))
+					/ (-2 * mapWidth * (panel.getZoom() + 1)));
+			currentObject.getBasic().setZ((Mediator.getMapHeight()
+					* (-2 * e.getY() + panel.getZoom() * mapHeight + 2 * panel.getCurrentPoint().y + mapHeight))
+					/ (2 * mapHeight * (panel.getZoom() + 1)));
 			Mediator.setClicked(currentObject);
 			panel.repaint();
 			Mediator.refreshObjects();
@@ -77,13 +80,16 @@ public class ImageListener extends MouseAdapter {
 			ObjectsPreviewPanel panel = (ObjectsPreviewPanel) this.panel;
 			if (panel.getGeneratedObjects() != null) {
 				for (GeneratedObject i : panel.getGeneratedObjects()) {
-					double x = (i.getBasic().getX() + Mediator.getMapDimensions().width / 2) * (1 + panel.getZoom())
-							+ panel.getCurrentPoint().x;
-					double z = ((Mediator.getMapDimensions().height / 2 - i.getBasic().getZ()) * (1 + panel.getZoom())
-							+ panel.getCurrentPoint().y);
+					int mapWidth = Mediator.getMapDimensions().width;
+					int mapHeight = Mediator.getMapDimensions().height;
+					double x = ((i.getBasic().getX() * (mapWidth / Mediator.getMapWidth())) + mapWidth / 2)
+							* (1 + panel.getZoom()) + panel.getCurrentPoint().x;
+					double z = ((mapHeight / 2 - (i.getBasic().getZ() * (mapHeight / Mediator.getMapHeight())))
+							* (1 + panel.getZoom()) + panel.getCurrentPoint().y);
 					if (absolute(e.getX(), x) <= 5 && absolute(e.getY(), z) <= 5) {
-						if (currentObject == i)
+						if (currentObject == i) {
 							return;
+						}
 						Mediator.highlight(i);
 						currentObject = i;
 						return;
@@ -96,10 +102,12 @@ public class ImageListener extends MouseAdapter {
 	}
 
 	private double absolute(double a, double b) {
-		if (a < 0)
+		if (a < 0) {
 			a *= -1;
-		if (b < 0)
+		}
+		if (b < 0) {
 			b *= -1;
+		}
 		return a - b > 0 ? a - b : b - a;
 	}
 }

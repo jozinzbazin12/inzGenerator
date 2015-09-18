@@ -88,11 +88,11 @@ public class Mediator {
 	public static void changeLocale(Locale locale) {
 		properties.setProperty(LANGUAGE_KEY, locale.getLanguage());
 		try {
-			saveProperties();
 			int dialogResult = JOptionPane.showConfirmDialog(null, Mediator.getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING),
 					Mediator.getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 			if (dialogResult == JOptionPane.YES_OPTION) {
+				saveProperties();
 				mainWindow.dispose();
 				main(null);
 			}
@@ -316,7 +316,9 @@ public class Mediator {
 	}
 
 	private static String getFileNameFromPath(String path) {
-		return path.substring(path.lastIndexOf("\\") + 1);
+		int index = path.lastIndexOf("\\");
+		int index2 = path.lastIndexOf("/");
+		return path.substring(Integer.max(index, index2) + 1);
 	}
 
 	public static Map<String, ObjectInfo> getModels() {
@@ -338,8 +340,14 @@ public class Mediator {
 	public static void setLastPath(String lastPath) {
 		Mediator.lastPath = lastPath;
 	}
+
+	public static double getMapWidth() {
+		return firstTabPanel.getMapSettings().getLengthX();
+	}
+
+	public static double getMapHeight() {
+		return firstTabPanel.getMapSettings().getLengthZ();
+	}
 }
 
-// TODO skalowanie podgladu
-// TODO skroty
 // TODO cleanup propertiesow

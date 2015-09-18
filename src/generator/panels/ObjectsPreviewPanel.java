@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
+import generator.Mediator;
 import generator.models.result.GeneratedObject;
 
 public class ObjectsPreviewPanel extends PreviewPanel {
@@ -16,7 +17,6 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (image != null) {
-			drawImage(g);
 			g.setColor(Color.red);
 			g.drawLine(width / 2 + currentPoint.x, currentPoint.y - 1000, width / 2 + currentPoint.x,
 					height + currentPoint.y + 1000);
@@ -25,11 +25,21 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 			if (generatedObjects != null) {
 				for (GeneratedObject i : generatedObjects) {
 					g.setColor(i.getColor());
-					g.fillRect((int) ((i.getBasic().getX() + image.getWidth() / 2) * (1 + zoom) + currentPoint.x),
-							(int) ((image.getHeight() / 2 - i.getBasic().getZ()) * (1 + zoom) + currentPoint.y), 4, 4);
+					g.fillRect(getObjectX(i), getObjectY(i), 4, 4);
 				}
 			}
 		}
+	}
+
+	private int getObjectY(GeneratedObject i) {
+		int mapHeight = image.getHeight();
+		return (int) ((mapHeight / 2 - (i.getBasic().getZ() * (mapHeight / Mediator.getMapHeight()))) * (1 + zoom)
+				+ currentPoint.y);
+	}
+
+	private int getObjectX(GeneratedObject i) {
+		int mapWidth = image.getWidth();
+		return (int) (((i.getBasic().getX() * (mapWidth / Mediator.getMapWidth())) + mapWidth / 2) * (1 + zoom) + currentPoint.x);
 	}
 
 	public ObjectsPreviewPanel(BufferedImage image) throws IOException {
