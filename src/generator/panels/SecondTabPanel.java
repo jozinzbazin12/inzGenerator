@@ -63,9 +63,6 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 		objectsPanel = new JPanel();
 		objectsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.OBJECTS)));
 		objectsPanel.setLayout(new GridLayout(0, 1));
-		view = new JPanel();
-		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
-		view.add(ObjectFileListRow.createTitle());
 
 		menu = new JPopupMenu();
 		LoadModelAction newAction = new LoadModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT));
@@ -76,7 +73,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 				NEW_ACTION);
 		getActionMap().put(NEW_ACTION, newAction);
 
-		JScrollPane listScroller = new JScrollPane(view);
+		JScrollPane listScroller = new JScrollPane(ObjectFileListRow.createTitle());
 		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		listScroller.addMouseListener(this);
 		objectsPanel.add(listScroller);

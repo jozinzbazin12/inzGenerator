@@ -3,7 +3,6 @@ package generator.models.generation;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -23,11 +22,13 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 import generator.Mediator;
-import generator.actions.RowsSelectionAction;
 import generator.actions.model.DeleteModelAction;
 import generator.actions.model.EditModelAction;
 import generator.utils.PropertiesKeys;
@@ -101,23 +102,15 @@ public class ObjectFileListRow extends JPanel implements MouseListener, ActionLi
 	}
 
 	public static Component createTitle() {
-		JPanel title = new JPanel();
-		title.setMaximumSize(new Dimension(2000, 20));
-		title.setLayout(new GridLayout(0, 4));
-		masterCheckbox = new JCheckBox(new RowsSelectionAction());
-		masterCheckbox.setOpaque(false);
-		title.add(masterCheckbox);
-		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_NAME)));
-		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.COLOR)));
-		title.add(new JLabel(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_LOCATION)));
-		for (Object i : title.getComponents()) {
-			if (i instanceof JLabel) {
-				((JLabel) i).setFont(new Font(((Component) i).getFont().getName(), Font.BOLD, 15));
-				((JLabel) i).setBorder(new EmptyBorder(0, 10, 0, 10));
-			}
-		}
-		title.setBackground(new Color(128, 128, 255));
-		return title;
+		TableColumnModel columnModel = new ObjectFileTableColumnModel();
+		DefaultTableModel model = new ObjectFileTableModel(new Class[] { Color.class, String.class, String.class });
+		JTable tab = new ObjectFileTable(model, columnModel);
+		GenerationModel generationModel = new GenerationModel("dupa", "kutas");
+		ObjectInfo objectInfo = new ObjectInfo(generationModel);
+		GenerationModel generationModel2 = new GenerationModel("chuj", "iksde");
+		ObjectInfo objectInfo2 = new ObjectInfo(generationModel2);
+		model.addRow(new ObjectInfo[] { objectInfo, objectInfo2 });
+		return tab;
 	}
 
 	private void setbackground(int index) {
