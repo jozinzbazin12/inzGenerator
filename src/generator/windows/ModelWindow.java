@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,6 +37,9 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private List<ObjectInfo> objects;
 	private JLabel fileName;
 	private JTextField pathField;
+	private JCheckBox equalScale;
+	private JPanel spinnersZ;
+	private JPanel spinnersY;
 
 	private void createWindow() {
 		setSize(600, 600);
@@ -72,7 +76,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 		add(fileOptions, BorderLayout.NORTH);
 
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder("Nie wiem"));
+		panel.setBorder(BorderFactory.createTitledBorder(PropertiesKeys.SETTINGS));
 		JPanel legendPanel = new JPanel();
 		legendPanel.setLayout(new GridLayout(0, 3));
 		JLabel attributelabel = new JLabel(Mediator.getMessage(PropertiesKeys.ATTRIBUTE));
@@ -86,7 +90,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 		panel.add(legendPanel);
 
-		panel.setLayout(new GridLayout(12, 2, 5, 5));
+		panel.setLayout(new GridLayout(13, 2, 5, 5));
 		panel.add(createSpinner(-10000, 10000, Consts.MIN_X, Consts.MAX_X,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X)));
 		panel.add(createSpinner(-10000, 10000, Consts.MIN_Y, Consts.MAX_Y,
@@ -94,12 +98,19 @@ public class ModelWindow extends JFrame implements ActionListener {
 		panel.add(createSpinner(-10000, 10000, Consts.MIN_Z, Consts.MAX_Z,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z)));
 		panel.add(new JSeparator());
+
+		equalScale = new JCheckBox(Mediator.getMessage(PropertiesKeys.EQUAL_SCALE));
+		equalScale.addActionListener(this);
+		panel.add(equalScale);
 		panel.add(createSpinner(-1000, 1000, Consts.MIN_SX, Consts.MAX_SX,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X)));
-		panel.add(createSpinner(-1000, 1000, Consts.MIN_SY, Consts.MAX_SY,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y)));
-		panel.add(createSpinner(-1000, 1000, Consts.MIN_SZ, Consts.MAX_SZ,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z)));
+		spinnersY = createSpinner(-1000, 1000, Consts.MIN_SY, Consts.MAX_SY,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y));
+		spinnersZ = createSpinner(-1000, 1000, Consts.MIN_SZ, Consts.MAX_SZ,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z));
+		panel.add(spinnersY);
+		panel.add(spinnersZ);
+
 		panel.add(new JSeparator());
 		panel.add(createSpinner(-180, 180, Consts.MIN_RX, Consts.MAX_RX,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X)));
@@ -201,13 +212,25 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 	private ScaleSettings getScale() {
 		ScaleSettings data = new ScaleSettings();
-		data.setMinX((double) arguments.get(Consts.MIN_SX).getValue());
-		data.setMinY((double) arguments.get(Consts.MIN_SY).getValue());
-		data.setMinZ((double) arguments.get(Consts.MIN_SZ).getValue());
+		if (equalScale.isSelected()) {
+			double minx = (double) arguments.get(Consts.MIN_SX).getValue();
+			data.setMinX(minx);
+			data.setMinY(minx);
+			data.setMinZ(minx);
 
-		data.setMaxX((double) arguments.get(Consts.MAX_SX).getValue());
-		data.setMaxY((double) arguments.get(Consts.MAX_SY).getValue());
-		data.setMaxZ((double) arguments.get(Consts.MAX_SZ).getValue());
+			double maxx = (double) arguments.get(Consts.MAX_SX).getValue();
+			data.setMaxX(maxx);
+			data.setMaxY(maxx);
+			data.setMaxZ(maxx);
+		} else {
+			data.setMinX((double) arguments.get(Consts.MIN_SX).getValue());
+			data.setMinY((double) arguments.get(Consts.MIN_SY).getValue());
+			data.setMinZ((double) arguments.get(Consts.MIN_SZ).getValue());
+
+			data.setMaxX((double) arguments.get(Consts.MAX_SX).getValue());
+			data.setMaxY((double) arguments.get(Consts.MAX_SY).getValue());
+			data.setMaxZ((double) arguments.get(Consts.MAX_SZ).getValue());
+		}
 		return data;
 	}
 
@@ -220,9 +243,16 @@ public class ModelWindow extends JFrame implements ActionListener {
 				i.setScaleSettings(getScale());
 			}
 			dispose();
-		}
-		if (e.getSource().equals(cancel)) {
+		} else if (e.getSource().equals(cancel)) {
 			dispose();
+		} else if (e.getSource().equals(equalScale)) {
+			if (equalScale.isSelected()) {
+				spinnersY.setVisible(false);
+				spinnersZ.setVisible(false);
+			} else {
+				spinnersY.setVisible(true);
+				spinnersZ.setVisible(true);
+			}
 		}
 
 	}

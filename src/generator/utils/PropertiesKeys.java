@@ -79,4 +79,6 @@ public final class PropertiesKeys {
 	public static final String SHINESS = "shiness";
 	public static final String MIN_ARG = "minArg";
 	public static final String MAX_ARG = "maxArg";
+	public static final String SETTINGS = "settings";
+	public static final String EQUAL_SCALE = "equalScale";
 }
