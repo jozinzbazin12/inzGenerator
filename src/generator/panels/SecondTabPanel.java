@@ -124,13 +124,6 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3) {
-					int r = table.rowAtPoint(e.getPoint());
-					if (r >= 0 && r < table.getRowCount()) {
-						table.setRowSelectionInterval(r, r);
-					} else {
-						table.clearSelection();
-					}
-
 					int rowindex = table.getSelectedRow();
 					if (rowindex < 0) {
 						menu.show(e.getComponent(), e.getX(), e.getY());
