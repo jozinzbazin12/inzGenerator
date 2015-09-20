@@ -8,16 +8,12 @@ public class ObjectFileTable extends JTable {
 
 	private static final long serialVersionUID = -8433216818192512700L;
 
-	@Override
-	public int getColumnCount() {
-		return getModel().getColumnCount();
-	}
-
 	public ObjectFileTable(DefaultTableModel model, TableColumnModel columnModel) {
 		super(model, columnModel);
 		setFillsViewportHeight(true);
 		setRowSelectionAllowed(true);
 
 		setColumnSelectionAllowed(false);
+		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 }

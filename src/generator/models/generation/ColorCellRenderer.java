@@ -12,9 +12,9 @@ public class ColorCellRenderer implements TableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row,
 			int column) {
-		JPanel label = new JPanel();
-		label.setBackground((Color) color);
-		return label;
+		JPanel panel = new JPanel();
+		panel.setBackground((Color) color);
+		return panel;
 	}
 
 }

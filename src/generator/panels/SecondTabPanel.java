@@ -1,8 +1,11 @@
 package generator.panels;
 
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -13,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -21,19 +23,33 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 import generator.Mediator;
+import generator.actions.model.DeleteModelAction;
+import generator.actions.model.EditModelAction;
 import generator.actions.model.LoadModelAction;
 import generator.algorithms.Algorithm;
 import generator.algorithms.FullRandomAlgorithm;
 import generator.algorithms.RegularAlgorithm;
-import generator.models.generation.ObjectFileListRow;
+import generator.models.generation.ObjectFileTable;
+import generator.models.generation.ObjectFileTableColumnModel;
+import generator.models.generation.ObjectFileTableModel;
 import generator.models.generation.ObjectInfo;
 import generator.utils.PropertiesKeys;
 
 public class SecondTabPanel extends JPanel implements MouseListener {
 
+	private static final DeleteModelAction deleteAction = new DeleteModelAction(
+			Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
+	private static final EditModelAction editAction = new EditModelAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
+
+	private static final String DELETE_ACTION = "deleteAction";
+	private static final String EDIT_ACTION = "editAction";
 	private static final String NEW_ACTION = "newAction";
 	private static final long serialVersionUID = -2087487239161953473L;
 	private Map<String, JSpinner> arguments;
@@ -41,8 +57,10 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	private JPanel options2;
 	private JComboBox<Algorithm> algorithmList;
 	private JPopupMenu menu;
-	private JPanel view;
-	private JPanel objectsPanel;
+	private JPopupMenu rowMenu;
+	private ObjectFileTable table;
+
+	private List<ObjectInfo> objectsInfo = new ArrayList<>();
 
 	public Algorithm getAlgorithm() {
 		return (Algorithm) algorithmList.getSelectedItem();
@@ -60,7 +78,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	}
 
 	private void createObjectFilesPanel() {
-		objectsPanel = new JPanel();
+		JPanel objectsPanel = new JPanel();
 		objectsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.OBJECTS)));
 		objectsPanel.setLayout(new GridLayout(0, 1));
 
@@ -73,11 +91,67 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 				NEW_ACTION);
 		getActionMap().put(NEW_ACTION, newAction);
 
-		JScrollPane listScroller = new JScrollPane(ObjectFileListRow.createTitle());
-		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		listScroller.addMouseListener(this);
-		objectsPanel.add(listScroller);
+		rowMenu = new JPopupMenu();
+		JMenuItem edit = new JMenuItem(editAction);
+		edit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK));
+		rowMenu.add(edit);
+		JMenuItem delete = new JMenuItem(deleteAction);
+		delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK));
+		rowMenu.add(delete);
+
+		JScrollPane tableScroller = new JScrollPane(createTable());
+		tableScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		tableScroller.addMouseListener(this);
+		createShorcruts();
+		objectsPanel.add(tableScroller);
 		add(objectsPanel);
+	}
+
+	private void createShorcruts() {
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK),
+				EDIT_ACTION);
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK),
+				DELETE_ACTION);
+
+		getActionMap().put(EDIT_ACTION, editAction);
+		getActionMap().put(DELETE_ACTION, deleteAction);
+	}
+
+	private Component createTable() {
+		TableColumnModel columnModel = new ObjectFileTableColumnModel();
+		DefaultTableModel model = new ObjectFileTableModel(ObjectFileTableColumnModel.getColumnClasses());
+		table = new ObjectFileTable(model, columnModel);
+		MouseListener rowListener = new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					int r = table.rowAtPoint(e.getPoint());
+					if (r >= 0 && r < table.getRowCount()) {
+						table.setRowSelectionInterval(r, r);
+					} else {
+						table.clearSelection();
+					}
+
+					int rowindex = table.getSelectedRow();
+					if (rowindex < 0) {
+						menu.show(e.getComponent(), e.getX(), e.getY());
+					} else if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+						rowMenu.show(e.getComponent(), e.getX(), e.getY());
+					}
+				}
+			}
+		};
+		table.addMouseListener(rowListener);
+		MouseListener tableListener = new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					menu.show(e.getComponent(), e.getX(), e.getY());
+				}
+			}
+		};
+		table.getTableHeader().addMouseListener(tableListener);
+		return table;
 	}
 
 	public SecondTabPanel() {
@@ -118,23 +192,21 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	}
 
 	public void updateObjectFiles(Collection<ObjectInfo> collection) {
-		objectsPanel.removeAll();
-		view = new JPanel();
-		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
-		view.add(ObjectFileListRow.createTitle());
-
 		List<ObjectInfo> modelsList = new ArrayList<>(collection);
 		Collections.sort(modelsList);
-		int count = 0;
-		for (ObjectInfo i : modelsList) {
-			view.add(new ObjectFileListRow(i, count++));
+		objectsInfo.clear();
+		objectsInfo.addAll(collection);
+		TableModel model = table.getModel();
+		((DefaultTableModel) model).addRow(collection.toArray(new ObjectInfo[0]));
+	}
+
+	public List<ObjectInfo> getSelectedRows() {
+		int[] selectedRows = table.getSelectedRows();
+		List<ObjectInfo> objects = new ArrayList<>();
+		for (int i : selectedRows) {
+			objects.add(objectsInfo.get(i));
 		}
-		JScrollPane listScroller = new JScrollPane(view);
-		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		listScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		listScroller.addMouseListener(this);
-		objectsPanel.add(listScroller);
-		objectsPanel.revalidate();
+		return objects;
 	}
 
 }

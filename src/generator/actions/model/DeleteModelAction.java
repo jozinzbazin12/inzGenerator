@@ -1,12 +1,10 @@
 package generator.actions.model;
 
 import java.awt.event.ActionEvent;
-import java.util.Set;
 
 import javax.swing.AbstractAction;
 
 import generator.Mediator;
-import generator.models.generation.ObjectFileListRow;
 
 public class DeleteModelAction extends AbstractAction {
 
@@ -14,8 +12,7 @@ public class DeleteModelAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-			Set<ObjectFileListRow> clicked = ObjectFileListRow.getSelectedRows();
-			Mediator.deleteObject(clicked);
+		Mediator.deleteModels();
 	}
 
 	public DeleteModelAction(String name) {

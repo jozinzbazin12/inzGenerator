@@ -1,7 +1,7 @@
 package generator.models.generation;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
@@ -15,9 +15,11 @@ public class ObjectFileTableModel extends DefaultTableModel {
 
 	@Override
 	public void addRow(Object[] rowData) {
-		int rowCount = getRowCount();
-		Collections.addAll(data, (ObjectInfo[]) rowData);
-		fireTableRowsInserted(rowCount, rowCount + data.size());
+		int oldCount = getRowCount();
+		ObjectInfo[] objectInfoData = (ObjectInfo[]) rowData;
+		data = Arrays.asList(objectInfoData);
+		fireTableRowsDeleted(0, oldCount);
+		fireTableRowsInserted(0, data.size());
 	}
 
 	@Override
@@ -49,20 +51,70 @@ public class ObjectFileTableModel extends DefaultTableModel {
 	}
 
 	private Object getValue(int row, int index) {
-		GenerationModel model = data.get(row).getModel();
-		switch (index) {
-		case 0:
-			return model.getColor();
-		case 1:
-			return model.getName();
-		case 2:
-			return model.getPath();
+		if (data != null && data.size() > row) {
+			ObjectInfo objectInfo = data.get(row);
+			PositionSettings positionSettings = objectInfo.getPositionSettings();
+			ScaleSettings scaleSettings = objectInfo.getScaleSettings();
+			RotationSettings rotationSettings = objectInfo.getRotationSettings();
+			GenerationModel model = objectInfo.getModel();
+			switch (index) {
+			case 0:
+				return model.getColor();
+			case 1:
+				return model.getName();
+			case 2:
+				return model.getPath();
+			case 3:
+				return objectInfo.getCount();
+
+			case 4:
+				return positionSettings.getMinX();
+			case 5:
+				return positionSettings.getMaxX();
+			case 6:
+				return positionSettings.getMinY();
+			case 7:
+				return positionSettings.getMaxY();
+			case 8:
+				return positionSettings.getMinZ();
+			case 9:
+				return positionSettings.getMaxZ();
+
+			case 10:
+				return scaleSettings.getMinX();
+			case 11:
+				return scaleSettings.getMaxX();
+			case 12:
+				return scaleSettings.getMinY();
+			case 13:
+				return scaleSettings.getMaxY();
+			case 14:
+				return scaleSettings.getMinZ();
+			case 15:
+				return scaleSettings.getMaxZ();
+
+			case 16:
+				return rotationSettings.getMinX();
+			case 17:
+				return rotationSettings.getMaxX();
+			case 18:
+				return rotationSettings.getMinY();
+			case 19:
+				return rotationSettings.getMaxY();
+			case 20:
+				return rotationSettings.getMinZ();
+			case 21:
+				return rotationSettings.getMaxZ();
+			}
+			throw new RuntimeException("No such column");
+		} else {
+			return null;
 		}
-		throw new RuntimeException("No such column");
 	}
 
 	public ObjectFileTableModel(Class<?>[] classes) {
 		data = new ArrayList<>();
 		this.classes = classes;
 	}
+
 }

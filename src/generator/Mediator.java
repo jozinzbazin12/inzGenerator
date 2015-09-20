@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -26,7 +25,6 @@ import javax.xml.bind.Unmarshaller;
 
 import generator.algorithms.Algorithm;
 import generator.models.generation.GenerationModel;
-import generator.models.generation.ObjectFileListRow;
 import generator.models.generation.ObjectInfo;
 import generator.models.generation.ObjectListRow;
 import generator.models.result.GeneratedObject;
@@ -259,9 +257,10 @@ public class Mediator {
 		printOnPreview();
 	}
 
-	public static void deleteObject(Set<ObjectFileListRow> clicked) {
-		for (ObjectFileListRow i : clicked) {
-			models.remove(i.getObject().getModel().getPath());
+	public static void deleteModels() {
+		List<ObjectInfo> selectedRows = secondTabPanel.getSelectedRows();
+		for (ObjectInfo i : selectedRows) {
+			models.remove(i.getModel().getPath());
 		}
 
 		secondTabPanel.updateObjectFiles(models.values());
@@ -347,6 +346,10 @@ public class Mediator {
 
 	public static double getMapHeight() {
 		return firstTabPanel.getMapSettings().getLengthZ();
+	}
+
+	public static List<ObjectInfo> getSelectedObjectFiles() {
+		return secondTabPanel.getSelectedRows();
 	}
 }
 

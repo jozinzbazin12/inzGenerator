@@ -77,4 +77,6 @@ public final class PropertiesKeys {
 	public static final String MATERIAL = "material";
 	public static final String OPACITY = "opacity";
 	public static final String SHINESS = "shiness";
+	public static final String MIN_ARG = "minArg";
+	public static final String MAX_ARG = "maxArg";
 }

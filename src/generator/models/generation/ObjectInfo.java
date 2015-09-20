@@ -10,7 +10,12 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 
 	@Override
 	public String toString() {
-		return model.getName();
+		StringBuilder str = new StringBuilder();
+		str.append("Name: ");
+		str.append(model.getName());
+		str.append(", ");
+		str.append(model.getPath());
+		return str.toString();
 	}
 
 	public PositionSettings getPositionSettings() {

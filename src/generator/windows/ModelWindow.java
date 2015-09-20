@@ -94,19 +94,19 @@ public class ModelWindow extends JFrame implements ActionListener {
 		panel.add(createSpinner(-10000, 10000, Consts.MIN_Z, Consts.MAX_Z,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z)));
 		panel.add(new JSeparator());
-		panel.add(createSpinner(-180, 180, Consts.MIN_RX, Consts.MAX_RX,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X)));
-		panel.add(createSpinner(-180, 180, Consts.MIN_RY, Consts.MAX_RY,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y)));
-		panel.add(createSpinner(-180, 180, Consts.MIN_RZ, Consts.MAX_RZ,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z)));
-		panel.add(new JSeparator());
 		panel.add(createSpinner(-1000, 1000, Consts.MIN_SX, Consts.MAX_SX,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X)));
 		panel.add(createSpinner(-1000, 1000, Consts.MIN_SY, Consts.MAX_SY,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y)));
 		panel.add(createSpinner(-1000, 1000, Consts.MIN_SZ, Consts.MAX_SZ,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z)));
+		panel.add(new JSeparator());
+		panel.add(createSpinner(-180, 180, Consts.MIN_RX, Consts.MAX_RX,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X)));
+		panel.add(createSpinner(-180, 180, Consts.MIN_RY, Consts.MAX_RY,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y)));
+		panel.add(createSpinner(-180, 180, Consts.MIN_RZ, Consts.MAX_RZ,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z)));
 
 		setVisible(true);
 		add(panel, BorderLayout.CENTER);
