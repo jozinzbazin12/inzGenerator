@@ -72,14 +72,16 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	}
 
 	public void highlight(GeneratedObject obj) {
-		int index = objects.indexOf(obj);
+		int index = objects.indexOf(obj) - 1;
 		if (last != null) {
 			last.swapColors();
 		}
-		if (index > 0) {
+		if (index >= 0) {
 			obj.swapColors();
 			last = obj;
+			table.setHighlighted(index + 1);
 		}
+
 		Mediator.refreshPreview();
 		repaint();
 	}
@@ -154,7 +156,18 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		TableColumnModel columnModel = new ObjectTableColumnModel();
 		DefaultTableModel model = new ObjectTableModel(ObjectTableColumnModel.getColumnClasses());
 		table = new ObjectFileTable(model, columnModel, false);
-		MouseListener rowListener = new MouseAdapter() {
+		MouseAdapter rowListener = new MouseAdapter() {
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				int row = table.rowAtPoint(e.getPoint());
+				if (row >= 0) {
+					table.setHighlighted(row);
+					highlight(objects.get(row));
+					table.repaint();
+				}
+			}
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3) {
@@ -168,6 +181,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 			}
 		};
 		table.addMouseListener(rowListener);
+		table.addMouseMotionListener(rowListener);
 		MouseListener tableListener = new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -244,6 +258,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 
 	public void click(GeneratedObject obj) {
 		int index = objects.indexOf(obj);
-		table.setRowSelectionInterval(index, index + 1);
+		table.setRowSelectionInterval(index - 1, index);
+		unHighlight();
 	}
 }
