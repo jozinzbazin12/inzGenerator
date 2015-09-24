@@ -1,4 +1,4 @@
-package generator.tables.models;
+package generator.tables.object;
 
 import java.awt.Color;
 
@@ -22,10 +22,10 @@ public class ObjectTableColumnModel extends AbstractTableColumnModel {
 		color.setCellRenderer(new ColorCellRenderer());
 		addColumn(color);
 
-		createColumn(PropertiesKeys.OBJECT_NAME, 100, 300);
-		createColumn(PropertiesKeys.COORDINATES, 200, 400);
-		createColumn(PropertiesKeys.SCALES, 200, 400);
-		createColumn(PropertiesKeys.ROTATIONS, 200, 400);
+		createColumn(Mediator.getMessage(PropertiesKeys.OBJECT_NAME), 100, 300);
+		createColumn(Mediator.getMessage(PropertiesKeys.COORDINATES), 200, 400);
+		createColumn(Mediator.getMessage(PropertiesKeys.SCALES), 200, 400);
+		createColumn(Mediator.getMessage(PropertiesKeys.ROTATIONS), 200, 400);
 
 		setColumnSelectionAllowed(false);
 	}

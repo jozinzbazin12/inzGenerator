@@ -1,4 +1,4 @@
-package generator.tables.models;
+package generator.tables.object;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

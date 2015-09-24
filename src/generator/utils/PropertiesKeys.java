@@ -81,4 +81,10 @@ public final class PropertiesKeys {
 	public static final String MAX_ARG = "maxArg";
 	public static final String SETTINGS = "settings";
 	public static final String EQUAL_SCALE = "equalScale";
+	public static final String MIN_POSITION = "minPosition";
+	public static final String MAX_POSITION = "maxPosition";
+	public static final String MIN_SCALE = "minScale";
+	public static final String MAX_SCALE = "maxScale";
+	public static final String MIN_ROTATION = "minRotation";
+	public static final String MAX_ROTATION = "maxRotation";
 }

@@ -37,8 +37,8 @@ import generator.algorithms.FullRandomAlgorithm;
 import generator.algorithms.RegularAlgorithm;
 import generator.models.generation.ObjectInfo;
 import generator.tables.Table;
-import generator.tables.object.ObjectFileTableColumnModel;
-import generator.tables.object.ObjectFileTableModel;
+import generator.tables.model.ObjectFileTableColumnModel;
+import generator.tables.model.ObjectFileTableModel;
 import generator.utils.PropertiesKeys;
 
 public class SecondTabPanel extends JPanel implements MouseListener {
@@ -115,7 +115,17 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 		TableColumnModel columnModel = new ObjectFileTableColumnModel();
 		DefaultTableModel model = new ObjectFileTableModel(ObjectFileTableColumnModel.getColumnClasses());
 		table = new Table(model, columnModel, true);
-		MouseListener rowListener = new MouseAdapter() {
+		MouseAdapter rowListener = new MouseAdapter() {
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				int row = table.rowAtPoint(e.getPoint());
+				if (row >= 0) {
+					table.setHighlighted(row);
+					table.repaint();
+				}
+			}
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3) {
@@ -129,6 +139,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 			}
 		};
 		table.addMouseListener(rowListener);
+		table.addMouseMotionListener(rowListener);
 		MouseListener tableListener = new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {

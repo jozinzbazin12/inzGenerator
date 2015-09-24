@@ -36,8 +36,8 @@ import generator.actions.object.NewObjectAction;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.tables.Table;
-import generator.tables.models.ObjectTableColumnModel;
-import generator.tables.models.ObjectTableModel;
+import generator.tables.object.ObjectTableColumnModel;
+import generator.tables.object.ObjectTableModel;
 import generator.utils.PropertiesKeys;
 
 public class ThirdTabPanel extends JPanel implements MouseListener {

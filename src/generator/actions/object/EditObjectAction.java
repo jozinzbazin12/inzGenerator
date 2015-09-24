@@ -6,6 +6,7 @@ import generator.utils.PropertiesKeys;
 import generator.windows.ObjectWindow;
 
 import java.awt.event.ActionEvent;
+import java.text.MessageFormat;
 
 import javax.swing.AbstractAction;
 
@@ -17,7 +18,9 @@ public class EditObjectAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		GeneratedObject generatedObject = Mediator.getGeneratedObject();
 		if (generatedObject != null) {
-			new ObjectWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), generatedObject);
+			new ObjectWindow(
+					MessageFormat.format(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), generatedObject.getObjectName()),
+					generatedObject);
 		}
 	}
 

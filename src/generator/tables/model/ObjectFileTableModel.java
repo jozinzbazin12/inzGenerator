@@ -1,5 +1,6 @@
-package generator.tables.object;
+package generator.tables.model;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,12 +52,16 @@ public class ObjectFileTableModel extends DefaultTableModel {
 		return getValue(rowIndex, columnIndex);
 	}
 
+	private String createCellValue(double x, double y, double z) {
+		return MessageFormat.format("X: {0}, Y: {1}, Z: {2}", x, y, z);
+	}
+
 	private Object getValue(int row, int index) {
 		if (data != null && data.size() > row) {
 			ObjectInfo objectInfo = data.get(row);
-			PositionSettings positionSettings = objectInfo.getPositionSettings();
-			ScaleSettings scaleSettings = objectInfo.getScaleSettings();
-			RotationSettings rotationSettings = objectInfo.getRotationSettings();
+			PositionSettings pos = objectInfo.getPositionSettings();
+			ScaleSettings sca = objectInfo.getScaleSettings();
+			RotationSettings rot = objectInfo.getRotationSettings();
 			GenerationModel model = objectInfo.getModel();
 			switch (index) {
 			case 0:
@@ -67,45 +72,18 @@ public class ObjectFileTableModel extends DefaultTableModel {
 				return model.getPath();
 			case 3:
 				return objectInfo.getCount();
-
 			case 4:
-				return positionSettings.getMinX();
+				return createCellValue(pos.getMinX(), pos.getMinY(), pos.getMinZ());
 			case 5:
-				return positionSettings.getMaxX();
+				return createCellValue(pos.getMaxX(), pos.getMaxY(), pos.getMaxZ());
 			case 6:
-				return positionSettings.getMinY();
+				return createCellValue(sca.getMinX(), sca.getMinY(), sca.getMinZ());
 			case 7:
-				return positionSettings.getMaxY();
+				return createCellValue(sca.getMaxX(), sca.getMaxY(), sca.getMaxZ());
 			case 8:
-				return positionSettings.getMinZ();
+				return createCellValue(rot.getMinX(), rot.getMinY(), rot.getMinZ());
 			case 9:
-				return positionSettings.getMaxZ();
-
-			case 10:
-				return scaleSettings.getMinX();
-			case 11:
-				return scaleSettings.getMaxX();
-			case 12:
-				return scaleSettings.getMinY();
-			case 13:
-				return scaleSettings.getMaxY();
-			case 14:
-				return scaleSettings.getMinZ();
-			case 15:
-				return scaleSettings.getMaxZ();
-
-			case 16:
-				return rotationSettings.getMinX();
-			case 17:
-				return rotationSettings.getMaxX();
-			case 18:
-				return rotationSettings.getMinY();
-			case 19:
-				return rotationSettings.getMaxY();
-			case 20:
-				return rotationSettings.getMinZ();
-			case 21:
-				return rotationSettings.getMaxZ();
+				return createCellValue(rot.getMaxX(), rot.getMaxY(), rot.getMaxZ());
 			}
 			throw new RuntimeException("No such column");
 		} else {
