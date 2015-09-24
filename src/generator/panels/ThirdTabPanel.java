@@ -1,96 +1,83 @@
 package generator.panels;
 
-import generator.Mediator;
-import generator.actions.object.NewObjectAction;
-import generator.models.generation.ObjectListRow;
-import generator.models.result.GeneratedObject;
-import generator.utils.PropertiesKeys;
-
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+
+import generator.Mediator;
+import generator.actions.object.DeleteObjectAction;
+import generator.actions.object.EditObjectAction;
+import generator.actions.object.NewObjectAction;
+import generator.models.result.BasicModelData;
+import generator.models.result.GeneratedObject;
+import generator.tables.ObjectFileTable;
+import generator.tables.ObjectTableColumnModel;
+import generator.tables.ObjectTableModel;
+import generator.utils.PropertiesKeys;
 
 public class ThirdTabPanel extends JPanel implements MouseListener {
 
+	private static final String DELETE_ACTION = "deleteAction";
+	private static final String EDIT_ACTION = "editAction";
 	private static final String NEW_ACTION = "newAction";
+	private static final EditObjectAction editAction = new EditObjectAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
+	private static final NewObjectAction newAction = new NewObjectAction(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
+	private static final DeleteObjectAction deleteAction = new DeleteObjectAction(
+			Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
+
 	private static final long serialVersionUID = -2087487239161953473L;
-	private static JPopupMenu menu;
+	private JPopupMenu menu;
+	private JPopupMenu rowMenu;
 	private ObjectsPreviewPanel previewPanel;
 	private Dimension imageSize;
 
 	private JPanel objectsPanel;
+	private ObjectFileTable table;
+	private List<GeneratedObject> objects = new ArrayList<>();
 
-	private JPanel view;
-	private List<ObjectListRow> rows;
-
-	public void refreshObjects() {
-		for (ObjectListRow i : rows) {
-			i.refresh();
-		}
-		objectsPanel.revalidate();
-	}
-
-	public GeneratedObject getGeneratedObject() {
-		ObjectListRow clicked = ObjectListRow.getClicked();
-		if (clicked == null) {
-			return null;
-		}
-		return clicked.getObject();
-	}
-
-	public void highlight(GeneratedObject obj) {
-		for (ObjectListRow i : rows) {
-			if (i.getObject() == obj) {
-				i.highlight();
-				i.repaint();
-				break;
-			}
-		}
-	}
-
-	public void setClicked(GeneratedObject obj) {
-		for (ObjectListRow i : rows) {
-			if (i.getObject() == obj) {
-				ObjectListRow.setClicked(i);
-				objectsPanel.revalidate();
-				i.revalidate();
-				break;
-			}
-		}
-	}
-
-	public void deleteObject(ObjectListRow objectListRow) {
-		view.remove(objectListRow.getIndex() + 1);
-		ObjectListRow.setClicked(null);
-		int count = 0;
-		for (Object i : view.getComponents()) {
-			if (i instanceof ObjectListRow) {
-				((ObjectListRow) i).setIndex(count++);
-				((JComponent) i).revalidate();
-			}
-		}
-		objectsPanel.repaint();
-		previewPanel.repaint();
-	}
+	// public GeneratedObject getGeneratedObject() {
+	// ObjectListRow clicked = ObjectListRow.getClicked();
+	// if (clicked == null) {
+	// return null;
+	// }
+	// return clicked.getObject();
+	// }
+	//
+	// public void highlight(GeneratedObject obj) {
+	// for (ObjectListRow i : rows) {
+	// if (i.getObject() == obj) {
+	// i.highlight();
+	// i.repaint();
+	// break;
+	// }
+	// }
+	// }
+	//
 
 	public File addPreview(String imgName) throws IOException {
 		remove(previewPanel);
@@ -125,44 +112,79 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	}
 
 	public JScrollPane createObjectListPanel() {
-		JPanel view = new JPanel();
-		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
-		view.add(ObjectListRow.createTitle());
-
-		JScrollPane listScroller = new JScrollPane(view);
-		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		menu = new JPopupMenu();
-		NewObjectAction newAction = new NewObjectAction(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
 		JMenuItem neww = new JMenuItem(newAction);
-		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK));
 		menu.add(neww);
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK),
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK),
 				NEW_ACTION);
 		getActionMap().put(NEW_ACTION, newAction);
-		listScroller.addMouseListener(this);
 
-		return listScroller;
+		rowMenu = new JPopupMenu();
+		JMenuItem edit = new JMenuItem(editAction);
+		edit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK));
+		rowMenu.add(edit);
+		JMenuItem delete = new JMenuItem(deleteAction);
+		delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK));
+		rowMenu.add(delete);
+
+		JScrollPane tabScroller = new JScrollPane(createTable());
+		tabScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		tabScroller.addMouseListener(this);
+		createShorcruts();
+		return tabScroller;
 	}
 
-	public void updateObjectListPanel(List<GeneratedObject> objects) {
-		objectsPanel.removeAll();
-		view = new JPanel();
-		view.setLayout(new BoxLayout(view, BoxLayout.PAGE_AXIS));
-		view.add(ObjectListRow.createTitle());
-		int count = 0;
-		rows = new ArrayList<ObjectListRow>();
-		Collections.sort(objects);
-		for (GeneratedObject i : objects) {
-			ObjectListRow objectListRow = new ObjectListRow(i, count++);
-			rows.add(objectListRow);
-			view.add(objectListRow);
-		}
-		JScrollPane listScroller = new JScrollPane(view);
-		listScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		listScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		listScroller.addMouseListener(this);
-		objectsPanel.add(listScroller);
-		objectsPanel.revalidate();
+	private void createShorcruts() {
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK),
+				EDIT_ACTION);
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK),
+				DELETE_ACTION);
+
+		getActionMap().put(EDIT_ACTION, editAction);
+		getActionMap().put(DELETE_ACTION, deleteAction);
+	}
+
+	private Component createTable() {
+		TableColumnModel columnModel = new ObjectTableColumnModel();
+		DefaultTableModel model = new ObjectTableModel(ObjectTableColumnModel.getColumnClasses());
+		table = new ObjectFileTable(model, columnModel, false);
+		MouseListener rowListener = new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					int rowindex = table.getSelectedRow();
+					if (rowindex < 0) {
+						menu.show(e.getComponent(), e.getX(), e.getY());
+					} else if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+						rowMenu.show(e.getComponent(), e.getX(), e.getY());
+					}
+				}
+			}
+		};
+		table.addMouseListener(rowListener);
+		MouseListener tableListener = new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					menu.show(e.getComponent(), e.getX(), e.getY());
+				}
+			}
+		};
+		table.getTableHeader().addMouseListener(tableListener);
+		GeneratedObject generatedObject = new GeneratedObject();
+		generatedObject.setBasic(new BasicModelData());
+
+		return table;
+	}
+
+	public void updateObjectListPanel(List<GeneratedObject> collection) {
+		List<GeneratedObject> modelsList = new ArrayList<>(collection);
+		Collections.sort(modelsList);
+		objects.clear();
+		objects.addAll(collection);
+		TableModel model = table.getModel();
+		((DefaultTableModel) model).addRow(collection.toArray(new GeneratedObject[0]));
 	}
 
 	public Dimension getImageSize() {
@@ -195,11 +217,32 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	}
 
 	public void unHighlight() {
-		ObjectListRow.unHighlight();
+		// ObjectListRow.unHighlight();
 	}
 
 	public void refreshPreview() {
 		previewPanel.repaint();
 	}
 
+	public void updateObjectFiles(Collection<GeneratedObject> collection) {
+		List<GeneratedObject> modelsList = new ArrayList<>(collection);
+		Collections.sort(modelsList);
+		objects.clear();
+		objects.addAll(collection);
+		TableModel model = table.getModel();
+		((DefaultTableModel) model).addRow(collection.toArray(new GeneratedObject[0]));
+	}
+
+	public GeneratedObject getSelectedRow() {
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			return null;
+		}
+		return objects.get(row);
+	}
+
+	public void click(GeneratedObject obj) {
+		int index = objects.indexOf(obj);
+		table.setRowSelectionInterval(index, index + 1);
+	}
 }

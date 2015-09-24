@@ -35,10 +35,10 @@ import generator.actions.model.LoadModelAction;
 import generator.algorithms.Algorithm;
 import generator.algorithms.FullRandomAlgorithm;
 import generator.algorithms.RegularAlgorithm;
-import generator.models.generation.ObjectFileTable;
-import generator.models.generation.ObjectFileTableColumnModel;
-import generator.models.generation.ObjectFileTableModel;
 import generator.models.generation.ObjectInfo;
+import generator.tables.ObjectFileTable;
+import generator.tables.ObjectFileTableColumnModel;
+import generator.tables.ObjectFileTableModel;
 import generator.utils.PropertiesKeys;
 
 public class SecondTabPanel extends JPanel implements MouseListener {
@@ -46,6 +46,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	private static final DeleteModelAction deleteAction = new DeleteModelAction(
 			Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
 	private static final EditModelAction editAction = new EditModelAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
+	private static final LoadModelAction newAction = new LoadModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT));
 
 	private static final String DELETE_ACTION = "deleteAction";
 	private static final String EDIT_ACTION = "editAction";
@@ -77,12 +78,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	}
 
 	private void createObjectFilesPanel() {
-		JPanel objectsPanel = new JPanel();
-		objectsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.OBJECTS)));
-		objectsPanel.setLayout(new GridLayout(0, 1));
-
 		menu = new JPopupMenu();
-		LoadModelAction newAction = new LoadModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT));
 		JMenuItem neww = new JMenuItem(newAction);
 		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK));
 		menu.add(neww);
@@ -102,8 +98,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 		tableScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		tableScroller.addMouseListener(this);
 		createShorcruts();
-		objectsPanel.add(tableScroller);
-		add(objectsPanel);
+		add(tableScroller);
 	}
 
 	private void createShorcruts() {
@@ -119,7 +114,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	private Component createTable() {
 		TableColumnModel columnModel = new ObjectFileTableColumnModel();
 		DefaultTableModel model = new ObjectFileTableModel(ObjectFileTableColumnModel.getColumnClasses());
-		table = new ObjectFileTable(model, columnModel);
+		table = new ObjectFileTable(model, columnModel, true);
 		MouseListener rowListener = new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {

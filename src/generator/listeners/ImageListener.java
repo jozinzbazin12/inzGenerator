@@ -30,7 +30,6 @@ public class ImageListener extends MouseAdapter {
 		if (currentObject != null && SwingUtilities.isLeftMouseButton(e)) {
 			Mediator.setClicked(currentObject);
 			panel.repaint();
-			Mediator.refreshObjects();
 		}
 	}
 
@@ -55,7 +54,6 @@ public class ImageListener extends MouseAdapter {
 					/ (2 * mapHeight * (panel.getZoom() + 1)));
 			Mediator.setClicked(currentObject);
 			panel.repaint();
-			Mediator.refreshObjects();
 		}
 	}
 

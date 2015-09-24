@@ -26,7 +26,6 @@ import javax.xml.bind.Unmarshaller;
 import generator.algorithms.Algorithm;
 import generator.models.generation.GenerationModel;
 import generator.models.generation.ObjectInfo;
-import generator.models.generation.ObjectListRow;
 import generator.models.result.GeneratedObject;
 import generator.models.result.MapObject;
 import generator.models.result.Material;
@@ -251,10 +250,14 @@ public class Mediator {
 		thirdTabPanel.updateObjectListPanel(resultObject.getGeneratedObjects());
 	}
 
-	public static void deleteObject(ObjectListRow objectListRow) {
-		resultObject.getGeneratedObjects().remove(objectListRow.getIndex());
-		thirdTabPanel.deleteObject(objectListRow);
-		printOnPreview();
+	public static void deleteObject() {
+		GeneratedObject row = thirdTabPanel.getSelectedRow();
+		if (row != null) {
+			List<GeneratedObject> objects = resultObject.getGeneratedObjects();
+			objects.remove(row);
+			thirdTabPanel.updateObjectFiles(objects);
+			printOnPreview();
+		}
 	}
 
 	public static void deleteModels() {
@@ -275,23 +278,19 @@ public class Mediator {
 	}
 
 	public static GeneratedObject getGeneratedObject() {
-		return thirdTabPanel.getGeneratedObject();
+		return thirdTabPanel.getSelectedRow();
 	}
 
 	public static void setClicked(GeneratedObject obj) {
-		thirdTabPanel.setClicked(obj);
+		thirdTabPanel.click(obj);
 	}
 
 	public static void highlight(GeneratedObject obj) {
-		thirdTabPanel.highlight(obj);
+		// thirdTabPanel.highlight(obj);
 	}
 
 	public static void unHighlight() {
 		thirdTabPanel.unHighlight();
-	}
-
-	public static void refreshObjects() {
-		thirdTabPanel.refreshObjects();
 	}
 
 	public static void refreshPreview() {
@@ -351,6 +350,7 @@ public class Mediator {
 	public static List<ObjectInfo> getSelectedObjectFiles() {
 		return secondTabPanel.getSelectedRows();
 	}
+
 }
 
 // TODO cleanup propertiesow
