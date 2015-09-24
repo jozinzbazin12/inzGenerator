@@ -15,7 +15,7 @@ public class CellRenderer implements TableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object txt, boolean isSelected, boolean hasFocus, int row,
 			int column) {
-		ObjectFileTable tab = (ObjectFileTable) table;
+		Table tab = (Table) table;
 		JLabel label = new JLabel();
 		if (isSelected) {
 			label.setBackground(SELECTED);

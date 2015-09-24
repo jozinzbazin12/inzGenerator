@@ -36,9 +36,9 @@ import generator.algorithms.Algorithm;
 import generator.algorithms.FullRandomAlgorithm;
 import generator.algorithms.RegularAlgorithm;
 import generator.models.generation.ObjectInfo;
-import generator.tables.ObjectFileTable;
-import generator.tables.ObjectFileTableColumnModel;
-import generator.tables.ObjectFileTableModel;
+import generator.tables.Table;
+import generator.tables.object.ObjectFileTableColumnModel;
+import generator.tables.object.ObjectFileTableModel;
 import generator.utils.PropertiesKeys;
 
 public class SecondTabPanel extends JPanel implements MouseListener {
@@ -58,7 +58,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	private JComboBox<Algorithm> algorithmList;
 	private JPopupMenu menu;
 	private JPopupMenu rowMenu;
-	private ObjectFileTable table;
+	private Table table;
 
 	private List<ObjectInfo> objectsInfo = new ArrayList<>();
 
@@ -114,7 +114,7 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 	private Component createTable() {
 		TableColumnModel columnModel = new ObjectFileTableColumnModel();
 		DefaultTableModel model = new ObjectFileTableModel(ObjectFileTableColumnModel.getColumnClasses());
-		table = new ObjectFileTable(model, columnModel, true);
+		table = new Table(model, columnModel, true);
 		MouseListener rowListener = new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {

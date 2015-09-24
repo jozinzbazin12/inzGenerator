@@ -1,4 +1,4 @@
-package generator.tables;
+package generator.tables.object;
 
 import java.util.ArrayList;
 import java.util.Arrays;

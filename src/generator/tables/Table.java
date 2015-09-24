@@ -5,11 +5,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-public class ObjectFileTable extends JTable {
+public class Table extends JTable {
 	private int highlighted = -1;
 	private static final long serialVersionUID = -8433216818192512700L;
 
-	public ObjectFileTable(DefaultTableModel model, TableColumnModel columnModel, boolean multiselect) {
+	public Table(DefaultTableModel model, TableColumnModel columnModel, boolean multiselect) {
 		super(model, columnModel);
 		setFillsViewportHeight(true);
 		setRowSelectionAllowed(true);

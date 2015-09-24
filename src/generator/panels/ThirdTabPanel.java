@@ -35,9 +35,9 @@ import generator.actions.object.EditObjectAction;
 import generator.actions.object.NewObjectAction;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
-import generator.tables.ObjectFileTable;
-import generator.tables.ObjectTableColumnModel;
-import generator.tables.ObjectTableModel;
+import generator.tables.Table;
+import generator.tables.models.ObjectTableColumnModel;
+import generator.tables.models.ObjectTableModel;
 import generator.utils.PropertiesKeys;
 
 public class ThirdTabPanel extends JPanel implements MouseListener {
@@ -57,7 +57,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	private Dimension imageSize;
 
 	private JPanel objectsPanel;
-	private ObjectFileTable table;
+	private Table table;
 	private List<GeneratedObject> objects = new ArrayList<>();
 
 	private static GeneratedObject last;
@@ -155,7 +155,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	private Component createTable() {
 		TableColumnModel columnModel = new ObjectTableColumnModel();
 		DefaultTableModel model = new ObjectTableModel(ObjectTableColumnModel.getColumnClasses());
-		table = new ObjectFileTable(model, columnModel, false);
+		table = new Table(model, columnModel, false);
 		MouseAdapter rowListener = new MouseAdapter() {
 
 			@Override

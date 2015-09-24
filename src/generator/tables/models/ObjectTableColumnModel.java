@@ -1,26 +1,25 @@
-package generator.tables;
+package generator.tables.models;
 
 import java.awt.Color;
 
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 
 import generator.Mediator;
+import generator.tables.AbstractTableColumnModel;
+import generator.tables.ColorCellRenderer;
 import generator.utils.PropertiesKeys;
 
-public class ObjectTableColumnModel extends DefaultTableColumnModel {
+public class ObjectTableColumnModel extends AbstractTableColumnModel {
 	private static final Class<?>[] CLASSES = new Class[] { Color.class, String.class, String.class, String.class, String.class };
 
 	private static final long serialVersionUID = -5443564851650290151L;
 
-	private int index;
-
 	public ObjectTableColumnModel() {
-		index = 0;
 		TableColumn color = new TableColumn(index++);
 		color.setHeaderValue(Mediator.getMessage(PropertiesKeys.COLOR));
 		color.setMinWidth(10);
 		color.setMaxWidth(50);
+		color.setCellRenderer(new ColorCellRenderer());
 		addColumn(color);
 
 		createColumn(PropertiesKeys.OBJECT_NAME, 100, 300);
@@ -28,17 +27,7 @@ public class ObjectTableColumnModel extends DefaultTableColumnModel {
 		createColumn(PropertiesKeys.SCALES, 200, 400);
 		createColumn(PropertiesKeys.ROTATIONS, 200, 400);
 
-		color.setCellRenderer(new ColorCellRenderer());
 		setColumnSelectionAllowed(false);
-	}
-
-	private void createColumn(String msgKey, int minWidth, int maxWidth) {
-		TableColumn col = new TableColumn(index++);
-		col.setHeaderValue(Mediator.getMessage(msgKey));
-		col.setMinWidth(minWidth);
-		col.setMaxWidth(maxWidth);
-		col.setCellRenderer(new CellRenderer());
-		addColumn(col);
 	}
 
 	public static Class<?>[] getColumnClasses() {

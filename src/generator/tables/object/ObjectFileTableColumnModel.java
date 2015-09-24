@@ -1,15 +1,16 @@
-package generator.tables;
+package generator.tables.object;
 
 import java.awt.Color;
 import java.text.MessageFormat;
 
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 
 import generator.Mediator;
+import generator.tables.AbstractTableColumnModel;
+import generator.tables.ColorCellRenderer;
 import generator.utils.PropertiesKeys;
 
-public class ObjectFileTableColumnModel extends DefaultTableColumnModel {
+public class ObjectFileTableColumnModel extends AbstractTableColumnModel {
 	private static final Class<?>[] CLASSES = new Class[] { Color.class, String.class, String.class, Integer.class, Double.class,
 			Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
 			Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
@@ -21,7 +22,6 @@ public class ObjectFileTableColumnModel extends DefaultTableColumnModel {
 	private static final String Z = "Z";;
 
 	public ObjectFileTableColumnModel() {
-		int index = 0;
 		TableColumn color = new TableColumn(index++);
 		color.setHeaderValue(Mediator.getMessage(PropertiesKeys.COLOR));
 		color.setMinWidth(10);
