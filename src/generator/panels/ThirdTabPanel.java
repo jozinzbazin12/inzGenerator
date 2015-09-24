@@ -60,24 +60,29 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	private ObjectFileTable table;
 	private List<GeneratedObject> objects = new ArrayList<>();
 
-	// public GeneratedObject getGeneratedObject() {
-	// ObjectListRow clicked = ObjectListRow.getClicked();
-	// if (clicked == null) {
-	// return null;
-	// }
-	// return clicked.getObject();
-	// }
-	//
-	// public void highlight(GeneratedObject obj) {
-	// for (ObjectListRow i : rows) {
-	// if (i.getObject() == obj) {
-	// i.highlight();
-	// i.repaint();
-	// break;
-	// }
-	// }
-	// }
-	//
+	private static GeneratedObject last;
+
+	public void unHighlight() {
+		if (last != null) {
+			last.swapColors();
+			Mediator.refreshPreview();
+			repaint();
+			last = null;
+		}
+	}
+
+	public void highlight(GeneratedObject obj) {
+		int index = objects.indexOf(obj);
+		if (last != null) {
+			last.swapColors();
+		}
+		if (index > 0) {
+			obj.swapColors();
+			last = obj;
+		}
+		Mediator.refreshPreview();
+		repaint();
+	}
 
 	public File addPreview(String imgName) throws IOException {
 		remove(previewPanel);
@@ -214,10 +219,6 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
-
-	public void unHighlight() {
-		// ObjectListRow.unHighlight();
 	}
 
 	public void refreshPreview() {

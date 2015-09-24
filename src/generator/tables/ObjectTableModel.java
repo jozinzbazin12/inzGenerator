@@ -59,7 +59,7 @@ public class ObjectTableModel extends DefaultTableModel {
 			BasicModelData basic = object.getBasic();
 			switch (index) {
 			case 0:
-				return object.getColor();
+				return object.getModelColor();
 			case 1:
 				return object.getObjectName();
 			case 2:

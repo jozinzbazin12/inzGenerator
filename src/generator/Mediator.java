@@ -286,7 +286,7 @@ public class Mediator {
 	}
 
 	public static void highlight(GeneratedObject obj) {
-		// thirdTabPanel.highlight(obj);
+		 thirdTabPanel.highlight(obj);
 	}
 
 	public static void unHighlight() {

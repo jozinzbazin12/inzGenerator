@@ -1,7 +1,5 @@
 package generator.models.result;
 
-import generator.models.generation.GenerationModel;
-
 import java.awt.Color;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -9,6 +7,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import generator.models.generation.GenerationModel;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GeneratedObject implements Comparable<GeneratedObject> {
@@ -72,6 +72,10 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 
 	public Color getColor() {
 		return color;
+	}
+
+	public Color getModelColor() {
+		return model.getColor();
 	}
 
 	public void swapColors() {
