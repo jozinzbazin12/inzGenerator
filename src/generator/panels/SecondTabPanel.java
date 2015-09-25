@@ -1,7 +1,10 @@
 package generator.panels;
 
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -21,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
@@ -39,42 +43,72 @@ import generator.models.generation.ObjectInfo;
 import generator.tables.Table;
 import generator.tables.model.ObjectFileTableColumnModel;
 import generator.tables.model.ObjectFileTableModel;
+import generator.utils.ComponentUtil;
+import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
 
-public class SecondTabPanel extends JPanel implements MouseListener {
+public class SecondTabPanel extends AbstractPanel implements MouseListener {
 
 	private static final DeleteModelAction deleteAction = new DeleteModelAction(
 			Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
 	private static final EditModelAction editAction = new EditModelAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
 	private static final LoadModelAction newAction = new LoadModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT));
-
 	private static final String DELETE_ACTION = "deleteAction";
 	private static final String EDIT_ACTION = "editAction";
 	private static final String NEW_ACTION = "newAction";
 	private static final long serialVersionUID = -2087487239161953473L;
-	private Map<String, JSpinner> arguments;
-
-	private JPanel options2;
+	private Map<Algorithm, JPanel> panels = new HashMap<>();
 	private JComboBox<Algorithm> algorithmList;
 	private JPopupMenu menu;
 	private JPopupMenu rowMenu;
 	private Table table;
+	private Map<String, JSpinner> algorithmArgs = new HashMap<>();
 
 	private List<ObjectInfo> objectsInfo = new ArrayList<>();
+	private JPanel options;
 
 	public Algorithm getAlgorithm() {
 		return (Algorithm) algorithmList.getSelectedItem();
 	}
 
 	private void createAlgotithmsPanel() {
-		options2 = new JPanel();
-		options2.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_OPTIONS)));
-		options2.setLayout(new GridLayout(12, 2, 5, 5));
+		JPanel algorithmPanel = new JPanel();
+		options = new JPanel();
+		algorithmPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_OPTIONS)));
+		algorithmPanel.setLayout(new FlowLayout());
 		algorithmList = new JComboBox<>();
-		algorithmList.addItem(new FullRandomAlgorithm(Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM)));
-		algorithmList.addItem(new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM)));
-		options2.add(algorithmList);
-		add(options2);
+		FullRandomAlgorithm fullRandomAlgorithm = new FullRandomAlgorithm(
+				Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
+		RegularAlgorithm regularAlgorithm = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
+		algorithmList.addItem(fullRandomAlgorithm);
+		algorithmList.addItem(regularAlgorithm);
+		algorithmList.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent paramActionEvent) {
+				options.removeAll();
+				JPanel comp = panels.get(getAlgorithm());
+				options.add(comp);
+				options.revalidate();
+			}
+		});
+		algorithmPanel.add(algorithmList);
+
+		panels.put(fullRandomAlgorithm, new JPanel());
+
+		createRegularPanel(regularAlgorithm);
+		algorithmPanel.add(options);
+		add(algorithmPanel);
+	}
+
+	private void createRegularPanel(Algorithm a) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(12, 1, 5, 5));
+		panel.add(new JSeparator());
+		panel.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.MIN_X, Consts.MAX_X,
+				Mediator.getMessage(PropertiesKeys.MAX), algorithmArgs));
+		panel.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.MIN_Z, Consts.MAX_Z,
+				Mediator.getMessage(PropertiesKeys.MAX), algorithmArgs));
+		panels.put(a, panel);
 	}
 
 	private void createObjectFilesPanel() {
@@ -160,10 +194,6 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 		Mediator.registerSecondTabPanel(this);
 	}
 
-	public Map<String, JSpinner> getArguments() {
-		return arguments;
-	}
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON3) {
@@ -205,6 +235,14 @@ public class SecondTabPanel extends JPanel implements MouseListener {
 			objects.add(objectsInfo.get(i));
 		}
 		return objects;
+	}
+
+	public Map<String, Number> getAlgorithmArgs() {
+		Map<String, Number> map = new HashMap<>();
+		for (Map.Entry<String, JSpinner> i : algorithmArgs.entrySet()) {
+			map.put(i.getKey(), (Number) i.getValue().getValue());
+		}
+		return map;
 	}
 
 }

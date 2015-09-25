@@ -33,16 +33,14 @@ import generator.models.result.Material;
 import generator.models.result.RGB;
 import generator.models.result.RGBA;
 import generator.models.result.Texture;
+import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
 
-public class FirstTabPanel extends JPanel implements MouseListener {
-
+public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	private static final long serialVersionUID = -2087487239161953473L;
-	private Map<String, JSpinner> arguments;
 
 	private JLabel mapLabel;
-
 	private JLabel mapWidthLabel;
 	private JLabel mapHeightLabel;
 	private JPopupMenu menu;
@@ -101,12 +99,12 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		legendPanel.add(valueLabel);
 
 		options.add(legendPanel);
-		options.add(createSpinner(-10000, 10000, Consts.X,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.X)));
-		options.add(createSpinner(-10000, 10000, Consts.Y,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.Y)));
-		options.add(createSpinner(-10000, 10000, Consts.Z,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.Z)));
+		options.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.X,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.X), arguments));
+		options.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Y,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.Y), arguments));
+		options.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Z,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.Z), arguments));
 
 		options.add(new JLabel(Mediator.getMessage(PropertiesKeys.LIGHT), SwingConstants.CENTER));
 
@@ -118,8 +116,8 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 				Consts.LIGHT_DIFFUSE_A, Mediator.getMessage(PropertiesKeys.DIFFUSE), 0.8));
 		options.add(createLightSpinners(0, 1, Consts.LIGHT_SPECULAR_R, Consts.LIGHT_SPECULAR_G, Consts.LIGHT_SPECULAR_B,
 				Consts.LIGHT_SPECULAR_A, Mediator.getMessage(PropertiesKeys.SPECULAR), 0.5));
-		options.add(createLightSpinners(-10000, 10000, Consts.LIGHT_POSITION_X, Consts.LIGHT_POSITION_Y, Consts.LIGHT_POSITION_Z,
-				Consts.LIGHT_POSITION_MODE, Mediator.getMessage(PropertiesKeys.LIGHT_POSITION), 1));
+		options.add(createLightSpinners(-MAX_POSITION, MAX_POSITION, Consts.LIGHT_POSITION_X, Consts.LIGHT_POSITION_Y,
+				Consts.LIGHT_POSITION_Z, Consts.LIGHT_POSITION_MODE, Mediator.getMessage(PropertiesKeys.LIGHT_POSITION), 1));
 
 		add(options);
 	}
@@ -161,7 +159,8 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		JButton open = new JButton(new LoadTextureAction(Mediator.getMessage(PropertiesKeys.OPEN_TEXTURE)));
 		buttonHolder.add(open);
 		textureOptions.add(buttonHolder);
-		textureOptions.add(createSpinner(0.01, 9999, Consts.SCALE, Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE), 1));
+		textureOptions.add(ComponentUtil.createSpinner(0.01, 9999, Consts.SCALE,
+				Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE), 1, arguments));
 
 		textureOptions.add(new JLabel(Mediator.getMessage(PropertiesKeys.MATERIAL), SwingConstants.CENTER));
 		textureOptions.add(createMaterialsSettingsTitle());
@@ -172,8 +171,10 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		textureOptions.add(createMaterialSpinners(0, 1, Consts.MATERIAL_SPECULAR_R, Consts.MATERIAL_SPECULAR_G,
 				Consts.MATERIAL_SPECULAR_B, Mediator.getMessage(PropertiesKeys.SPECULAR), 0.5));
 
-		textureOptions.add(createSpinner(0, 1, Consts.MATERIAL_D, Mediator.getMessage(PropertiesKeys.OPACITY), 1));
-		textureOptions.add(createSpinner(0, 1000, Consts.MATERIAL_NS, Mediator.getMessage(PropertiesKeys.SHINESS), 1));
+		textureOptions.add(
+				ComponentUtil.createSpinner(0, 1, Consts.MATERIAL_D, Mediator.getMessage(PropertiesKeys.OPACITY), 1, arguments));
+		textureOptions.add(ComponentUtil.createSpinner(0, 1000, Consts.MATERIAL_NS, Mediator.getMessage(PropertiesKeys.SHINESS),
+				1, arguments));
 
 		add(textureOptions);
 	}
@@ -191,32 +192,17 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		add(texturePanel);
 	}
 
-	private JPanel createSpinner(double min, double max, String key, String description, double defValue) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(0, 2));
-		JLabel attributelabel = new JLabel(description);
-		panel.add(attributelabel);
-		JSpinner spinner = new JSpinner(new SpinnerNumberModel(defValue, min, max, 1));
-		panel.add(attributelabel);
-		panel.add(spinner);
-		arguments.put(key, spinner);
-		return panel;
-	}
-
-	private JPanel createSpinner(double min, double max, String key, String description) {
-		return createSpinner(min, max, key, description, 0.0);
-	}
-
 	private JPanel createLightSpinners(double min, double max, String keyR, String keyG, String keyB, String keyA,
 			String description, double defValue) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 5));
 		JLabel attributelabel = new JLabel(description);
 		panel.add(attributelabel);
-		JSpinner spinnerR = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		JSpinner spinnerG = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		JSpinner spinnerB = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		JSpinner spinnerA = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		SpinnerNumberModel model = new SpinnerNumberModel(defValue, min, max, 0.01);
+		JSpinner spinnerR = new JSpinner(model);
+		JSpinner spinnerG = new JSpinner(model);
+		JSpinner spinnerB = new JSpinner(model);
+		JSpinner spinnerA = new JSpinner(model);
 		panel.add(attributelabel);
 		panel.add(spinnerR);
 		panel.add(spinnerG);
@@ -235,9 +221,10 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 		panel.setLayout(new GridLayout(0, 4));
 		JLabel attributelabel = new JLabel(description);
 		panel.add(attributelabel);
-		JSpinner spinnerR = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		JSpinner spinnerG = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		JSpinner spinnerB = new JSpinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		SpinnerNumberModel model = new SpinnerNumberModel(defValue, min, max, 0.01);
+		JSpinner spinnerR = new JSpinner(model);
+		JSpinner spinnerG = new JSpinner(model);
+		JSpinner spinnerB = new JSpinner(model);
 		panel.add(attributelabel);
 		panel.add(spinnerR);
 		panel.add(spinnerG);
@@ -284,10 +271,6 @@ public class FirstTabPanel extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
-
-	private double getValue(String key) {
-		return (double) arguments.get(key).getValue();
 	}
 
 	public BasicMapData getMapSettings() {

@@ -1,11 +1,13 @@
 package generator.models.generation;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GenerationInfo {
 
 	private List<ObjectInfo> objects;
-	private int count;
+	Map<String, Number> args = new HashMap<>();
 
 	public List<ObjectInfo> getObjects() {
 		return objects;
@@ -15,13 +17,12 @@ public class GenerationInfo {
 		this.objects = objects;
 	}
 
-	@Deprecated
-	public int getCount() {
-		return count;
+	public Map<String, Number> getArgs() {
+		return args;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setArgs(Map<String, Number> args) {
+		this.args = args;
 	}
 
 }

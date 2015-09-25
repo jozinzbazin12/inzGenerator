@@ -286,7 +286,7 @@ public class Mediator {
 	}
 
 	public static void highlight(GeneratedObject obj) {
-		 thirdTabPanel.highlight(obj);
+		thirdTabPanel.highlight(obj);
 	}
 
 	public static void unHighlight() {
@@ -351,8 +351,11 @@ public class Mediator {
 		return secondTabPanel.getSelectedRows();
 	}
 
+	public static Map<String, Number> getAlgorithmArgs() {
+		return secondTabPanel.getAlgorithmArgs();
+	}
 }
 
 // TODO cleanup propertiesow
-//TODO sprawdzic statyczne pola, po zmianie jezyka jest chujowo
-//TODO zmienic z obiektu na model
+// TODO sprawdzic statyczne pola, po zmianie jezyka jest chujowo
+// TODO zmienic z obiektu na model

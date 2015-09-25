@@ -1,13 +1,13 @@
 package generator.algorithms;
 
-import generator.models.generation.GenerationInfo;
-import generator.models.generation.ObjectInfo;
-import generator.models.generation.PositionSettings;
-import generator.models.result.BasicModelData;
-import generator.models.result.GeneratedObject;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import generator.models.generation.GenerationInfo;
+import generator.models.generation.ObjectInfo;
+import generator.models.result.BasicModelData;
+import generator.models.result.GeneratedObject;
+import generator.utils.Consts;
 
 public class RegularAlgorithm extends Algorithm {
 
@@ -18,21 +18,46 @@ public class RegularAlgorithm extends Algorithm {
 	@Override
 	public List<GeneratedObject> generationMethod(GenerationInfo info) {
 		List<GeneratedObject> list = new ArrayList<GeneratedObject>();
-		PositionSettings positionSettings = info.getObjects().get(0).getPositionSettings();
-		double width = positionSettings.getMaxZ() - positionSettings.getMinZ();
-		double height = positionSettings.getMaxX() - positionSettings.getMinX();
+		double minX = info.getArgs().get(Consts.MIN_X).doubleValue();
+		double minZ = info.getArgs().get(Consts.MIN_Z).doubleValue();
+		double actualMinX = minX;
+		double actualMinZ = minZ;
+		double maxX = info.getArgs().get(Consts.MAX_X).doubleValue();
+		double maxZ = info.getArgs().get(Consts.MAX_Z).doubleValue();
+		double width = maxZ - minZ;
+		double height = maxX - minX;
 		double ratio = width / height;
 
-		ObjectInfo objInfo = info.getObjects().get(0);
-		int i = info.getCount();
-		double x = objInfo.getPositionSettings().getMinX();
-		double z = objInfo.getPositionSettings().getMinZ();
-		
-		double dx=(width/Math.floor(Math.sqrt(i)))/ratio;
-		double dz=(height/Math.floor(Math.sqrt(i)))*ratio;
-		while (i >= 0) {
+		int count = 0;
+		List<Integer> counts = new ArrayList<>();
+		List<ObjectInfo> allObjects = info.getObjects();
+		List<ObjectInfo> objects = new ArrayList<>();
+		for (ObjectInfo obj : allObjects) {
+			int tmp = getCount(obj);
+			if (tmp > 0) {
+				objects.add(obj);
+				count += tmp;
+				counts.add(tmp);
+			}
+		}
+
+		double dx = (width / Math.floor(Math.sqrt(count))) / ratio;
+		double dz = (height / Math.floor(Math.sqrt(count))) * ratio;
+		int actualCount = 0;
+		int modelNumber = 0;
+		ObjectInfo objInfo;
+		while (count > 0) {
+			if (actualCount >= counts.get(modelNumber)) {
+				modelNumber++;
+				actualCount = 0;
+			}
+			objInfo = objects.get(modelNumber);
+			actualCount++;
+
 			BasicModelData obj = new BasicModelData();
-			obj.setPosition(x, randomizeDouble(objInfo.getRotationSettings().getMinY(), objInfo.getRotationSettings().getMaxY()), z);
+			obj.setPosition(actualMinX,
+					randomizeDouble(objInfo.getRotationSettings().getMinY(), objInfo.getRotationSettings().getMaxY()),
+					actualMinZ);
 
 			obj.setRotation(randomizeDouble(objInfo.getRotationSettings().getMinX(), objInfo.getRotationSettings().getMaxX()),
 					randomizeDouble(objInfo.getRotationSettings().getMinY(), objInfo.getRotationSettings().getMaxY()),
@@ -41,13 +66,13 @@ public class RegularAlgorithm extends Algorithm {
 			obj.setScale(randomizeDouble(objInfo.getScaleSettings().getMinX(), objInfo.getScaleSettings().getMaxX()),
 					randomizeDouble(objInfo.getScaleSettings().getMinY(), objInfo.getScaleSettings().getMaxY()),
 					randomizeDouble(objInfo.getScaleSettings().getMinZ(), objInfo.getScaleSettings().getMaxZ()));
-			list.add(new GeneratedObject(info.getObjects().get(0).getModel(), obj));
-			i--;
-			x +=dx;
-			
-			if (x > objInfo.getPositionSettings().getMaxX()) {
-				x = objInfo.getPositionSettings().getMinX();
-				z +=dz;
+			list.add(new GeneratedObject(objInfo.getModel(), obj));
+			count--;
+			actualMinX += dx;
+
+			if (actualMinX > maxX) {
+				actualMinX = minX;
+				actualMinZ += dz;
 			}
 		}
 		return list;

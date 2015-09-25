@@ -69,17 +69,18 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 			repaint();
 			last = null;
 		}
+		table.setHighlighted(-1);
 	}
 
 	public void highlight(GeneratedObject obj) {
-		int index = objects.indexOf(obj) - 1;
+		int index = objects.indexOf(obj);
 		if (last != null) {
 			last.swapColors();
 		}
 		if (index >= 0) {
 			obj.swapColors();
 			last = obj;
-			table.setHighlighted(index + 1);
+			table.setHighlighted(index);
 		}
 
 		Mediator.refreshPreview();
@@ -258,7 +259,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 
 	public void click(GeneratedObject obj) {
 		int index = objects.indexOf(obj);
-		table.setRowSelectionInterval(index - 1, index);
+		table.setRowSelectionInterval(index , index);
 		unHighlight();
 	}
 }

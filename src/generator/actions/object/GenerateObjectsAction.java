@@ -2,13 +2,11 @@ package generator.actions.object;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 
 import generator.Mediator;
 import generator.models.generation.GenerationInfo;
-import generator.models.generation.ObjectInfo;
 
 public class GenerateObjectsAction extends AbstractAction {
 
@@ -17,25 +15,8 @@ public class GenerateObjectsAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		GenerationInfo info = new GenerationInfo();
-		List<ObjectInfo> objects = new ArrayList<ObjectInfo>();
-		info.setCount(30);
-//		PositionSettings pos = new PositionSettings(Mediator.getGenerationInfoArguments(Consts.MIN_X), Mediator.getGenerationInfoArguments(Consts.MAX_X),
-//				Mediator.getGenerationInfoArguments(Consts.MIN_Y), Mediator.getGenerationInfoArguments(Consts.MAX_Y),
-//				Mediator.getGenerationInfoArguments(Consts.MIN_Z), Mediator.getGenerationInfoArguments(Consts.MAX_Z), true);
-//
-//		ScaleSettings scale = new ScaleSettings(Mediator.getGenerationInfoArguments(Consts.MIN_SX), Mediator.getGenerationInfoArguments(Consts.MAX_SX),
-//				Mediator.getGenerationInfoArguments(Consts.MIN_SY), Mediator.getGenerationInfoArguments(Consts.MAX_SY),
-//				Mediator.getGenerationInfoArguments(Consts.MIN_SZ), Mediator.getGenerationInfoArguments(Consts.MAX_SZ));
-//
-//		RotationSettings rotation = new RotationSettings(Mediator.getGenerationInfoArguments(Consts.MIN_RX), Mediator.getGenerationInfoArguments(Consts.MAX_RX),
-//				Mediator.getGenerationInfoArguments(Consts.MIN_RY), Mediator.getGenerationInfoArguments(Consts.MAX_RY),
-//				Mediator.getGenerationInfoArguments(Consts.MIN_RZ), Mediator.getGenerationInfoArguments(Consts.MAX_RZ));
-
-		for (ObjectInfo i : Mediator.getModels().values()) {
-			//ObjectInfo obj = new ObjectInfo(0, pos, rotation, scale, i);
-			objects.add(i);
-		}
-		info.setObjects(objects);
+		info.setObjects(new ArrayList<>(Mediator.getModels().values()));
+		info.setArgs(Mediator.getAlgorithmArgs());
 		Mediator.getResultObject().setGeneratedObjects(Mediator.getAlgorithm().generate(info));
 		Mediator.printOnPreview();
 	}

@@ -1,11 +1,5 @@
 package generator.windows;
 
-import generator.Mediator;
-import generator.models.result.BasicModelData;
-import generator.models.result.GeneratedObject;
-import generator.utils.Consts;
-import generator.utils.PropertiesKeys;
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -17,11 +11,16 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+
+import generator.Mediator;
+import generator.models.result.BasicModelData;
+import generator.models.result.GeneratedObject;
+import generator.utils.ComponentUtil;
+import generator.utils.Consts;
+import generator.utils.PropertiesKeys;
 
 public class ObjectWindow extends JFrame implements ActionListener {
 	Map<String, JSpinner> arguments = new HashMap<String, JSpinner>();
@@ -37,17 +36,26 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(11, 2, 5, 5));
-		panel.add(createSpinner(-10000, 10000, Consts.X, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X)));
-		panel.add(createSpinner(-10000, 10000, Consts.Y, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y)));
-		panel.add(createSpinner(-10000, 10000, Consts.Z, MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z)));
+		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.X,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments));
+		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.Y,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y), arguments));
+		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.Z,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), arguments));
 		panel.add(new JSeparator());
-		panel.add(createSpinner(-180, 180, Consts.RX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X)));
-		panel.add(createSpinner(-180, 180, Consts.RY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y)));
-		panel.add(createSpinner(-180, 180, Consts.RZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z)));
+		panel.add(ComponentUtil.createSpinner(-180, 180, Consts.RX,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X), arguments));
+		panel.add(ComponentUtil.createSpinner(-180, 180, Consts.RY,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y), arguments));
+		panel.add(ComponentUtil.createSpinner(-180, 180, Consts.RZ,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z), arguments));
 		panel.add(new JSeparator());
-		panel.add(createSpinner(-1000, 1000, Consts.SX, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X)));
-		panel.add(createSpinner(-1000, 1000, Consts.SY, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y)));
-		panel.add(createSpinner(-1000, 1000, Consts.SZ, MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z)));
+		panel.add(ComponentUtil.createSpinner(-1000, 1000, Consts.SX,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X), arguments));
+		panel.add(ComponentUtil.createSpinner(-1000, 1000, Consts.SY,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y), arguments));
+		panel.add(ComponentUtil.createSpinner(-1000, 1000, Consts.SZ,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z), arguments));
 
 		setVisible(true);
 		add(panel, BorderLayout.CENTER);
@@ -62,17 +70,6 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		bottom.add(cancel);
 		add(bottom, BorderLayout.PAGE_END);
 		Mediator.registerObjectWindow(this);
-	}
-
-	private JPanel createSpinner(double min, double max, String key1, String description) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(0, 2, 20, 0));
-		JLabel attributelabel = new JLabel(description);
-		panel.add(attributelabel);
-		JSpinner minSpinner = new JSpinner(new SpinnerNumberModel(0.0, min, max, 1));
-		panel.add(minSpinner);
-		arguments.put(key1, minSpinner);
-		return panel;
 	}
 
 	public ObjectWindow(String name) {
