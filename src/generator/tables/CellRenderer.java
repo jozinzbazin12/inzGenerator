@@ -5,6 +5,7 @@ import java.awt.Component;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 
 public class CellRenderer implements TableCellRenderer {
@@ -16,7 +17,7 @@ public class CellRenderer implements TableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object txt, boolean isSelected, boolean hasFocus, int row,
 			int column) {
 		Table tab = (Table) table;
-		JLabel label = new JLabel();
+		JLabel label = new JLabel(txt.toString(), SwingConstants.CENTER);
 		if (isSelected) {
 			label.setBackground(SELECTED);
 		} else {
@@ -25,8 +26,7 @@ public class CellRenderer implements TableCellRenderer {
 			} else {
 				label.setBackground(Color.white);
 			}
-		}
-		label.setText(txt.toString());
+		}	
 		label.setOpaque(true);
 		return label;
 	}

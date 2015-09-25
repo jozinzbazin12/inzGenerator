@@ -12,6 +12,9 @@ public class Consts {
 	public static final String SY = "Sy";
 	public static final String SZ = "Sz";
 
+	public static final String MIN_COUNT = "minC";
+
+	public static final String MAX_COUNT = "maxC";
 	public static final String MIN_X = "minX";
 	public static final String MIN_Y = "minY";
 	public static final String MIN_Z = "minZ";

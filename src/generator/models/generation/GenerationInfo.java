@@ -6,7 +6,7 @@ public class GenerationInfo {
 
 	private List<ObjectInfo> objects;
 	private int count;
-	
+
 	public List<ObjectInfo> getObjects() {
 		return objects;
 	}
@@ -15,6 +15,7 @@ public class GenerationInfo {
 		this.objects = objects;
 	}
 
+	@Deprecated
 	public int getCount() {
 		return count;
 	}
@@ -22,5 +23,5 @@ public class GenerationInfo {
 	public void setCount(int count) {
 		this.count = count;
 	}
-	
+
 }

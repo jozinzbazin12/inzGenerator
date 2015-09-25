@@ -5,7 +5,8 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 	private PositionSettings positionSettings;
 	private ScaleSettings scaleSettings;
 	private RotationSettings rotationSettings;
-	int count;
+	private int minCount;
+	private int maxCount;
 	private GenerationModel model;
 
 	@Override
@@ -30,12 +31,7 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 		return rotationSettings;
 	}
 
-	public int getCount() {
-		return count;
-	}
-
-	public ObjectInfo(int count, PositionSettings pos, RotationSettings rot, ScaleSettings scale, GenerationModel model) {
-		this.count = count;
+	public ObjectInfo(PositionSettings pos, RotationSettings rot, ScaleSettings scale, GenerationModel model) {
 		positionSettings = pos;
 		rotationSettings = rot;
 		scaleSettings = scale;
@@ -74,5 +70,21 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 
 	public void setRotationSettings(RotationSettings rotationSettings) {
 		this.rotationSettings = rotationSettings;
+	}
+
+	public int getMinCount() {
+		return minCount;
+	}
+
+	public void setMinCount(int minCount) {
+		this.minCount = minCount;
+	}
+
+	public int getMaxCount() {
+		return maxCount;
+	}
+
+	public void setMaxCount(int maxCount) {
+		this.maxCount = maxCount;
 	}
 }

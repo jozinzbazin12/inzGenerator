@@ -25,7 +25,7 @@ public class ObjectFileTableColumnModel extends AbstractTableColumnModel {
 
 		createColumn(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_NAME), 100, 300);
 		createColumn(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_LOCATION), 100, 300);
-		createColumn("test", 100, 300);
+		createColumn(Mediator.getMessage(PropertiesKeys.COUNT), 100, 300);
 		createColumn(Mediator.getMessage(PropertiesKeys.MIN_POSITION), 100, 300);
 		createColumn(Mediator.getMessage(PropertiesKeys.MAX_POSITION), 100, 300);
 		createColumn(Mediator.getMessage(PropertiesKeys.MIN_SCALE), 100, 300);

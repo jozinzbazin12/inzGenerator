@@ -355,3 +355,4 @@ public class Mediator {
 
 // TODO cleanup propertiesow
 //TODO sprawdzic statyczne pola, po zmianie jezyka jest chujowo
+//TODO zmienic z obiektu na model

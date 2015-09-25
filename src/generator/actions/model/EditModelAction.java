@@ -18,7 +18,7 @@ public class EditModelAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		List<ObjectInfo> selectedRows = Mediator.getSelectedObjectFiles();
 		if (!selectedRows.isEmpty()) {
-			new ModelWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), selectedRows);
+			new ModelWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT_SETTINGS), selectedRows);
 		}
 	}
 

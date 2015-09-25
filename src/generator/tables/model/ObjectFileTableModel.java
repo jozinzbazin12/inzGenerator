@@ -71,7 +71,7 @@ public class ObjectFileTableModel extends DefaultTableModel {
 			case 2:
 				return model.getPath();
 			case 3:
-				return objectInfo.getCount();
+				return MessageFormat.format("{0} - {1}", objectInfo.getMinCount(), objectInfo.getMaxCount());
 			case 4:
 				return createCellValue(pos.getMinX(), pos.getMinY(), pos.getMinZ());
 			case 5:

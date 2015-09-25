@@ -76,7 +76,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 		add(fileOptions, BorderLayout.NORTH);
 
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(PropertiesKeys.SETTINGS));
+		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
 		JPanel legendPanel = new JPanel();
 		legendPanel.setLayout(new GridLayout(0, 3));
 		JLabel attributelabel = new JLabel(Mediator.getMessage(PropertiesKeys.ATTRIBUTE));
@@ -90,7 +90,9 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 		panel.add(legendPanel);
 
-		panel.setLayout(new GridLayout(13, 2, 5, 5));
+		panel.setLayout(new GridLayout(15, 2, 5, 5));
+		panel.add(createSpinner(0, 10000, Consts.MIN_COUNT, Consts.MAX_COUNT, Mediator.getMessage(PropertiesKeys.COUNT)));
+		panel.add(new JSeparator());
 		panel.add(createSpinner(-10000, 10000, Consts.MIN_X, Consts.MAX_X,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X)));
 		panel.add(createSpinner(-10000, 10000, Consts.MIN_Y, Consts.MAX_Y,
@@ -159,6 +161,9 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 	private void fillValues() {
 		if (objects.size() == 1) {
+			arguments.get(Consts.MIN_COUNT).setValue(objects.get(0).getMinCount());
+			arguments.get(Consts.MAX_COUNT).setValue(objects.get(0).getMaxCount());
+
 			arguments.get(Consts.MIN_X).setValue(objects.get(0).getPositionSettings().getMinX());
 			arguments.get(Consts.MIN_Y).setValue(objects.get(0).getPositionSettings().getMinY());
 			arguments.get(Consts.MIN_Z).setValue(objects.get(0).getPositionSettings().getMinZ());
@@ -241,6 +246,8 @@ public class ModelWindow extends JFrame implements ActionListener {
 				i.setPositionSettings(getPosition());
 				i.setRotationSettings(getRotation());
 				i.setScaleSettings(getScale());
+				i.setMinCount(getIntValue(arguments.get(Consts.MIN_COUNT).getValue()));
+				i.setMaxCount(getIntValue(arguments.get(Consts.MAX_COUNT).getValue()));
 			}
 			dispose();
 		} else if (e.getSource().equals(cancel)) {
@@ -255,6 +262,16 @@ public class ModelWindow extends JFrame implements ActionListener {
 			}
 		}
 
+	}
+
+	private int getIntValue(Object value) {
+		if (value instanceof Double) {
+			return ((Double) value).intValue();
+		}
+		if (value instanceof Integer) {
+			return (Integer) value;
+		}
+		throw new IllegalArgumentException("Argument not a number");
 	}
 
 	public void changeFile(String path, String name) {
