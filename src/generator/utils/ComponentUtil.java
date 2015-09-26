@@ -8,7 +8,23 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import generator.Mediator;
+
 public final class ComponentUtil {
+
+	public static JPanel createAtrributeLegendPanel() {
+		JPanel legendPanel = new JPanel();
+		legendPanel.setLayout(new GridLayout(0, 3));
+		JLabel attributelabel = new JLabel(Mediator.getMessage(PropertiesKeys.ATTRIBUTE));
+		legendPanel.add(attributelabel);
+		JLabel minLabel = new JLabel(Mediator.getMessage(PropertiesKeys.MIN));
+		legendPanel.add(attributelabel);
+		JLabel maxLabel = new JLabel(Mediator.getMessage(PropertiesKeys.MAX));
+		legendPanel.add(attributelabel);
+		legendPanel.add(minLabel);
+		legendPanel.add(maxLabel);
+		return legendPanel;
+	}
 
 	public static JPanel createSpinner(double min, double max, String key, String description, double defValue,
 			Map<String, JSpinner> arguments) {

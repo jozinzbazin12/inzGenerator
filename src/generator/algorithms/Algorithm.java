@@ -10,6 +10,7 @@ import generator.models.result.GeneratedObject;
 
 public abstract class Algorithm {
 	private Random rnd = new Random();
+	private final String helpKey;
 
 	protected int getCount(ObjectInfo obj) {
 		int count = 0;
@@ -27,8 +28,9 @@ public abstract class Algorithm {
 
 	private String name;
 
-	public Algorithm(String name) {
+	public Algorithm(String name, String key) {
 		this.name = name;
+		helpKey = key;
 	}
 
 	@Override
@@ -46,6 +48,10 @@ public abstract class Algorithm {
 		List<GeneratedObject> result = generationMethod(info);
 		Mediator.updateObjectList(result);
 		return result;
+	}
+
+	public String getHelp() {
+		return Mediator.getMessage(helpKey);
 	}
 
 }

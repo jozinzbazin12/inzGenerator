@@ -7,11 +7,12 @@ import generator.models.generation.GenerationInfo;
 import generator.models.generation.ObjectInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
+import generator.utils.PropertiesKeys;
 
 public class FullRandomAlgorithm extends Algorithm {
 
 	public FullRandomAlgorithm(String name) {
-		super(name);
+		super(name, PropertiesKeys.FULL_RANDOM_ALGORITHM_HELP);
 	}
 
 	@Override

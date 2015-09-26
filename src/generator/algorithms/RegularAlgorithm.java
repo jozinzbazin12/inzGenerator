@@ -8,11 +8,12 @@ import generator.models.generation.ObjectInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.utils.Consts;
+import generator.utils.PropertiesKeys;
 
 public class RegularAlgorithm extends Algorithm {
 
 	public RegularAlgorithm(String name) {
-		super(name);
+		super(name, PropertiesKeys.REGULAR_ALGORITHM_HELP);
 	}
 
 	@Override

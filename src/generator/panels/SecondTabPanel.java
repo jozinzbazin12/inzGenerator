@@ -1,7 +1,7 @@
 package generator.panels;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -33,6 +35,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import generator.Mediator;
+import generator.actions.HelpAction;
 import generator.actions.model.DeleteModelAction;
 import generator.actions.model.EditModelAction;
 import generator.actions.model.LoadModelAction;
@@ -72,10 +75,11 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 	}
 
 	private void createAlgotithmsPanel() {
-		JPanel algorithmPanel = new JPanel();
-		options = new JPanel();
-		algorithmPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_OPTIONS)));
-		algorithmPanel.setLayout(new FlowLayout());
+		JPanel algorithmOptionsPanel = new JPanel(new BorderLayout());
+		options = new JPanel(new GridLayout(0, 1));
+		algorithmOptionsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_OPTIONS)));
+		JPanel algorithmPanel = new JPanel(new GridLayout(2, 0, 0, 10));
+		JPanel selectionPanel = new JPanel(new GridLayout(0, 2, 50, 0));
 		algorithmList = new JComboBox<>();
 		FullRandomAlgorithm fullRandomAlgorithm = new FullRandomAlgorithm(
 				Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
@@ -91,23 +95,27 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 				options.revalidate();
 			}
 		});
-		algorithmPanel.add(algorithmList);
+		selectionPanel.add(algorithmList);
+		selectionPanel.add(new JButton(new HelpAction(Mediator.getMessage(PropertiesKeys.HELP))));
+		algorithmPanel.add(selectionPanel);
+		algorithmPanel.add(new JSeparator());
+		algorithmOptionsPanel.add(algorithmPanel, BorderLayout.NORTH);
 
 		panels.put(fullRandomAlgorithm, new JPanel());
 
 		createRegularPanel(regularAlgorithm);
-		algorithmPanel.add(options);
-		add(algorithmPanel);
+		algorithmOptionsPanel.add(options, BorderLayout.CENTER);
+		add(algorithmOptionsPanel);
 	}
 
 	private void createRegularPanel(Algorithm a) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(12, 1, 5, 5));
-		panel.add(new JSeparator());
+		panel.add(ComponentUtil.createAtrributeLegendPanel());
 		panel.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.MIN_X, Consts.MAX_X,
-				Mediator.getMessage(PropertiesKeys.MAX), algorithmArgs));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), algorithmArgs));
 		panel.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.MIN_Z, Consts.MAX_Z,
-				Mediator.getMessage(PropertiesKeys.MAX), algorithmArgs));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), algorithmArgs));
 		panels.put(a, panel);
 	}
 

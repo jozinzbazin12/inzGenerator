@@ -77,18 +77,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 		JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
-		JPanel legendPanel = new JPanel();
-		legendPanel.setLayout(new GridLayout(0, 3));
-		JLabel attributelabel = new JLabel(Mediator.getMessage(PropertiesKeys.ATTRIBUTE));
-		legendPanel.add(attributelabel);
-		JLabel minLabel = new JLabel(Mediator.getMessage(PropertiesKeys.MIN));
-		legendPanel.add(attributelabel);
-		JLabel maxLabel = new JLabel(Mediator.getMessage(PropertiesKeys.MAX));
-		legendPanel.add(attributelabel);
-		legendPanel.add(minLabel);
-		legendPanel.add(maxLabel);
-
-		panel.add(legendPanel);
+		panel.add(ComponentUtil.createAtrributeLegendPanel());
 
 		panel.setLayout(new GridLayout(15, 2, 5, 5));
 		panel.add(ComponentUtil.createSpinner(0, 10000, Consts.MIN_COUNT, Consts.MAX_COUNT,

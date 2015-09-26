@@ -89,4 +89,7 @@ public final class PropertiesKeys {
 	public static final String MAX_ROTATION = "maxRotation";
 	public static final String COUNT = "count";
 	public static final String EDIT_OBJECT_SETTINGS = "editObjectSettings";
+	public static final String REGULAR_ALGORITHM_HELP = "regularAlgorithmHelp";
+	public static final String FULL_RANDOM_ALGORITHM_HELP = "fullRandomAlgorithmHelp";
+	public static final String HELP = "help";
 }
