@@ -44,10 +44,9 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	private static final String DELETE_ACTION = "deleteAction";
 	private static final String EDIT_ACTION = "editAction";
 	private static final String NEW_ACTION = "newAction";
-	private static final EditObjectAction editAction = new EditObjectAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
-	private static final NewObjectAction newAction = new NewObjectAction(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
-	private static final DeleteObjectAction deleteAction = new DeleteObjectAction(
-			Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
+	private final EditObjectAction editAction = new EditObjectAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
+	private final NewObjectAction newAction = new NewObjectAction(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
+	private final DeleteObjectAction deleteAction = new DeleteObjectAction(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
 
 	private static final long serialVersionUID = -2087487239161953473L;
 	private JPopupMenu menu;
@@ -173,7 +172,9 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 				int rowindex = table.rowAtPoint(e.getPoint());
 				if (rowindex >= 0) {
 					if (e.getButton() == MouseEvent.BUTTON3) {
-						table.setRowSelectionInterval(rowindex, rowindex);
+						if (table.getSelectedRowCount() <= 1) {
+							table.setRowSelectionInterval(rowindex, rowindex);
+						}
 						rowMenu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}

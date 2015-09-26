@@ -51,10 +51,9 @@ import generator.utils.PropertiesKeys;
 
 public class SecondTabPanel extends AbstractPanel implements MouseListener {
 
-	private static final DeleteModelAction deleteAction = new DeleteModelAction(
-			Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
-	private static final EditModelAction editAction = new EditModelAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
-	private static final LoadModelAction newAction = new LoadModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT));
+	private final DeleteModelAction deleteAction = new DeleteModelAction(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
+	private final EditModelAction editAction = new EditModelAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
+	private final LoadModelAction newAction = new LoadModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT));
 	private static final String DELETE_ACTION = "deleteAction";
 	private static final String EDIT_ACTION = "editAction";
 	private static final String NEW_ACTION = "newAction";
@@ -172,7 +171,9 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 				int rowindex = table.rowAtPoint(e.getPoint());
 				if (rowindex >= 0) {
 					if (e.getButton() == MouseEvent.BUTTON3) {
-						table.setRowSelectionInterval(rowindex, rowindex);
+						if (table.getSelectedRowCount() <= 1) {
+							table.setRowSelectionInterval(rowindex, rowindex);
+						}
 						rowMenu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
