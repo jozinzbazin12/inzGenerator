@@ -92,4 +92,6 @@ public final class PropertiesKeys {
 	public static final String REGULAR_ALGORITHM_HELP = "regularAlgorithmHelp";
 	public static final String FULL_RANDOM_ALGORITHM_HELP = "fullRandomAlgorithmHelp";
 	public static final String HELP = "help";
+	public static final String MODEL = "model";
+	public static final String ADDITIONAL = "additional";
 }

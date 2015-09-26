@@ -174,8 +174,7 @@ public class Mediator {
 		}
 		models.clear();
 		for (GeneratedObject i : resultObject.getGeneratedObjects()) {
-			i.setObjectName(getFileNameFromPath(i.getObjectPath()));
-			GenerationModel model = new GenerationModel(getFileNameFromPath(i.getObjectPath()), i.getObjectPath());
+			GenerationModel model = new GenerationModel(i.getObjectPath());
 			ObjectInfo obj = new ObjectInfo(model);
 			if (models.get(i.getObjectPath()) == null) {
 				models.put(i.getObjectPath(), obj);
@@ -188,7 +187,7 @@ public class Mediator {
 		updateModelsPanel();
 		setMapFile(resultObject.getMapObject().getMapFileName());
 		updateObjectList(resultObject.getGeneratedObjects());
-		printOnPreview();
+		updateObjects();
 	}
 
 	public static void registerSecondTabPanel(SecondTabPanel secondPanel) {
@@ -225,8 +224,8 @@ public class Mediator {
 		Mediator.resultObject = resultObject;
 	}
 
-	public static void printOnPreview() {
-		thirdTabPanel.printOnPreview(resultObject.getGeneratedObjects());
+	public static void updateObjects() {
+		thirdTabPanel.updateObjectFiles(resultObject.getGeneratedObjects());
 		thirdTabPanel.revalidate();
 	}
 
@@ -234,7 +233,7 @@ public class Mediator {
 		return (double) firstTabPanel.getArguments().get(key).getValue();
 	}
 
-	public static double getGeneratetObjectArguments(String key) {
+	public static double getGeneratedObjectArguments(String key) {
 		return (double) objectWindow.getArguments().get(key).getValue();
 	}
 
@@ -243,11 +242,7 @@ public class Mediator {
 	}
 
 	public static void updateObjectList(List<GeneratedObject> objects) {
-		thirdTabPanel.updateObjectListPanel(objects);
-	}
-
-	public static void updateObjectList() {
-		thirdTabPanel.updateObjectListPanel(resultObject.getGeneratedObjects());
+		thirdTabPanel.updateObjectFiles(objects);
 	}
 
 	public static void deleteObject() {
@@ -256,7 +251,7 @@ public class Mediator {
 			List<GeneratedObject> objects = resultObject.getGeneratedObjects();
 			objects.remove(row);
 			thirdTabPanel.updateObjectFiles(objects);
-			printOnPreview();
+			updateObjects();
 		}
 	}
 
@@ -294,6 +289,7 @@ public class Mediator {
 	}
 
 	public static void refreshPreview() {
+		thirdTabPanel.updateObjectFiles(resultObject.getGeneratedObjects());
 		thirdTabPanel.refreshPreview();
 	}
 
@@ -303,7 +299,7 @@ public class Mediator {
 
 	public static void loadObjectFile(String path) {
 		if (models.get(path) == null) {
-			GenerationModel model = new GenerationModel(getFileNameFromPath(path), path);
+			GenerationModel model = new GenerationModel(path);
 			ObjectInfo obj = new ObjectInfo(model);
 			models.put(path, obj);
 		}
@@ -313,18 +309,12 @@ public class Mediator {
 		secondTabPanel.updateObjectFiles(models.values());
 	}
 
-	private static String getFileNameFromPath(String path) {
-		int index = path.lastIndexOf("\\");
-		int index2 = path.lastIndexOf("/");
-		return path.substring(Integer.max(index, index2) + 1);
-	}
-
 	public static Map<String, ObjectInfo> getModels() {
 		return models;
 	}
 
 	public static void changeObjectsFileName(String path) {
-		modelWindow.changeFile(path, getFileNameFromPath(path));
+		modelWindow.changeFile(path);
 	}
 
 	public static void registerModelWindow(ModelWindow mw) {

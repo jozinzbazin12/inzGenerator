@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 
 import generator.Mediator;
 import generator.actions.model.LoadSingleModelAction;
+import generator.models.generation.GenerationModel;
 import generator.models.generation.ObjectInfo;
 import generator.models.generation.PositionSettings;
 import generator.models.generation.RotationSettings;
@@ -40,6 +41,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private JCheckBox equalScale;
 	private JPanel spinnersZ;
 	private JPanel spinnersY;
+	private JCheckBox relative;
 
 	private void createWindow() {
 		setSize(600, 600);
@@ -75,11 +77,21 @@ public class ModelWindow extends JFrame implements ActionListener {
 		}
 		add(fileOptions, BorderLayout.NORTH);
 
-		JPanel panel = new JPanel();
+		JPanel panel = new JPanel(new GridLayout(15, 2, 5, 5));
 		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
+
+		JPanel additional = new JPanel(new GridLayout(0, 2));
+		// additional.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ADDITIONAL)));
+		relative = new JCheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE));
+		additional.add(relative);
+		equalScale = new JCheckBox(Mediator.getMessage(PropertiesKeys.EQUAL_SCALE));
+		equalScale.addActionListener(this);
+		equalScale.setSelected(objects.get(0).getScaleSettings().isEqual());
+		additional.add(equalScale);
+		panel.add(additional);
+
 		panel.add(ComponentUtil.createAtrributeLegendPanel());
 
-		panel.setLayout(new GridLayout(15, 2, 5, 5));
 		panel.add(ComponentUtil.createSpinner(0, 10000, Consts.MIN_COUNT, Consts.MAX_COUNT,
 				Mediator.getMessage(PropertiesKeys.COUNT), arguments));
 		panel.add(new JSeparator());
@@ -91,9 +103,6 @@ public class ModelWindow extends JFrame implements ActionListener {
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), arguments));
 		panel.add(new JSeparator());
 
-		equalScale = new JCheckBox(Mediator.getMessage(PropertiesKeys.EQUAL_SCALE));
-		equalScale.addActionListener(this);
-		panel.add(equalScale);
 		panel.add(ComponentUtil.createSpinner(-1000, 1000, Consts.MIN_SX, Consts.MAX_SX,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X), arguments));
 		spinnersY = ComponentUtil.createSpinner(-1000, 1000, Consts.MIN_SY, Consts.MAX_SY,
@@ -131,6 +140,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 		objects = generationModel;
 		createWindow();
 		fillValues();
+		relative.setSelected(objects.get(0).getPositionSettings().isRelative());
 	}
 
 	private void fillValues() {
@@ -174,6 +184,8 @@ public class ModelWindow extends JFrame implements ActionListener {
 		data.setMaxX((double) arguments.get(Consts.MAX_X).getValue());
 		data.setMaxY((double) arguments.get(Consts.MAX_Y).getValue());
 		data.setMaxZ((double) arguments.get(Consts.MAX_Z).getValue());
+		data.setRelative(relative.isSelected());
+
 		return data;
 	}
 
@@ -201,6 +213,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 			data.setMaxX(maxx);
 			data.setMaxY(maxx);
 			data.setMaxZ(maxx);
+			data.setEqual(true);
 		} else {
 			data.setMinX((double) arguments.get(Consts.MIN_SX).getValue());
 			data.setMinY((double) arguments.get(Consts.MIN_SY).getValue());
@@ -247,10 +260,10 @@ public class ModelWindow extends JFrame implements ActionListener {
 		throw new IllegalArgumentException("Argument not a number");
 	}
 
-	public void changeFile(String path, String name) {
-		objects.get(0).getModel().setName(name);
-		objects.get(0).getModel().setPath(path);
-		fileName.setText(name);
+	public void changeFile(String path) {
+		GenerationModel model = objects.get(0).getModel();
+		model.setPath(path);
+		fileName.setText(model.getName());
 		pathField.setText(path);
 	}
 }

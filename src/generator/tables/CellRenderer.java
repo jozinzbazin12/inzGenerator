@@ -3,6 +3,7 @@ package generator.tables;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -16,8 +17,14 @@ public class CellRenderer implements TableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object txt, boolean isSelected, boolean hasFocus, int row,
 			int column) {
-		Table tab = (Table) table;
 		JLabel label = new JLabel(txt.toString(), SwingConstants.CENTER);
+		setColor(isSelected, row, table, label);
+		label.setOpaque(true);
+		return label;
+	}
+
+	protected void setColor(boolean isSelected, int row, JTable table, JComponent label) {
+		Table tab = (Table) table;
 		if (isSelected) {
 			label.setBackground(SELECTED);
 		} else {
@@ -26,8 +33,6 @@ public class CellRenderer implements TableCellRenderer {
 			} else {
 				label.setBackground(Color.white);
 			}
-		}	
-		label.setOpaque(true);
-		return label;
+		}
 	}
 }

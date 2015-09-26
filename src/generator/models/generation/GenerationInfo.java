@@ -7,7 +7,7 @@ import java.util.Map;
 public class GenerationInfo {
 
 	private List<ObjectInfo> objects;
-	Map<String, Number> args = new HashMap<>();
+	private Map<String, Number> args = new HashMap<>();
 
 	public List<ObjectInfo> getObjects() {
 		return objects;

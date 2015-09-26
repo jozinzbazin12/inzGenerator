@@ -23,7 +23,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -60,12 +59,12 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	private Table table;
 	private List<GeneratedObject> objects = new ArrayList<>();
 
-	private static GeneratedObject last;
+	private GeneratedObject last;
 
 	public void unHighlight() {
 		if (last != null) {
 			last.swapColors();
-			Mediator.refreshPreview();
+			refreshPreview();
 			repaint();
 			last = null;
 		}
@@ -83,7 +82,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 			table.setHighlighted(index);
 		}
 
-		Mediator.refreshPreview();
+		refreshPreview();
 		repaint();
 	}
 
@@ -101,8 +100,8 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		return file;
 	}
 
-	public void printOnPreview(List<GeneratedObject> list) {
-		previewPanel.setResultObject(list);
+	private void printOnPreview() {
+		previewPanel.setResultObject(objects);
 		previewPanel.repaint();
 	}
 
@@ -122,9 +121,9 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	public JScrollPane createObjectListPanel() {
 		menu = new JPopupMenu();
 		JMenuItem neww = new JMenuItem(newAction);
-		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK));
+		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
 		menu.add(neww);
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK),
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK),
 				NEW_ACTION);
 		getActionMap().put(NEW_ACTION, newAction);
 
@@ -171,11 +170,10 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON3) {
-					int rowindex = table.getSelectedRow();
-					if (rowindex < 0) {
-						menu.show(e.getComponent(), e.getX(), e.getY());
-					} else if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+				int rowindex = table.rowAtPoint(e.getPoint());
+				if (rowindex >= 0) {
+					if (e.getButton() == MouseEvent.BUTTON3) {
+						table.setRowSelectionInterval(rowindex, rowindex);
 						rowMenu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
@@ -196,15 +194,6 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		generatedObject.setBasic(new BasicModelData());
 
 		return table;
-	}
-
-	public void updateObjectListPanel(List<GeneratedObject> collection) {
-		List<GeneratedObject> modelsList = new ArrayList<>(collection);
-		Collections.sort(modelsList);
-		objects.clear();
-		objects.addAll(collection);
-		TableModel model = table.getModel();
-		((DefaultTableModel) model).addRow(collection.toArray(new GeneratedObject[0]));
 	}
 
 	public Dimension getImageSize() {
@@ -241,12 +230,13 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	}
 
 	public void updateObjectFiles(Collection<GeneratedObject> collection) {
-		List<GeneratedObject> modelsList = new ArrayList<>(collection);
-		Collections.sort(modelsList);
+		List<GeneratedObject> objectsList = new ArrayList<>(collection);
+		Collections.sort(objectsList);
 		objects.clear();
-		objects.addAll(collection);
+		objects.addAll(objectsList);
 		TableModel model = table.getModel();
-		((DefaultTableModel) model).addRow(collection.toArray(new GeneratedObject[0]));
+		((DefaultTableModel) model).addRow(objectsList.toArray(new GeneratedObject[0]));
+		printOnPreview();
 	}
 
 	public GeneratedObject getSelectedRow() {
@@ -259,7 +249,9 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 
 	public void click(GeneratedObject obj) {
 		int index = objects.indexOf(obj);
-		table.setRowSelectionInterval(index , index);
-		unHighlight();
+		table.setRowSelectionInterval(index, index);
+		if (index != table.getHighlighted()) {
+			unHighlight();
+		}
 	}
 }

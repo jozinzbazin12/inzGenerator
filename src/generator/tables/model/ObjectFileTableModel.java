@@ -25,7 +25,9 @@ public class ObjectFileTableModel extends DefaultTableModel {
 		int oldCount = getRowCount();
 		ObjectInfo[] objectInfoData = (ObjectInfo[]) rowData;
 		data = Arrays.asList(objectInfoData);
-		fireTableRowsDeleted(0, oldCount);
+		if (oldCount > 0) {
+			fireTableRowsDeleted(0, oldCount);
+		}
 		fireTableRowsInserted(0, data.size());
 	}
 
@@ -84,6 +86,8 @@ public class ObjectFileTableModel extends DefaultTableModel {
 				return createCellValue(rot.getMinX(), rot.getMinY(), rot.getMinZ());
 			case 9:
 				return createCellValue(rot.getMaxX(), rot.getMaxY(), rot.getMaxZ());
+			case 10:
+				return pos.isRelative();
 			}
 			throw new RuntimeException("No such column");
 		} else {

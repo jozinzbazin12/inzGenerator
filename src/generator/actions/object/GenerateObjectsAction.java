@@ -18,7 +18,7 @@ public class GenerateObjectsAction extends AbstractAction {
 		info.setObjects(new ArrayList<>(Mediator.getModels().values()));
 		info.setArgs(Mediator.getAlgorithmArgs());
 		Mediator.getResultObject().setGeneratedObjects(Mediator.getAlgorithm().generate(info));
-		Mediator.printOnPreview();
+		Mediator.updateObjects();
 	}
 
 	public GenerateObjectsAction(String name) {

@@ -26,14 +26,10 @@ public class FullRandomAlgorithm extends Algorithm {
 				obj.setPosition(randomizeDouble(objInfo.getPositionSettings().getMinX(), objInfo.getPositionSettings().getMaxX()),
 						randomizeDouble(objInfo.getPositionSettings().getMinY(), objInfo.getPositionSettings().getMaxY()),
 						randomizeDouble(objInfo.getPositionSettings().getMinZ(), objInfo.getPositionSettings().getMaxZ()));
+				obj.setRelative(objInfo.getPositionSettings().isRelative());
 
-				obj.setRotation(randomizeDouble(objInfo.getRotationSettings().getMinX(), objInfo.getRotationSettings().getMaxX()),
-						randomizeDouble(objInfo.getRotationSettings().getMinY(), objInfo.getRotationSettings().getMaxY()),
-						randomizeDouble(objInfo.getRotationSettings().getMinZ(), objInfo.getRotationSettings().getMaxZ()));
-
-				obj.setScale(randomizeDouble(objInfo.getScaleSettings().getMinX(), objInfo.getScaleSettings().getMaxX()),
-						randomizeDouble(objInfo.getScaleSettings().getMinY(), objInfo.getScaleSettings().getMaxY()),
-						randomizeDouble(objInfo.getScaleSettings().getMinZ(), objInfo.getScaleSettings().getMaxZ()));
+				setRotation(objInfo, obj);
+				setScale(objInfo, obj);
 				list.add(new GeneratedObject(objInfo.getModel(), obj));
 			}
 		}

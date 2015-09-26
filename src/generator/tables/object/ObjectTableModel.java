@@ -68,7 +68,10 @@ public class ObjectTableModel extends DefaultTableModel {
 				return createCellValue(basic.getSx(), basic.getSy(), basic.getSz());
 			case 4:
 				return createCellValue(basic.getRx(), basic.getRy(), basic.getRz());
+			case 5:
+				return object.getBasic().isRelative();
 			}
+
 			throw new RuntimeException("No such column");
 		} else {
 			return null;

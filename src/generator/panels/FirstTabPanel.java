@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -83,10 +82,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		JPanel controls = new JPanel();
 		controls.setLayout(new GridLayout(0, 2));
 		JButton loadMapButton = new JButton(new LoadMapAction(Mediator.getMessage(PropertiesKeys.LOAD_MAP_BUTTON)));
-		JCheckBox box = new JCheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE));
-		box.setSelected(true);
 		controls.add(loadMapButton);
-		controls.add(box);
 		options.add(controls);
 		options.add(new JLabel(Mediator.getMessage(PropertiesKeys.SIZE), SwingConstants.CENTER));
 

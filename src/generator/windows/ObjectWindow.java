@@ -5,17 +5,24 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 
 import generator.Mediator;
+import generator.models.generation.ObjectInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.utils.ComponentUtil;
@@ -29,13 +36,28 @@ public class ObjectWindow extends JFrame implements ActionListener {
 	private JButton ok;
 	private boolean edit;
 	private GeneratedObject object;
+	private JComboBox<ObjectInfo> models;
+	private JCheckBox relative;
 
 	private void createWindow() {
 		setSize(600, 600);
 		setLocation(400, 100);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(11, 2, 5, 5));
+		JPanel panel = new JPanel(new GridLayout(14, 2, 5, 5));
+		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
+
+		JPanel modelPanel = new JPanel(new GridLayout(0, 2, 0, 30));
+		modelPanel.add(new JLabel(Mediator.getMessage(PropertiesKeys.MODEL)));
+		Collection<ObjectInfo> values = Mediator.getModels().values();
+		ObjectInfo[] array = values.toArray(new ObjectInfo[values.size()]);
+		Arrays.sort(array);
+		models = new JComboBox<>(array);
+		modelPanel.add(models);
+		panel.add(modelPanel);
+		relative = new JCheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE));
+		panel.add(relative);
+		relative.setSelected(object.getBasic().isRelative());
+
 		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.X,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments));
 		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.Y,
@@ -83,6 +105,7 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		super(name);
 		this.object = obj;
 		createWindow();
+		models.setSelectedItem(Mediator.getModels().get(obj.getModel().getPath()));
 		edit = true;
 		fillValues();
 	}
@@ -119,6 +142,7 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		data.setRy((double) arguments.get(Consts.RY).getValue());
 		data.setRz((double) arguments.get(Consts.RZ).getValue());
 
+		data.setRelative(relative.isSelected());
 		return data;
 	}
 
@@ -127,12 +151,14 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		if (e.getSource().equals(ok)) {
 			if (edit) {
 				object.setBasic(getData());
+				object.setModel(((ObjectInfo) models.getSelectedItem()).getModel());
 			} else {
 				object.setBasic(getData());
+				object.setModel(((ObjectInfo) models.getSelectedItem()).getModel());
 				List<GeneratedObject> generatedObjects = Mediator.getResultObject().getGeneratedObjects();
 				generatedObjects.add(object);
 			}
-			Mediator.updateObjectList();
+			Mediator.refreshPreview();
 			dispose();
 		}
 		if (e.getSource().equals(cancel)) {

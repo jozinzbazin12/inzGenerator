@@ -22,6 +22,7 @@ public class GenerationModel implements Comparable<GenerationModel> {
 
 	public void setPath(String path) {
 		this.path = path;
+		name = getFileNameFromPath();
 	}
 
 	public Color getColor() {
@@ -32,14 +33,21 @@ public class GenerationModel implements Comparable<GenerationModel> {
 		this.color = color;
 	}
 
-	public GenerationModel(String name, String path) {
-		this.name = name;
+	public GenerationModel(String path) {
 		this.path = path;
+		this.name = getFileNameFromPath();
 		nexColor();
 	}
 
+	private String getFileNameFromPath() {
+		int index = path.lastIndexOf("\\");
+		int index2 = path.lastIndexOf("/");
+		return path.substring(Integer.max(index, index2) + 1);
+	}
+
 	private void nexColor() {
-		color = new Color((prevColor.getRed() + 30) % 255, (prevColor.getGreen() + 60) * 2 % 255, (prevColor.getBlue() + 90) * 3 % 255);
+		color = new Color((prevColor.getRed() + 30) % 255, (prevColor.getGreen() + 60) * 2 % 255,
+				(prevColor.getBlue() + 90) * 3 % 255);
 		prevColor = color;
 	}
 
@@ -50,8 +58,17 @@ public class GenerationModel implements Comparable<GenerationModel> {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof GenerationModel)) {
+			return false;
+		}
+		GenerationModel gm = (GenerationModel) obj;
+		return path.equals(gm.getPath());
+	}
+
+	@Override
 	public int compareTo(GenerationModel o) {
-		if (o == null || !(o instanceof GenerationModel)) {
+		if (o == null) {
 			return -1;
 		}
 		return name.compareToIgnoreCase(o.getName());

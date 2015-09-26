@@ -1,77 +1,23 @@
 package generator.models.generation;
 
-public class PositionSettings {
-	private double minX;
-	private double maxX;
-	private double minY;
-	private double maxY;
-	private double minZ;
-	private double maxZ;
+public class PositionSettings extends AbstractMinMax {
 
 	boolean relative;
 
-	public double getMinX() {
-		return minX;
-	}
-
-	public double getMaxX() {
-		return maxX;
-	}
-
-	public double getMinY() {
-		return minY;
-	}
-
-	public double getMaxY() {
-		return maxY;
-	}
-
-	public double getMinZ() {
-		return minZ;
-	}
-
-	public double getMaxZ() {
-		return maxZ;
-	}
-
-	public boolean isRelative() {
-		return relative;
-	}
-
 	public PositionSettings(double minx, double maxx, double miny, double maxy, double minz, double maxz, boolean relative) {
-		minX = minx;
-		maxX = maxx;
-		minY = miny;
-		maxY = maxy;
-		minZ = minz;
-		maxZ = maxz;
+		super(minx, maxx, miny, maxy, minz, maxz);
 		this.relative = relative;
 	}
 
 	public PositionSettings() {
 	}
 
-	public void setMinX(double minX) {
-		this.minX = minX;
+	public boolean isRelative() {
+		return relative;
 	}
 
-	public void setMaxX(double maxX) {
-		this.maxX = maxX;
+	public void setRelative(boolean relative) {
+		this.relative = relative;
 	}
 
-	public void setMinY(double minY) {
-		this.minY = minY;
-	}
-
-	public void setMaxY(double maxY) {
-		this.maxY = maxY;
-	}
-
-	public void setMinZ(double minZ) {
-		this.minZ = minZ;
-	}
-
-	public void setMaxZ(double maxZ) {
-		this.maxZ = maxZ;
-	}
 }

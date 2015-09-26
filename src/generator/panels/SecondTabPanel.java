@@ -28,7 +28,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
-import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -170,11 +169,10 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON3) {
-					int rowindex = table.getSelectedRow();
-					if (rowindex < 0) {
-						menu.show(e.getComponent(), e.getX(), e.getY());
-					} else if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+				int rowindex = table.rowAtPoint(e.getPoint());
+				if (rowindex >= 0) {
+					if (e.getButton() == MouseEvent.BUTTON3) {
+						table.setRowSelectionInterval(rowindex, rowindex);
 						rowMenu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
@@ -231,9 +229,9 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		List<ObjectInfo> modelsList = new ArrayList<>(collection);
 		Collections.sort(modelsList);
 		objectsInfo.clear();
-		objectsInfo.addAll(collection);
+		objectsInfo.addAll(modelsList);
 		TableModel model = table.getModel();
-		((DefaultTableModel) model).addRow(collection.toArray(new ObjectInfo[0]));
+		((DefaultTableModel) model).addRow(modelsList.toArray(new ObjectInfo[0]));
 	}
 
 	public List<ObjectInfo> getSelectedRows() {

@@ -12,10 +12,10 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-		str.append("Name: ");
 		str.append(model.getName());
-		str.append(", ");
+		str.append(" (");
 		str.append(model.getPath());
+		str.append(")");
 		return str.toString();
 	}
 

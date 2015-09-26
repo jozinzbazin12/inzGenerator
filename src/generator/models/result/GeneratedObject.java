@@ -22,8 +22,6 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 	private Color color;
 	@XmlTransient
 	private Color prevColor;
-	@XmlTransient
-	private String objectName;
 
 	public BasicModelData getBasic() {
 		return basic;
@@ -31,7 +29,6 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 
 	public GeneratedObject(GenerationModel model, BasicModelData data) {
 		this.model = model;
-		objectName = model.getName();
 		basic = data;
 		objectPath = model.getPath();
 		color = model.getColor();
@@ -54,10 +51,7 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 
 	@Override
 	public int compareTo(GeneratedObject o) {
-		if (o.getObjectName() == null || objectName == null) {
-			return 0;
-		}
-		return objectName.compareTo(o.getObjectName());
+		return model.compareTo(o.getModel());
 	}
 
 	public GenerationModel getModel() {
@@ -93,10 +87,7 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 	}
 
 	public String getObjectName() {
-		return objectName;
+		return model.getName();
 	}
 
-	public void setObjectName(String objectName) {
-		this.objectName = objectName;
-	}
 }
