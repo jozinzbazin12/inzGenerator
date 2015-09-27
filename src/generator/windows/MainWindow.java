@@ -1,7 +1,5 @@
 package generator.windows;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
@@ -95,7 +93,7 @@ public class MainWindow extends JFrame {
 		tab.addTab(Mediator.getMessage(PropertiesKeys.SECOND_TAB_NAME), second);
 		tab.addTab(Mediator.getMessage(PropertiesKeys.THIRD_TAB_NAME), third);
 
-		add(tab, BorderLayout.NORTH);
+		add(tab);
 	}
 
 	public MainWindow(String name) {
