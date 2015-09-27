@@ -245,11 +245,11 @@ public class Mediator {
 		thirdTabPanel.updateObjectFiles(objects);
 	}
 
-	public static void deleteObject() {
-		GeneratedObject row = thirdTabPanel.getSelectedRow();
-		if (row != null) {
+	public static void deleteObjects() {
+		List<GeneratedObject> rows = thirdTabPanel.getSelectedRows();
+		if (rows != null) {
 			List<GeneratedObject> objects = resultObject.getGeneratedObjects();
-			objects.remove(row);
+			objects.removeAll(rows);
 			thirdTabPanel.updateObjectFiles(objects);
 			updateObjects();
 		}
@@ -272,8 +272,8 @@ public class Mediator {
 		objectWindow = null;
 	}
 
-	public static GeneratedObject getGeneratedObject() {
-		return thirdTabPanel.getSelectedRow();
+	public static List<GeneratedObject> getGeneratedObjects() {
+		return thirdTabPanel.getSelectedRows();
 	}
 
 	public static void setClicked(GeneratedObject obj) {
@@ -343,6 +343,15 @@ public class Mediator {
 
 	public static Map<String, Number> getAlgorithmArgs() {
 		return secondTabPanel.getAlgorithmArgs();
+	}
+
+	public static int find(int[] tab, int index) {
+		for (int i : tab) {
+			if (i == index) {
+				return index;
+			}
+		}
+		return -1;
 	}
 }
 

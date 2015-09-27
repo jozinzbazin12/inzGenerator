@@ -64,6 +64,11 @@ public final class ComponentUtil {
 		return createSpinner(min, max, key, description, 0.0, arguments);
 	}
 
+	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Spinner> arguments,
+			boolean listen) {
+		return createSpinner(min, max, key, description, 0.0, arguments, listen);
+	}
+
 	public static JPanel createSpinner(double min, double max, String key, String description, double defValue,
 			Map<String, Spinner> arguments) {
 		return createSpinner(min, max, key, description, defValue, arguments, false);

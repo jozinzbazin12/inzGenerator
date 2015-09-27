@@ -8,6 +8,16 @@ public class GenerationModel implements Comparable<GenerationModel> {
 	private String path;
 	private Color color;
 
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder();
+		str.append(name);
+		str.append(" (");
+		str.append(path);
+		str.append(")");
+		return str.toString();
+	}
+
 	public String getName() {
 		return name;
 	}

@@ -154,7 +154,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	private Component createTable() {
 		TableColumnModel columnModel = new ObjectTableColumnModel();
 		DefaultTableModel model = new ObjectTableModel(ObjectTableColumnModel.getColumnClasses());
-		table = new Table(model, columnModel, false);
+		table = new Table(model, columnModel, true);
 		MouseAdapter rowListener = new MouseAdapter() {
 
 			@Override
@@ -172,7 +172,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 				int rowindex = table.rowAtPoint(e.getPoint());
 				if (rowindex >= 0) {
 					if (e.getButton() == MouseEvent.BUTTON3) {
-						if (table.getSelectedRowCount() <= 1) {
+						if (Mediator.find(table.getSelectedRows(), rowindex) == -1) {
 							table.setRowSelectionInterval(rowindex, rowindex);
 						}
 						rowMenu.show(e.getComponent(), e.getX(), e.getY());
@@ -240,12 +240,13 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		printOnPreview();
 	}
 
-	public GeneratedObject getSelectedRow() {
-		int row = table.getSelectedRow();
-		if (row < 0) {
-			return null;
+	public List<GeneratedObject> getSelectedRows() {
+		int[] selectedRows = table.getSelectedRows();
+		List<GeneratedObject> rows = new ArrayList<>();
+		for (int i : selectedRows) {
+			rows.add(objects.get(i));
 		}
-		return objects.get(row);
+		return rows;
 	}
 
 	public void click(GeneratedObject obj) {

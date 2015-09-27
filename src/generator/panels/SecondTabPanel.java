@@ -171,7 +171,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 				int rowindex = table.rowAtPoint(e.getPoint());
 				if (rowindex >= 0) {
 					if (e.getButton() == MouseEvent.BUTTON3) {
-						if (table.getSelectedRowCount() <= 1) {
+						if (Mediator.find(table.getSelectedRows(), rowindex) == -1) {
 							table.setRowSelectionInterval(rowindex, rowindex);
 						}
 						rowMenu.show(e.getComponent(), e.getX(), e.getY());

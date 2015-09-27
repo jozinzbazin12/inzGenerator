@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,7 +14,6 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 import generator.Mediator;
+import generator.models.generation.GenerationModel;
 import generator.models.generation.ObjectInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
@@ -36,9 +37,9 @@ public class ObjectWindow extends JFrame implements ActionListener {
 	private JButton cancel;
 	private JButton ok;
 	private boolean edit;
-	private GeneratedObject object;
-	private JComboBox<ObjectInfo> models;
-	private JCheckBox relative;
+	private List<GeneratedObject> objects;
+	private JComboBox<GenerationModel> models;
+	private CheckBox relative;
 
 	private void createWindow() {
 		setSize(600, 600);
@@ -50,35 +51,38 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		JPanel modelPanel = new JPanel(new GridLayout(0, 2, 0, 30));
 		modelPanel.add(new JLabel(Mediator.getMessage(PropertiesKeys.MODEL)));
 		Collection<ObjectInfo> values = Mediator.getModels().values();
-		ObjectInfo[] array = values.toArray(new ObjectInfo[values.size()]);
+		List<GenerationModel> options = new ArrayList<>();
+		for (ObjectInfo i : values) {
+			options.add(i.getModel());
+		}
+		GenerationModel[] array = options.toArray(new GenerationModel[options.size()]);
 		Arrays.sort(array);
 		models = new JComboBox<>(array);
 		modelPanel.add(models);
 		panel.add(modelPanel);
 		relative = new CheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE));
 		panel.add(relative);
-		relative.setSelected(object.getBasic().isRelative());
 
 		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.X,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments, true));
 		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.Y,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y), arguments));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y), arguments, true));
 		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.Z,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), arguments));
-		panel.add(new JSeparator());
-		panel.add(ComponentUtil.createSpinner(-180, 180, Consts.RX,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X), arguments));
-		panel.add(ComponentUtil.createSpinner(-180, 180, Consts.RY,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y), arguments));
-		panel.add(ComponentUtil.createSpinner(-180, 180, Consts.RZ,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z), arguments));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), arguments, true));
 		panel.add(new JSeparator());
 		panel.add(ComponentUtil.createSpinner(-1000, 1000, Consts.SX,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X), arguments));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X), arguments, true));
 		panel.add(ComponentUtil.createSpinner(-1000, 1000, Consts.SY,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y), arguments));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y), arguments, true));
 		panel.add(ComponentUtil.createSpinner(-1000, 1000, Consts.SZ,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z), arguments));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z), arguments, true));
+		panel.add(new JSeparator());
+		panel.add(ComponentUtil.createSpinner(-180, 180, Consts.RX,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.X), arguments, true));
+		panel.add(ComponentUtil.createSpinner(-180, 180, Consts.RY,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Y), arguments, true));
+		panel.add(ComponentUtil.createSpinner(-180, 180, Consts.RZ,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.ROTATION), Consts.Z), arguments, true));
 
 		setVisible(true);
 		add(panel, BorderLayout.CENTER);
@@ -98,52 +102,101 @@ public class ObjectWindow extends JFrame implements ActionListener {
 	public ObjectWindow(String name) {
 		super(name);
 		createWindow();
-		object = new GeneratedObject();
+		objects = new ArrayList<>();
+		objects.add(new GeneratedObject());
 		edit = false;
 	}
 
-	public ObjectWindow(String name, GeneratedObject obj) {
+	public ObjectWindow(String name, List<GeneratedObject> obj) {
 		super(name);
-		this.object = obj;
+		this.objects = obj;
 		createWindow();
-		models.setSelectedItem(Mediator.getModels().get(obj.getModel().getPath()));
 		edit = true;
 		fillValues();
 	}
 
 	private void fillValues() {
-		arguments.get(Consts.X).setValue(object.getBasic().getX());
-		arguments.get(Consts.Y).setValue(object.getBasic().getY());
-		arguments.get(Consts.Z).setValue(object.getBasic().getZ());
+		GeneratedObject generatedObject = objects.get(0);
+		BasicModelData basic = generatedObject.getBasic();
+		if (objects.size() == 1) {
+			arguments.get(Consts.X).setValue(basic.getX());
+			arguments.get(Consts.Y).setValue(basic.getY());
+			arguments.get(Consts.Z).setValue(basic.getZ());
 
-		arguments.get(Consts.RX).setValue(object.getBasic().getRx());
-		arguments.get(Consts.RY).setValue(object.getBasic().getRy());
-		arguments.get(Consts.RZ).setValue(object.getBasic().getRz());
+			arguments.get(Consts.RX).setValue(basic.getRx());
+			arguments.get(Consts.RY).setValue(basic.getRy());
+			arguments.get(Consts.RZ).setValue(basic.getRz());
 
-		arguments.get(Consts.SX).setValue(object.getBasic().getSx());
-		arguments.get(Consts.SY).setValue(object.getBasic().getSy());
-		arguments.get(Consts.SZ).setValue(object.getBasic().getSz());
+			arguments.get(Consts.SX).setValue(basic.getSx());
+			arguments.get(Consts.SY).setValue(basic.getSy());
+			arguments.get(Consts.SZ).setValue(basic.getSz());
+			relative.setSelected(basic.isRelative());
+			models.setSelectedItem(generatedObject.getModel());
+		} else {
+			boolean last = basic.isRelative();
+			boolean diff = false;
+			for (GeneratedObject i : objects) {
+				boolean actual = i.getBasic().isRelative();
+				if (actual != last) {
+					relative.setSelected(false);
+					diff = true;
+					break;
+				}
+				last = actual;
+			}
+			if (!diff) {
+				relative.setSelected(basic.isRelative());
+			}
+			models.setSelectedIndex(-1);
+		}
 	}
 
 	public Map<String, Spinner> getArguments() {
 		return arguments;
 	}
 
-	private BasicModelData getData() {
-		BasicModelData data = new BasicModelData();
-		data.setX((double) arguments.get(Consts.X).getValue());
-		data.setY((double) arguments.get(Consts.Y).getValue());
-		data.setZ((double) arguments.get(Consts.Z).getValue());
+	private BasicModelData getData(BasicModelData data) {
+		Spinner x = arguments.get(Consts.X);
+		Spinner y = arguments.get(Consts.Y);
+		Spinner z = arguments.get(Consts.Z);
+		Spinner sx = arguments.get(Consts.SX);
+		Spinner sy = arguments.get(Consts.SY);
+		Spinner sz = arguments.get(Consts.SZ);
+		Spinner rx = arguments.get(Consts.RX);
+		Spinner ry = arguments.get(Consts.RY);
+		Spinner rz = arguments.get(Consts.RZ);
 
-		data.setSx((double) arguments.get(Consts.SX).getValue());
-		data.setSy((double) arguments.get(Consts.SY).getValue());
-		data.setSz((double) arguments.get(Consts.SZ).getValue());
+		if (x.isModified()) {
+			data.setX((double) x.getValue());
+		}
+		if (y.isModified()) {
+			data.setY((double) y.getValue());
+		}
+		if (z.isModified()) {
+			data.setZ((double) z.getValue());
+		}
+		if (sx.isModified()) {
+			data.setSx((double) sx.getValue());
+		}
+		if (sy.isModified()) {
+			data.setSy((double) sy.getValue());
+		}
+		if (sz.isModified()) {
+			data.setSz((double) sz.getValue());
+		}
+		if (rx.isModified()) {
+			data.setRx((double) rx.getValue());
+		}
+		if (ry.isModified()) {
+			data.setRy((double) ry.getValue());
+		}
+		if (rz.isModified()) {
+			data.setRz((double) rz.getValue());
+		}
 
-		data.setRx((double) arguments.get(Consts.RX).getValue());
-		data.setRy((double) arguments.get(Consts.RY).getValue());
-		data.setRz((double) arguments.get(Consts.RZ).getValue());
-
-		data.setRelative(relative.isSelected());
+		if (relative.isModified()) {
+			data.setRelative(relative.isSelected());
+		}
 		return data;
 	}
 
@@ -151,13 +204,17 @@ public class ObjectWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(ok)) {
 			if (edit) {
-				object.setBasic(getData());
-				object.setModel(((ObjectInfo) models.getSelectedItem()).getModel());
+				for (GeneratedObject i : objects) {
+					i.setBasic(getData(i.getBasic()));
+					if (models.getSelectedIndex() != -1) {
+						i.setModel((GenerationModel) models.getSelectedItem());
+					}
+				}
 			} else {
-				object.setBasic(getData());
-				object.setModel(((ObjectInfo) models.getSelectedItem()).getModel());
+				objects.get(0).setBasic(getData(new BasicModelData()));
+				objects.get(0).setModel((GenerationModel) models.getSelectedItem());
 				List<GeneratedObject> generatedObjects = Mediator.getResultObject().getGeneratedObjects();
-				generatedObjects.add(object);
+				generatedObjects.add(objects.get(0));
 			}
 			Mediator.refreshPreview();
 			dispose();

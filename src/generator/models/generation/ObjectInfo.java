@@ -15,7 +15,12 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 		str.append(model.getName());
 		str.append(" (");
 		str.append(model.getPath());
-		str.append(")");
+		str.append("), ");
+		str.append("<");
+		str.append(minCount);
+		str.append(", ");
+		str.append(maxCount);
+		str.append(">");
 		return str.toString();
 	}
 

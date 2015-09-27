@@ -1,14 +1,15 @@
 package generator.actions.object;
 
+import java.awt.event.ActionEvent;
+import java.text.MessageFormat;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+
 import generator.Mediator;
 import generator.models.result.GeneratedObject;
 import generator.utils.PropertiesKeys;
 import generator.windows.ObjectWindow;
-
-import java.awt.event.ActionEvent;
-import java.text.MessageFormat;
-
-import javax.swing.AbstractAction;
 
 public class EditObjectAction extends AbstractAction {
 
@@ -16,11 +17,10 @@ public class EditObjectAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		GeneratedObject generatedObject = Mediator.getGeneratedObject();
-		if (generatedObject != null) {
-			new ObjectWindow(
-					MessageFormat.format(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), generatedObject.getObjectName()),
-					generatedObject);
+		List<GeneratedObject> generatedObjects = Mediator.getGeneratedObjects();
+		if (!generatedObjects.isEmpty()) {
+			String objectName = generatedObjects.size() > 1 ? "" : generatedObjects.get(0).getObjectName();
+			new ObjectWindow(MessageFormat.format(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), objectName), generatedObjects);
 		}
 	}
 

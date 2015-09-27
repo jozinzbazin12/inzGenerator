@@ -12,7 +12,7 @@ public class DeleteObjectAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Mediator.deleteObject();
+		Mediator.deleteObjects();
 	}
 
 	public DeleteObjectAction(String name) {
