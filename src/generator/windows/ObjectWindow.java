@@ -19,18 +19,19 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import javax.swing.JSpinner;
 
 import generator.Mediator;
 import generator.models.generation.ObjectInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
+import generator.utils.CheckBox;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
+import generator.utils.Spinner;
 
 public class ObjectWindow extends JFrame implements ActionListener {
-	Map<String, JSpinner> arguments = new HashMap<String, JSpinner>();
+	Map<String, Spinner> arguments = new HashMap<>();
 	private static final long serialVersionUID = 5328377975510513084L;
 	private JButton cancel;
 	private JButton ok;
@@ -54,7 +55,7 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		models = new JComboBox<>(array);
 		modelPanel.add(models);
 		panel.add(modelPanel);
-		relative = new JCheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE));
+		relative = new CheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE));
 		panel.add(relative);
 		relative.setSelected(object.getBasic().isRelative());
 
@@ -124,7 +125,7 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		arguments.get(Consts.SZ).setValue(object.getBasic().getSz());
 	}
 
-	public Map<String, JSpinner> getArguments() {
+	public Map<String, Spinner> getArguments() {
 		return arguments;
 	}
 

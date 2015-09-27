@@ -94,7 +94,6 @@ public class MainWindow extends JFrame {
 		tab.addTab(Mediator.getMessage(PropertiesKeys.FIRST_TAB_NAME), first);
 		tab.addTab(Mediator.getMessage(PropertiesKeys.SECOND_TAB_NAME), second);
 		tab.addTab(Mediator.getMessage(PropertiesKeys.THIRD_TAB_NAME), third);
-		tab.setPreferredSize(new Dimension(getWidth(), (int) (getHeight() * 0.9)));
 
 		add(tab, BorderLayout.NORTH);
 	}

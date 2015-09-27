@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -48,6 +47,7 @@ import generator.tables.model.ObjectFileTableModel;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
+import generator.utils.Spinner;
 
 public class SecondTabPanel extends AbstractPanel implements MouseListener {
 
@@ -63,7 +63,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 	private JPopupMenu menu;
 	private JPopupMenu rowMenu;
 	private Table table;
-	private Map<String, JSpinner> algorithmArgs = new HashMap<>();
+	private Map<String, Spinner> algorithmArgs = new HashMap<>();
 
 	private List<ObjectInfo> objectsInfo = new ArrayList<>();
 	private JPanel options;
@@ -194,7 +194,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 	}
 
 	public SecondTabPanel() {
-		arguments = new HashMap<String, JSpinner>();
+		arguments = new HashMap<String, Spinner>();
 		setLayout(new GridLayout(0, 2));
 		createObjectFilesPanel();
 		createAlgotithmsPanel();
@@ -246,7 +246,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 
 	public Map<String, Number> getAlgorithmArgs() {
 		Map<String, Number> map = new HashMap<>();
-		for (Map.Entry<String, JSpinner> i : algorithmArgs.entrySet()) {
+		for (Map.Entry<String, Spinner> i : algorithmArgs.entrySet()) {
 			map.put(i.getKey(), (Number) i.getValue().getValue());
 		}
 		return map;

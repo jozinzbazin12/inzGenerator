@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
@@ -35,6 +34,7 @@ import generator.models.result.Texture;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
+import generator.utils.Spinner;
 
 public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	private static final long serialVersionUID = -2087487239161953473L;
@@ -195,10 +195,10 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		JLabel attributelabel = new JLabel(description);
 		panel.add(attributelabel);
 		SpinnerNumberModel model = new SpinnerNumberModel(defValue, min, max, 0.01);
-		JSpinner spinnerR = new JSpinner(model);
-		JSpinner spinnerG = new JSpinner(model);
-		JSpinner spinnerB = new JSpinner(model);
-		JSpinner spinnerA = new JSpinner(model);
+		Spinner spinnerR = new Spinner(model);
+		Spinner spinnerG = new Spinner(model);
+		Spinner spinnerB = new Spinner(model);
+		Spinner spinnerA = new Spinner(model);
 		panel.add(attributelabel);
 		panel.add(spinnerR);
 		panel.add(spinnerG);
@@ -218,9 +218,9 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		JLabel attributelabel = new JLabel(description);
 		panel.add(attributelabel);
 		SpinnerNumberModel model = new SpinnerNumberModel(defValue, min, max, 0.01);
-		JSpinner spinnerR = new JSpinner(model);
-		JSpinner spinnerG = new JSpinner(model);
-		JSpinner spinnerB = new JSpinner(model);
+		Spinner spinnerR = new Spinner(model);
+		Spinner spinnerG = new Spinner(model);
+		Spinner spinnerB = new Spinner(model);
 		panel.add(attributelabel);
 		panel.add(spinnerR);
 		panel.add(spinnerG);
@@ -232,7 +232,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	}
 
 	public FirstTabPanel() {
-		arguments = new HashMap<String, JSpinner>();
+		arguments = new HashMap<String, Spinner>();
 		setLayout(new GridLayout(0, 3));
 		createMapOptionsPanel();
 		createTextureOptionsPanel();
@@ -240,7 +240,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		Mediator.registerFirstTabPanel(this);
 	}
 
-	public Map<String, JSpinner> getArguments() {
+	public Map<String, Spinner> getArguments() {
 		return arguments;
 	}
 
