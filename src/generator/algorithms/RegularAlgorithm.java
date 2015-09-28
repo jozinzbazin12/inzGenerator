@@ -57,7 +57,7 @@ public class RegularAlgorithm extends Algorithm {
 
 			BasicModelData obj = new BasicModelData();
 			obj.setPosition(actualMinX,
-					randomizeDouble(objInfo.getRotationSettings().getMinY(), objInfo.getRotationSettings().getMaxY()),
+					randomizeDouble(objInfo.getPositionSettings().getMinY(), objInfo.getPositionSettings().getMaxY()),
 					actualMinZ);
 			obj.setRelative(objInfo.getPositionSettings().isRelative());
 

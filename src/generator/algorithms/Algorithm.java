@@ -55,6 +55,9 @@ public abstract class Algorithm {
 	}
 
 	protected double randomizeDouble(double min, double max) {
+		if (min == max) {
+			return max;
+		}
 		return min + (max - min) * rnd.nextDouble();
 	}
 
