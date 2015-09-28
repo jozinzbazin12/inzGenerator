@@ -1,11 +1,22 @@
 package generator.models.generation;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractMinMax {
+	@XmlAttribute(name = "minX")
 	private double minX;
+	@XmlAttribute(name = "maxX")
 	private double maxX;
+	@XmlAttribute(name = "minY")
 	private double minY;
+	@XmlAttribute(name = "maxY")
 	private double maxY;
+	@XmlAttribute(name = "minZ")
 	private double minZ;
+	@XmlAttribute(name = "maxZ")
 	private double maxZ;
 
 	public AbstractMinMax(double minx, double maxx, double miny, double maxy, double minz, double maxz) {

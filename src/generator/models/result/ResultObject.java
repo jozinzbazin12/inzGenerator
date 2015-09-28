@@ -8,13 +8,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import generator.models.generation.GenerationInfo;
+
 @XmlRootElement(name = "Objects")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ResultObject {
 	@XmlElement(name = "Map", required = true)
 	private MapObject mapObject = new MapObject();
 	@XmlElement(name = "Object", required = true)
-	private List<GeneratedObject> generatedObjects=new ArrayList<>();
+	private List<GeneratedObject> generatedObjects = new ArrayList<>();
+	@XmlElement(name = "Settings")
+	private GenerationInfo generationInfo = new GenerationInfo();
 
 	public ResultObject(List<GeneratedObject> generatedObjects) {
 		this.generatedObjects = generatedObjects;
@@ -37,6 +41,15 @@ public class ResultObject {
 
 	public void setGeneratedObjects(List<GeneratedObject> generatedObjects) {
 		this.generatedObjects = generatedObjects;
-		
+
 	}
+
+	public GenerationInfo getGenerationInfo() {
+		return generationInfo;
+	}
+
+	public void setGenerationInfo(GenerationInfo generationInfo) {
+		this.generationInfo = generationInfo;
+	}
+
 }

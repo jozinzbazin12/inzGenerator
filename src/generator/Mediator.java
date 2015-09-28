@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -140,9 +141,12 @@ public class Mediator {
 
 	public static void saveXMLFile(String name) {
 		JAXBContext context;
-		resultObject.getMapObject().setBasic(firstTabPanel.getMapSettings());
-		resultObject.getMapObject().setLightData(firstTabPanel.getLightSettings());
-		resultObject.getMapObject().setMaterial(firstTabPanel.getMaterial());
+		MapObject mapObject = resultObject.getMapObject();
+		mapObject.setBasic(firstTabPanel.getMapSettings());
+		mapObject.setLightData(firstTabPanel.getLightSettings());
+		mapObject.setMaterial(firstTabPanel.getMaterial());
+		resultObject.getGenerationInfo().setObjects(new ArrayList<>(models.values()));
+		resultObject.getGenerationInfo().setArgs(secondTabPanel.getAlgorithmArgs());
 		try {
 			context = JAXBContext.newInstance("generator.models.result");
 			Marshaller marshaller = context.createMarshaller();
@@ -172,15 +176,31 @@ public class Mediator {
 			e.printStackTrace();
 			return;
 		}
+		Map<String, Number> args = resultObject.getGenerationInfo().getArgs();
+		if (args != null) {
+			secondTabPanel.setAlgorithmArgs(args);
+		}
 		models.clear();
+		List<ObjectInfo> objects = resultObject.getGenerationInfo().getObjects();
+		if (objects != null) {
+			for (ObjectInfo i : objects) {
+				models.put(i.getModel().getPath(), i);
+			}
+		}
 		for (GeneratedObject i : resultObject.getGeneratedObjects()) {
-			GenerationModel model = new GenerationModel(i.getObjectPath());
+			ObjectInfo objectInfo = models.get(i.getObjectPath());
+			GenerationModel model;
+			if (objectInfo != null) {
+				model = objectInfo.getModel();
+			} else {
+				model = new GenerationModel(i.getObjectPath());
+			}
 			ObjectInfo obj = new ObjectInfo(model);
-			if (models.get(i.getObjectPath()) == null) {
+			if (objectInfo == null) {
 				models.put(i.getObjectPath(), obj);
 				i.setModel(model);
 			} else {
-				i.setModel(models.get(i.getObjectPath()).getModel());
+				i.setModel(objectInfo.getModel());
 			}
 		}
 		firstTabPanel.setMapObject(resultObject.getMapObject());
@@ -356,5 +376,4 @@ public class Mediator {
 }
 
 // TODO cleanup propertiesow
-// TODO sprawdzic statyczne pola, po zmianie jezyka jest chujowo
 // TODO zmienic z obiektu na model

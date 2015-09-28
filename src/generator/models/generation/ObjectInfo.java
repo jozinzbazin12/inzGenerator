@@ -1,13 +1,37 @@
 package generator.models.generation;
 
-public class ObjectInfo implements Comparable<ObjectInfo> {
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-	private PositionSettings positionSettings;
-	private ScaleSettings scaleSettings;
-	private RotationSettings rotationSettings;
-	private int minCount;
-	private int maxCount;
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ObjectInfo implements Comparable<ObjectInfo> {
+	@XmlTransient
 	private GenerationModel model;
+
+	@XmlAttribute(name = "minCount")
+	private int minCount;
+	@XmlAttribute(name = "maxCount")
+	private int maxCount;
+
+	@XmlElement(name = "Position")
+	private PositionSettings positionSettings;
+	@XmlElement(name = "Scale")
+	private ScaleSettings scaleSettings;
+	@XmlElement(name = "Rotation")
+	private RotationSettings rotationSettings;
+
+	@XmlAttribute(name = "path")
+	private String getPath() {
+		return model.getPath();
+	}
+
+	@SuppressWarnings("unused")
+	private void setPath(String path) {
+		model = new GenerationModel(path);
+	}
 
 	@Override
 	public String toString() {
@@ -48,6 +72,9 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 		positionSettings = new PositionSettings();
 		scaleSettings = new ScaleSettings();
 		rotationSettings = new RotationSettings();
+	}
+
+	public ObjectInfo() {
 	}
 
 	public GenerationModel getModel() {

@@ -252,4 +252,9 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		return map;
 	}
 
+	public void setAlgorithmArgs(Map<String, Number> map) {
+		for (Map.Entry<String, Spinner> i : algorithmArgs.entrySet()) {
+			algorithmArgs.get(i.getKey()).setValue((Number) i.getValue().getValue());
+		}
+	}
 }
