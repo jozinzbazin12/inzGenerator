@@ -22,7 +22,7 @@ import javax.swing.JSeparator;
 
 import generator.Mediator;
 import generator.models.generation.GenerationModel;
-import generator.models.generation.ObjectInfo;
+import generator.models.generation.ModelInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.utils.CheckBox;
@@ -50,9 +50,9 @@ public class ObjectWindow extends JFrame implements ActionListener {
 
 		JPanel modelPanel = new JPanel(new GridLayout(0, 2, 0, 30));
 		modelPanel.add(new JLabel(Mediator.getMessage(PropertiesKeys.MODEL)));
-		Collection<ObjectInfo> values = Mediator.getModels().values();
+		Collection<ModelInfo> values = Mediator.getModels().values();
 		List<GenerationModel> options = new ArrayList<>();
-		for (ObjectInfo i : values) {
+		for (ModelInfo i : values) {
 			options.add(i.getModel());
 		}
 		GenerationModel[] array = options.toArray(new GenerationModel[options.size()]);

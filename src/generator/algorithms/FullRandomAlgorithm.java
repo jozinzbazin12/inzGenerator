@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import generator.models.generation.GenerationInfo;
-import generator.models.generation.ObjectInfo;
+import generator.models.generation.ModelInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.utils.PropertiesKeys;
@@ -19,7 +19,7 @@ public class FullRandomAlgorithm extends Algorithm {
 	public List<GeneratedObject> generationMethod(GenerationInfo info) {
 		List<GeneratedObject> list = new ArrayList<GeneratedObject>();
 
-		for (ObjectInfo objInfo : info.getObjects()) {
+		for (ModelInfo objInfo : info.getModels()) {
 			int count = getCount(objInfo);
 			for (int i = 0; i < count; i++) {
 				BasicModelData obj = new BasicModelData();

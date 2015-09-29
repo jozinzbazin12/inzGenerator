@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import generator.Mediator;
 import generator.actions.model.LoadSingleModelAction;
 import generator.models.generation.GenerationModel;
-import generator.models.generation.ObjectInfo;
+import generator.models.generation.ModelInfo;
 import generator.models.generation.PositionSettings;
 import generator.models.generation.RotationSettings;
 import generator.models.generation.ScaleSettings;
@@ -35,7 +35,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 5328377975510513084L;
 	private JButton cancel;
 	private JButton ok;
-	private List<ObjectInfo> objects;
+	private List<ModelInfo> objects;
 	private JLabel fileName;
 	private JTextField pathField;
 	private CheckBox equalScale;
@@ -54,7 +54,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 			fileName = new JLabel(objects.get(0).getModel().getName());
 		} else {
 			StringBuilder str = new StringBuilder();
-			for (ObjectInfo i : objects) {
+			for (ModelInfo i : objects) {
 				str.append(i.getModel().getName());
 				str.append(", ");
 			}
@@ -135,7 +135,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 		Mediator.registerModelWindow(this);
 	}
 
-	public ModelWindow(String name, List<ObjectInfo> generationModel) {
+	public ModelWindow(String name, List<ModelInfo> generationModel) {
 		super(name);
 		objects = generationModel;
 		createWindow();
@@ -144,7 +144,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 	private void fillValues() {
 		if (objects.size() == 1) {
-			ObjectInfo objectInfo = objects.get(0);
+			ModelInfo objectInfo = objects.get(0);
 			arguments.get(Consts.MIN_COUNT).setValue(objectInfo.getMinCount());
 			arguments.get(Consts.MAX_COUNT).setValue(objectInfo.getMaxCount());
 
@@ -176,7 +176,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 		} else {
 			boolean lastEqual = objects.get(0).getScaleSettings().isEqual();
 			boolean diff = false;
-			for (ObjectInfo i : objects) {
+			for (ModelInfo i : objects) {
 				boolean actual = i.getScaleSettings().isEqual();
 				if (actual != lastEqual) {
 					equalScale.setSelected(false);
@@ -191,7 +191,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 			lastEqual = objects.get(0).getPositionSettings().isRelative();
 			diff = false;
-			for (ObjectInfo i : objects) {
+			for (ModelInfo i : objects) {
 				boolean actual = i.getPositionSettings().isRelative();
 				if (actual != lastEqual) {
 					relative.setSelected(false);
@@ -312,7 +312,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(ok)) {
-			for (ObjectInfo i : objects) {
+			for (ModelInfo i : objects) {
 				i.setPositionSettings(getPosition(i.getPositionSettings()));
 				i.setRotationSettings(getRotation(i.getRotationSettings()));
 				i.setScaleSettings(getScale(i.getScaleSettings()));

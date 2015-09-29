@@ -11,17 +11,17 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GenerationInfo {
 	@XmlElement(name = "Model")
-	private List<ObjectInfo> objects;
+	private List<ModelInfo> models;
 
 	@XmlElement(name = "Args")
 	private Map<String, Double> args = new HashMap<>();
 
-	public List<ObjectInfo> getObjects() {
-		return objects;
+	public List<ModelInfo> getModels() {
+		return models;
 	}
 
-	public void setObjects(List<ObjectInfo> objects) {
-		this.objects = objects;
+	public void setModels(List<ModelInfo> models) {
+		this.models = models;
 	}
 
 	public Map<String, Double> getArgs() {

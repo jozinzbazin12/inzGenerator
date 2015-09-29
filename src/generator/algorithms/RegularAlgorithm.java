@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import generator.models.generation.GenerationInfo;
-import generator.models.generation.ObjectInfo;
+import generator.models.generation.ModelInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.utils.Consts;
@@ -31,9 +31,9 @@ public class RegularAlgorithm extends Algorithm {
 
 		int count = 0;
 		List<Integer> counts = new ArrayList<>();
-		List<ObjectInfo> allObjects = info.getObjects();
-		List<ObjectInfo> objects = new ArrayList<>();
-		for (ObjectInfo obj : allObjects) {
+		List<ModelInfo> allObjects = info.getModels();
+		List<ModelInfo> objects = new ArrayList<>();
+		for (ModelInfo obj : allObjects) {
 			int tmp = getCount(obj);
 			if (tmp > 0) {
 				objects.add(obj);
@@ -46,7 +46,7 @@ public class RegularAlgorithm extends Algorithm {
 		double dz = (height / Math.floor(Math.sqrt(count))) * ratio;
 		int actualCount = 0;
 		int modelNumber = 0;
-		ObjectInfo objInfo;
+		ModelInfo objInfo;
 		while (count > 0) {
 			if (actualCount >= counts.get(modelNumber)) {
 				modelNumber++;

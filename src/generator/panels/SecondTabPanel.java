@@ -40,7 +40,7 @@ import generator.actions.model.LoadModelAction;
 import generator.algorithms.Algorithm;
 import generator.algorithms.FullRandomAlgorithm;
 import generator.algorithms.RegularAlgorithm;
-import generator.models.generation.ObjectInfo;
+import generator.models.generation.ModelInfo;
 import generator.tables.Table;
 import generator.tables.model.ObjectFileTableColumnModel;
 import generator.tables.model.ObjectFileTableModel;
@@ -65,7 +65,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 	private Table table;
 	private Map<String, Spinner> algorithmArgs = new HashMap<>();
 
-	private List<ObjectInfo> objectsInfo = new ArrayList<>();
+	private List<ModelInfo> modelsInfo = new ArrayList<>();
 	private JPanel options;
 
 	public Algorithm getAlgorithm() {
@@ -117,7 +117,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		panels.put(a, panel);
 	}
 
-	private void createObjectFilesPanel() {
+	private void createModelsPanel() {
 		menu = new JPopupMenu();
 		JMenuItem neww = new JMenuItem(newAction);
 		neww.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK));
@@ -196,7 +196,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 	public SecondTabPanel() {
 		arguments = new HashMap<String, Spinner>();
 		setLayout(new GridLayout(0, 2));
-		createObjectFilesPanel();
+		createModelsPanel();
 		createAlgotithmsPanel();
 		Mediator.registerSecondTabPanel(this);
 	}
@@ -226,20 +226,20 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 	}
 
-	public void updateObjectFiles(Collection<ObjectInfo> collection) {
-		List<ObjectInfo> modelsList = new ArrayList<>(collection);
+	public void updateModels(Collection<ModelInfo> collection) {
+		List<ModelInfo> modelsList = new ArrayList<>(collection);
 		Collections.sort(modelsList);
-		objectsInfo.clear();
-		objectsInfo.addAll(modelsList);
+		modelsInfo.clear();
+		modelsInfo.addAll(modelsList);
 		TableModel model = table.getModel();
-		((DefaultTableModel) model).addRow(modelsList.toArray(new ObjectInfo[0]));
+		((DefaultTableModel) model).addRow(modelsList.toArray(new ModelInfo[0]));
 	}
 
-	public List<ObjectInfo> getSelectedRows() {
+	public List<ModelInfo> getSelectedRows() {
 		int[] selectedRows = table.getSelectedRows();
-		List<ObjectInfo> objects = new ArrayList<>();
+		List<ModelInfo> objects = new ArrayList<>();
 		for (int i : selectedRows) {
-			objects.add(objectsInfo.get(i));
+			objects.add(modelsInfo.get(i));
 		}
 		return objects;
 	}

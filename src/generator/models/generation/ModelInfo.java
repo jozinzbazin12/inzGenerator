@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ObjectInfo implements Comparable<ObjectInfo> {
+public class ModelInfo implements Comparable<ModelInfo> {
 	@XmlTransient
 	private GenerationModel model;
 
@@ -60,21 +60,21 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 		return rotationSettings;
 	}
 
-	public ObjectInfo(PositionSettings pos, RotationSettings rot, ScaleSettings scale, GenerationModel model) {
+	public ModelInfo(PositionSettings pos, RotationSettings rot, ScaleSettings scale, GenerationModel model) {
 		positionSettings = pos;
 		rotationSettings = rot;
 		scaleSettings = scale;
 		this.model = model;
 	}
 
-	public ObjectInfo(GenerationModel model) {
+	public ModelInfo(GenerationModel model) {
 		this.model = model;
 		positionSettings = new PositionSettings();
 		scaleSettings = new ScaleSettings();
 		rotationSettings = new RotationSettings();
 	}
 
-	public ObjectInfo() {
+	public ModelInfo() {
 	}
 
 	public GenerationModel getModel() {
@@ -82,11 +82,11 @@ public class ObjectInfo implements Comparable<ObjectInfo> {
 	}
 
 	@Override
-	public int compareTo(ObjectInfo o) {
+	public int compareTo(ModelInfo o) {
 		if (model == null) {
 			return -1;
 		}
-		if (!(o instanceof ObjectInfo) || o.getModel() == null) {
+		if (!(o instanceof ModelInfo) || o.getModel() == null) {
 			return -1;
 		}
 		return model.compareTo(o.getModel());

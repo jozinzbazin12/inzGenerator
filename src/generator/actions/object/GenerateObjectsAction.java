@@ -15,7 +15,7 @@ public class GenerateObjectsAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		GenerationInfo info = new GenerationInfo();
-		info.setObjects(new ArrayList<>(Mediator.getModels().values()));
+		info.setModels(new ArrayList<>(Mediator.getModels().values()));
 		info.setArgs(Mediator.getAlgorithmArgs());
 		Mediator.getResultObject().setGeneratedObjects(Mediator.getAlgorithm().generate(info));
 		Mediator.updateObjects();

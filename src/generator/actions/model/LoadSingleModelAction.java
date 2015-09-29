@@ -14,6 +14,6 @@ public class LoadSingleModelAction extends AbstractLoadAction {
 
 	@Override
 	protected void onSucess(String path) {
-		Mediator.changeObjectsFileName(path);
+		Mediator.changeModelFileName(path);
 	}
 }

@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 import generator.models.generation.GenerationModel;
-import generator.models.generation.ObjectInfo;
+import generator.models.generation.ModelInfo;
 import generator.models.generation.PositionSettings;
 import generator.models.generation.RotationSettings;
 import generator.models.generation.ScaleSettings;
@@ -17,13 +17,13 @@ public class ObjectFileTableModel extends DefaultTableModel {
 
 	private static final long serialVersionUID = 4537045252888015583L;
 
-	private List<ObjectInfo> data;
+	private List<ModelInfo> data;
 	private Class<?>[] classes;
 
 	@Override
 	public void addRow(Object[] rowData) {
 		int oldCount = getRowCount();
-		ObjectInfo[] objectInfoData = (ObjectInfo[]) rowData;
+		ModelInfo[] objectInfoData = (ModelInfo[]) rowData;
 		data = Arrays.asList(objectInfoData);
 		if (oldCount > 0) {
 			fireTableRowsDeleted(0, oldCount);
@@ -60,7 +60,7 @@ public class ObjectFileTableModel extends DefaultTableModel {
 
 	private Object getValue(int row, int index) {
 		if (data != null && data.size() > row) {
-			ObjectInfo objectInfo = data.get(row);
+			ModelInfo objectInfo = data.get(row);
 			PositionSettings pos = objectInfo.getPositionSettings();
 			ScaleSettings sca = objectInfo.getScaleSettings();
 			RotationSettings rot = objectInfo.getRotationSettings();

@@ -29,7 +29,7 @@ public class LoadModelAction extends AbstractAction {
 		}
 		if (files != null && files.length > 0) {
 			for (File i : files) {
-				Mediator.loadObjectFile(i.getAbsolutePath());
+				Mediator.loadModel(i.getAbsolutePath());
 			}
 		}
 		Mediator.updateModelsPanel();

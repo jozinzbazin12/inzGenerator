@@ -230,7 +230,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		previewPanel.repaint();
 	}
 
-	public void updateObjectFiles(Collection<GeneratedObject> collection) {
+	public void updateModels(Collection<GeneratedObject> collection) {
 		List<GeneratedObject> objectsList = new ArrayList<>(collection);
 		Collections.sort(objectsList);
 		objects.clear();

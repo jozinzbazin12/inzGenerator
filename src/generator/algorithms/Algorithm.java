@@ -5,7 +5,7 @@ import java.util.Random;
 
 import generator.Mediator;
 import generator.models.generation.GenerationInfo;
-import generator.models.generation.ObjectInfo;
+import generator.models.generation.ModelInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 
@@ -14,7 +14,7 @@ public abstract class Algorithm {
 	private final String helpKey;
 	private String name;
 
-	protected int getCount(ObjectInfo obj) {
+	protected int getCount(ModelInfo obj) {
 		int count = 0;
 		int max = obj.getMaxCount();
 		int min = obj.getMinCount();
@@ -28,13 +28,13 @@ public abstract class Algorithm {
 		return count;
 	}
 
-	protected void setRotation(ObjectInfo objInfo, BasicModelData obj) {
+	protected void setRotation(ModelInfo objInfo, BasicModelData obj) {
 		obj.setRotation(randomizeDouble(objInfo.getRotationSettings().getMinX(), objInfo.getRotationSettings().getMaxX()),
 				randomizeDouble(objInfo.getRotationSettings().getMinY(), objInfo.getRotationSettings().getMaxY()),
 				randomizeDouble(objInfo.getRotationSettings().getMinZ(), objInfo.getRotationSettings().getMaxZ()));
 	}
 
-	protected void setScale(ObjectInfo objInfo, BasicModelData obj) {
+	protected void setScale(ModelInfo objInfo, BasicModelData obj) {
 		double scaleX = randomizeDouble(objInfo.getScaleSettings().getMinX(), objInfo.getScaleSettings().getMaxX());
 		if (objInfo.getScaleSettings().isEqual()) {
 			obj.setScale(scaleX, scaleX, scaleX);
@@ -65,7 +65,7 @@ public abstract class Algorithm {
 
 	public List<GeneratedObject> generate(GenerationInfo info) {
 		List<GeneratedObject> result = generationMethod(info);
-		Mediator.updateObjectList(result);
+		Mediator.updateModels(result);
 		return result;
 	}
 

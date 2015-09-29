@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 
 import generator.Mediator;
-import generator.models.generation.ObjectInfo;
+import generator.models.generation.ModelInfo;
 import generator.utils.PropertiesKeys;
 import generator.windows.ModelWindow;
 
@@ -16,7 +16,7 @@ public class EditModelAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		List<ObjectInfo> selectedRows = Mediator.getSelectedObjectFiles();
+		List<ModelInfo> selectedRows = Mediator.getSelectedModels();
 		if (!selectedRows.isEmpty()) {
 			new ModelWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT_SETTINGS), selectedRows);
 		}
