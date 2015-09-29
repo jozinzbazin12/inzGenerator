@@ -7,16 +7,14 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GenerationInfo {
 	@XmlElement(name = "Model")
 	private List<ObjectInfo> objects;
 
-	@XmlTransient
-	// @XmlElement(name = "Args")
-	private Map<String, Number> args = new HashMap<>();
+	@XmlElement(name = "Args")
+	private Map<String, Double> args = new HashMap<>();
 
 	public List<ObjectInfo> getObjects() {
 		return objects;
@@ -26,11 +24,11 @@ public class GenerationInfo {
 		this.objects = objects;
 	}
 
-	public Map<String, Number> getArgs() {
+	public Map<String, Double> getArgs() {
 		return args;
 	}
 
-	public void setArgs(Map<String, Number> args) {
+	public void setArgs(Map<String, Double> args) {
 		this.args = args;
 	}
 

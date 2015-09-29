@@ -176,7 +176,7 @@ public class Mediator {
 			e.printStackTrace();
 			return;
 		}
-		Map<String, Number> args = resultObject.getGenerationInfo().getArgs();
+		Map<String, Double> args = resultObject.getGenerationInfo().getArgs();
 		if (args != null) {
 			secondTabPanel.setAlgorithmArgs(args);
 		}
@@ -361,7 +361,7 @@ public class Mediator {
 		return secondTabPanel.getSelectedRows();
 	}
 
-	public static Map<String, Number> getAlgorithmArgs() {
+	public static Map<String, Double> getAlgorithmArgs() {
 		return secondTabPanel.getAlgorithmArgs();
 	}
 
