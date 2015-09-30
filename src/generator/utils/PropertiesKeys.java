@@ -94,4 +94,6 @@ public final class PropertiesKeys {
 	public static final String HELP = "help";
 	public static final String MODEL = "model";
 	public static final String ADDITIONAL = "additional";
+	public static final String HEIGHT_ALGORITHM = "heightAlgorithm";
+	public static final String HEIGHT_ALGORITHM_HELP = "heightAlgorithmHelp";
 }

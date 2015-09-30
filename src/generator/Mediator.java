@@ -376,3 +376,6 @@ public class Mediator {
 }
 
 // TODO cleanup propertiesow
+//TODO nienachodzenie obiekow
+//TODO mapa prawodpodobienstwa dla kazdego obiektu, pozycja 1 obiektu i rozsiewanie, skupisko
+//TODO generator na siatce refularnej

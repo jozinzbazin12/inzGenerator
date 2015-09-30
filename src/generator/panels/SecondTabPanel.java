@@ -39,6 +39,7 @@ import generator.actions.model.EditModelAction;
 import generator.actions.model.LoadModelAction;
 import generator.algorithms.Algorithm;
 import generator.algorithms.FullRandomAlgorithm;
+import generator.algorithms.HeightAlgorithm;
 import generator.algorithms.RegularAlgorithm;
 import generator.models.generation.ModelInfo;
 import generator.tables.Table;
@@ -79,17 +80,21 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		JPanel algorithmPanel = new JPanel(new GridLayout(2, 0, 0, 10));
 		JPanel selectionPanel = new JPanel(new GridLayout(0, 2, 50, 0));
 		algorithmList = new JComboBox<>();
-		FullRandomAlgorithm fullRandomAlgorithm = new FullRandomAlgorithm(
-				Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
-		RegularAlgorithm regularAlgorithm = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
+		Algorithm fullRandomAlgorithm = new FullRandomAlgorithm(Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
+		Algorithm regularAlgorithm = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
+		Algorithm heightAlgorithm = new HeightAlgorithm(Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM));
+
 		algorithmList.addItem(fullRandomAlgorithm);
 		algorithmList.addItem(regularAlgorithm);
+		algorithmList.addItem(heightAlgorithm);
 		algorithmList.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				options.removeAll();
-				JPanel comp = panels.get(getAlgorithm());
-				options.add(comp);
+				JPanel panel = panels.get(getAlgorithm());
+				if (panel != null) {
+					options.add(panel);
+				}
 				options.revalidate();
 			}
 		});
@@ -98,8 +103,6 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		algorithmPanel.add(selectionPanel);
 		algorithmPanel.add(new JSeparator());
 		algorithmOptionsPanel.add(algorithmPanel, BorderLayout.NORTH);
-
-		panels.put(fullRandomAlgorithm, new JPanel());
 
 		createRegularPanel(regularAlgorithm);
 		algorithmOptionsPanel.add(options, BorderLayout.CENTER);

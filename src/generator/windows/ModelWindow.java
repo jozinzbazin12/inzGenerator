@@ -142,6 +142,16 @@ public class ModelWindow extends JFrame implements ActionListener {
 		fillValues();
 	}
 
+	private void setEqualScale(boolean b) {
+		equalScale.setSelected(b);
+		showScaleSpinners(!b);
+	}
+
+	private void showScaleSpinners(boolean b) {
+		spinnersY.setVisible(b);
+		spinnersZ.setVisible(b);
+	}
+
 	private void fillValues() {
 		if (objects.size() == 1) {
 			ModelInfo objectInfo = objects.get(0);
@@ -172,21 +182,21 @@ public class ModelWindow extends JFrame implements ActionListener {
 			arguments.get(Consts.MAX_SY).setValue(scaleSettings.getMaxY());
 			arguments.get(Consts.MAX_SZ).setValue(scaleSettings.getMaxZ());
 			relative.setSelected(positionSettings.isRelative());
-			equalScale.setSelected(scaleSettings.isEqual());
+			setEqualScale(scaleSettings.isEqual());
 		} else {
 			boolean lastEqual = objects.get(0).getScaleSettings().isEqual();
 			boolean diff = false;
 			for (ModelInfo i : objects) {
 				boolean actual = i.getScaleSettings().isEqual();
 				if (actual != lastEqual) {
-					equalScale.setSelected(false);
+					setEqualScale(false);
 					diff = true;
 					break;
 				}
 				lastEqual = actual;
 			}
 			if (!diff) {
-				equalScale.setSelected(objects.get(0).getScaleSettings().isEqual());
+				setEqualScale(objects.get(0).getScaleSettings().isEqual());
 			}
 
 			lastEqual = objects.get(0).getPositionSettings().isRelative();
@@ -288,7 +298,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 		double maxY = smaxY.isModified() ? (double) smaxY.getValue() : data.getMaxY();
 		double maxZ = smaxZ.isModified() ? (double) smaxZ.getValue() : data.getMaxZ();
 
-		if (data.isEqual() || (equalScale.isModified() && equalScale.isSelected())) {
+		if (data.isEqual() || (equalScale.isModified())) {
 			data.setMinX(minX);
 			data.setMinY(minX);
 			data.setMinZ(minX);
@@ -296,7 +306,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 			data.setMaxX(maxX);
 			data.setMaxY(maxX);
 			data.setMaxZ(maxX);
-			data.setEqual(true);
+			data.setEqual( equalScale.isSelected());
 		} else {
 			data.setMinX(minX);
 			data.setMinY(minY);
@@ -330,11 +340,9 @@ public class ModelWindow extends JFrame implements ActionListener {
 			dispose();
 		} else if (e.getSource().equals(equalScale)) {
 			if (equalScale.isSelected()) {
-				spinnersY.setVisible(false);
-				spinnersZ.setVisible(false);
+				showScaleSpinners(false);
 			} else {
-				spinnersY.setVisible(true);
-				spinnersZ.setVisible(true);
+				showScaleSpinners(true);
 			}
 		}
 	}
