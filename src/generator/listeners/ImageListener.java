@@ -44,14 +44,17 @@ public class ImageListener extends MouseAdapter {
 			((JComponent) e.getSource()).repaint();
 		}
 		if (currentObject != null && SwingUtilities.isLeftMouseButton(e)) {
+			((ObjectsPreviewPanel) panel).setPoint(e.getPoint());
 			int mapWidth = Mediator.getMapDimensions().width;
 			int mapHeight = Mediator.getMapDimensions().height;
-			currentObject.getBasic().setX((Mediator.getMapWidth()
-					* (-2 * e.getX() + panel.getZoom() * mapWidth + 2 * panel.getCurrentPoint().x + mapWidth))
-					/ (-2 * mapWidth * (panel.getZoom() + 1)));
-			currentObject.getBasic().setZ((Mediator.getMapHeight()
-					* (-2 * e.getY() + panel.getZoom() * mapHeight + 2 * panel.getCurrentPoint().y + mapHeight))
-					/ (2 * mapHeight * (panel.getZoom() + 1)));
+			currentObject.getBasic()
+					.setX((Mediator.getMapWidth()
+							* (-2 * e.getX() + panel.getZoom() * mapWidth + 2 * panel.getCurrentPoint().x + mapWidth))
+							/ (-2 * mapWidth * (panel.getZoom() + 1)));
+			currentObject.getBasic()
+					.setZ((Mediator.getMapHeight()
+							* (-2 * e.getY() + panel.getZoom() * mapHeight + 2 * panel.getCurrentPoint().y + mapHeight))
+							/ (2 * mapHeight * (panel.getZoom() + 1)));
 			Mediator.setClicked(currentObject);
 			panel.repaint();
 		}
@@ -76,6 +79,7 @@ public class ImageListener extends MouseAdapter {
 	public void mouseMoved(MouseEvent e) {
 		if (objectsPanel) {
 			ObjectsPreviewPanel panel = (ObjectsPreviewPanel) this.panel;
+			panel.setPoint(e.getPoint());
 			if (panel.getGeneratedObjects() != null) {
 				for (GeneratedObject i : panel.getGeneratedObjects()) {
 					int mapWidth = Mediator.getMapDimensions().width;

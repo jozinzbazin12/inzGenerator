@@ -19,6 +19,8 @@ public class PreviewPanel extends JPanel {
 	protected double zoom = 0;
 	protected int width;
 	protected int height;
+	protected int minY;
+	protected int maxY;
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -65,7 +67,35 @@ public class PreviewPanel extends JPanel {
 		addMouseMotionListener(listener);
 		addMouseListener(listener);
 		addMouseWheelListener(listener);
+		findMinMax();
 		revalidate();
+	}
+
+	private void findMinMax() {
+		int w = image.getWidth();
+		int h = image.getHeight();
+		minY = Integer.MAX_VALUE;
+		maxY = Integer.MIN_VALUE;
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				int value = getColor(i, j);
+				if (value < minY) {
+					minY = value;
+				}
+				if (value > maxY) {
+					maxY = value;
+				}
+			}
+		}
+
+	}
+
+	protected int getColor(int x, int y) {
+		int rgb = image.getRGB(x, y);
+		int r = (rgb >> 16) & 0x000000FF;
+		int g = (rgb >> 8) & 0x000000FF;
+		int b = (rgb) & 0x000000FF;
+		return (r + g + b) / 3;
 	}
 
 	public PreviewPanel() {
