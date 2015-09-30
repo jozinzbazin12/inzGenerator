@@ -42,7 +42,7 @@ public final class PropertiesKeys {
 	public static final String MODIFY_OBJECT = "object.modify";
 	public static final String DELETE_OBJECT = "object.delete";
 	public static final String OBJECT_NAME = "object.name";
-	public static final String COORDINATES = "coordinates";
+	public static final String COORDINATES = "settings.coordinates";
 	public static final String ROTATIONS = "settings.rotations";
 	public static final String SCALES = "settings.scales";
 	public static final String COLOR = "settings.color";
