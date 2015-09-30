@@ -74,18 +74,18 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 	}
 
 	private void createAlgotithmsPanel() {
-		JPanel algorithmOptionsPanel = new JPanel(new BorderLayout());
+		JPanel optionsPanel = new JPanel(new BorderLayout());
 		options = new JPanel(new GridLayout(0, 1));
-		algorithmOptionsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_OPTIONS)));
+		optionsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_OPTIONS)));
 		JPanel algorithmPanel = new JPanel(new GridLayout(2, 0, 0, 10));
 		JPanel selectionPanel = new JPanel(new GridLayout(0, 2, 50, 0));
 		algorithmList = new JComboBox<>();
-		Algorithm fullRandomAlgorithm = new FullRandomAlgorithm(Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
-		Algorithm regularAlgorithm = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
+		Algorithm fullRandom = new FullRandomAlgorithm(Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
+		Algorithm regular = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
 		Algorithm heightAlgorithm = new HeightAlgorithm(Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM));
 
-		algorithmList.addItem(fullRandomAlgorithm);
-		algorithmList.addItem(regularAlgorithm);
+		algorithmList.addItem(fullRandom);
+		algorithmList.addItem(regular);
 		algorithmList.addItem(heightAlgorithm);
 		algorithmList.addActionListener(new ActionListener() {
 			@Override
@@ -102,11 +102,11 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		selectionPanel.add(new JButton(new HelpAction(Mediator.getMessage(PropertiesKeys.HELP))));
 		algorithmPanel.add(selectionPanel);
 		algorithmPanel.add(new JSeparator());
-		algorithmOptionsPanel.add(algorithmPanel, BorderLayout.NORTH);
+		optionsPanel.add(algorithmPanel, BorderLayout.NORTH);
 
-		createRegularPanel(regularAlgorithm);
-		algorithmOptionsPanel.add(options, BorderLayout.CENTER);
-		add(algorithmOptionsPanel);
+		createRegularPanel(regular);
+		optionsPanel.add(options, BorderLayout.CENTER);
+		add(optionsPanel);
 	}
 
 	private void createRegularPanel(Algorithm a) {
