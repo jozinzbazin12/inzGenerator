@@ -356,6 +356,10 @@ public class Mediator {
 	public static double getMapHeight() {
 		return firstTabPanel.getMapSettings().getLengthZ();
 	}
+	
+	public static double getMapMaxY() {
+		return firstTabPanel.getMapSettings().getLengthY();
+	}
 
 	public static List<ModelInfo> getSelectedModels() {
 		return secondTabPanel.getSelectedRows();

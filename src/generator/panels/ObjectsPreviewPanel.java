@@ -14,6 +14,8 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 	private static final long serialVersionUID = -9061500843600921283L;
 	private List<GeneratedObject> generatedObjects;
 	private double posX, posY, posZ;
+	private int minY;
+	private int maxY;
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -70,13 +72,32 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 		int x = (int) (posX / (Mediator.getMapWidth() / image.getWidth())) + image.getWidth() / 2;
 		int y = (int) -(posZ / (Mediator.getMapHeight() / image.getHeight())) + image.getHeight() / 2;
 		if (x >= 0 && x < image.getWidth() && y >= 0 && y < image.getHeight()) {
-			posY = getColor(x, y);
+			posY = getColor(x, y) * Mediator.getMapMaxY() / maxY;
 		}
 		repaint();
 	}
 
+	private void findMinMax() {
+		int w = image.getWidth();
+		int h = image.getHeight();
+		minY = Integer.MAX_VALUE;
+		maxY = Integer.MIN_VALUE;
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				int value = getColor(i, j);
+				if (value < minY) {
+					minY = value;
+				}
+				if (value > maxY) {
+					maxY = value;
+				}
+			}
+		}
+	}
+
 	public ObjectsPreviewPanel(BufferedImage image) throws IOException {
 		super(image);
+		findMinMax();
 	}
 
 	public ObjectsPreviewPanel() {
