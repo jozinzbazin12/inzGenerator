@@ -5,6 +5,7 @@ import java.util.List;
 
 import generator.models.generation.GenerationInfo;
 import generator.models.generation.ModelInfo;
+import generator.models.generation.PositionSettings;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.utils.Consts;
@@ -56,10 +57,11 @@ public class RegularAlgorithm extends Algorithm {
 			actualCount++;
 
 			BasicModelData obj = new BasicModelData();
+			PositionSettings positionSettings = objInfo.getPositionSettings();
 			obj.setPosition(actualMinX,
-					randomizeDouble(objInfo.getPositionSettings().getMinY(), objInfo.getPositionSettings().getMaxY()),
+					randomizeDouble(positionSettings.getMinY(), positionSettings.getMaxY()),
 					actualMinZ);
-			obj.setRelative(objInfo.getPositionSettings().isRelative());
+			obj.setRelative(positionSettings.isRelative());
 
 			setRotation(objInfo, obj);
 			setScale(objInfo, obj);

@@ -256,4 +256,12 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 			unHighlight();
 		}
 	}
+
+	public double getMapHeight(int x, int y) {
+		return previewPanel.getColor(x, y);
+	}
+
+	public double getMapMaxY() {
+		return previewPanel.getMaxY();
+	}
 }

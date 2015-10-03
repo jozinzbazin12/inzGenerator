@@ -68,7 +68,7 @@ public class PreviewPanel extends JPanel {
 		revalidate();
 	}
 
-	protected int getColor(int x, int y) {
+	public int getColor(int x, int y) {
 		int rgb = image.getRGB(x, y);
 		int r = (rgb >> 16) & 0x000000FF;
 		int g = (rgb >> 8) & 0x000000FF;

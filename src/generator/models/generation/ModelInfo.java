@@ -1,5 +1,8 @@
 package generator.models.generation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -22,6 +25,8 @@ public class ModelInfo implements Comparable<ModelInfo> {
 	private ScaleSettings scaleSettings;
 	@XmlElement(name = "Rotation")
 	private RotationSettings rotationSettings;
+	@XmlElement(name = "Args")
+	private Map<String, Double> args = new HashMap<>();
 
 	@XmlAttribute(name = "path")
 	private String getPath() {
@@ -118,5 +123,13 @@ public class ModelInfo implements Comparable<ModelInfo> {
 
 	public void setMaxCount(int maxCount) {
 		this.maxCount = maxCount;
+	}
+
+	public Map<String, Double> getArgs() {
+		return args;
+	}
+
+	public void setArgs(Map<String, Double> args) {
+		this.args = args;
 	}
 }

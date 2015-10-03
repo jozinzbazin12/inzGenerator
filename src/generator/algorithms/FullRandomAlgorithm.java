@@ -5,6 +5,7 @@ import java.util.List;
 
 import generator.models.generation.GenerationInfo;
 import generator.models.generation.ModelInfo;
+import generator.models.generation.PositionSettings;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.utils.PropertiesKeys;
@@ -23,10 +24,11 @@ public class FullRandomAlgorithm extends Algorithm {
 			int count = getCount(objInfo);
 			for (int i = 0; i < count; i++) {
 				BasicModelData obj = new BasicModelData();
-				obj.setPosition(randomizeDouble(objInfo.getPositionSettings().getMinX(), objInfo.getPositionSettings().getMaxX()),
-						randomizeDouble(objInfo.getPositionSettings().getMinY(), objInfo.getPositionSettings().getMaxY()),
-						randomizeDouble(objInfo.getPositionSettings().getMinZ(), objInfo.getPositionSettings().getMaxZ()));
-				obj.setRelative(objInfo.getPositionSettings().isRelative());
+				PositionSettings positionSettings = objInfo.getPositionSettings();
+				obj.setPosition(randomizeDouble(positionSettings.getMinX(), positionSettings.getMaxX()),
+						randomizeDouble(positionSettings.getMinY(), positionSettings.getMaxY()),
+						randomizeDouble(positionSettings.getMinZ(), positionSettings.getMaxZ()));
+				obj.setRelative(positionSettings.isRelative());
 
 				setRotation(objInfo, obj);
 				setScale(objInfo, obj);

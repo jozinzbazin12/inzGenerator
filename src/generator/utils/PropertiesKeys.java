@@ -35,9 +35,9 @@ public final class PropertiesKeys {
 	public static final String REGULAR_ALGORITHM = "algorithm.regular";
 	public static final String LANGUAGE = "language";
 	public static final String CHANGE_LANGUAGE_WARNING = "language.change.warning";
-	public static final String SAVE_XML_ERROR = "saveXmlError";
-	public static final String SAVE_XML_SUCCESS = "saveXmlSuccess";
-	public static final String LOAD_XML_ERROR = "loadXmlError";
+	public static final String SAVE_XML_ERROR = "save.xml.error";
+	public static final String SAVE_XML_SUCCESS = "save.xml.success";
+	public static final String LOAD_XML_ERROR = "load.xml.error";
 	public static final String GENERATED_OBJECTS = "generatedObjects";
 	public static final String MODIFY_OBJECT = "object.modify";
 	public static final String DELETE_OBJECT = "object.delete";
@@ -89,11 +89,12 @@ public final class PropertiesKeys {
 	public static final String MAX_ROTATION = "settings.rotation.max";
 	public static final String COUNT = "count";
 	public static final String EDIT_OBJECT_SETTINGS = "object.settings.edit";
-	public static final String REGULAR_ALGORITHM_HELP = "algorithm.regularHelp";
-	public static final String FULL_RANDOM_ALGORITHM_HELP = "algorithm.fullRandomHelp";
+	public static final String REGULAR_ALGORITHM_HELP = "algorithm.regular.help";
+	public static final String FULL_RANDOM_ALGORITHM_HELP = "algorithm.fullRandom.help";
 	public static final String HELP = "help";
 	public static final String MODEL = "model";
 	public static final String ADDITIONAL = "additional";
-	public static final String HEIGHT_ALGORITHM = "heightAlgorithm";
-	public static final String HEIGHT_ALGORITHM_HELP = "heightAlgorithmHelp";
+	public static final String HEIGHT_ALGORITHM = "algorithm.height";
+	public static final String HEIGHT_ALGORITHM_HELP = "algorithm.height.help";
+	public static final String HEIGHT_ALGORITHM_SETTINGS = "algorithm.settings.height";
 }

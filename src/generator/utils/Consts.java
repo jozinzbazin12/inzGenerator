@@ -71,4 +71,6 @@ public class Consts {
 
 	public static final String MATERIAL_D = "md";
 	public static final String MATERIAL_NS = "mns";
+	public static final String MIN_Y_HEIGHT = "minYH";
+	public static final String MAX_Y_HEIGHT = "maxYH";
 }

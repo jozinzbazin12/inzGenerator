@@ -72,7 +72,7 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 		int x = (int) (posX / (Mediator.getMapWidth() / image.getWidth())) + image.getWidth() / 2;
 		int y = (int) -(posZ / (Mediator.getMapHeight() / image.getHeight())) + image.getHeight() / 2;
 		if (x >= 0 && x < image.getWidth() && y >= 0 && y < image.getHeight()) {
-			posY = getColor(x, y) * Mediator.getMapMaxY() / maxY;
+			posY = getColor(x, y) * Mediator.getMapMaxYSetting() / maxY;
 		}
 		repaint();
 	}
@@ -110,6 +110,14 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 
 	public List<GeneratedObject> getGeneratedObjects() {
 		return generatedObjects;
+	}
+
+	public int getMinY() {
+		return minY;
+	}
+
+	public int getMaxY() {
+		return maxY;
 	}
 
 }

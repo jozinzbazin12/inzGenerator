@@ -86,9 +86,8 @@ public class Mediator {
 	public static void changeLocale(Locale locale) {
 		properties.setProperty(LANGUAGE_KEY, locale.getLanguage());
 		try {
-			int dialogResult = JOptionPane.showConfirmDialog(null, Mediator.getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING),
-					Mediator.getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
+			int dialogResult = JOptionPane.showConfirmDialog(null, getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING),
+					getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (dialogResult == JOptionPane.YES_OPTION) {
 				saveProperties();
 				mainWindow.dispose();
@@ -109,8 +108,8 @@ public class Mediator {
 			firstTabPanel.setMapFileName(imgName);
 			mainWindow.getContentPane().revalidate();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.FILE_NOT_IMAGE),
-					messages.getString(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
+			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.FILE_NOT_IMAGE),
+					getMessage(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
 		}
 		firstTabPanel.setMapHeight(String.valueOf(thirdTabPanel.getImageSize().height) + " px");
 		firstTabPanel.setMapWidth(String.valueOf(thirdTabPanel.getImageSize().width) + " px");
@@ -134,8 +133,8 @@ public class Mediator {
 			firstTabPanel.setTexturePath(path);
 			mainWindow.getContentPane().revalidate();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.FILE_NOT_IMAGE),
-					messages.getString(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
+			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.FILE_NOT_IMAGE),
+					getMessage(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
 		}
 	}
 
@@ -154,11 +153,11 @@ public class Mediator {
 			FileOutputStream os = new FileOutputStream(new File(name.endsWith(".xml") ? name : name + ".xml"));
 			marshaller.marshal(resultObject, os);
 			os.close();
-			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.SAVE_XML_SUCCESS),
-					messages.getString(PropertiesKeys.SAVE_XML_SUCCESS), JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.SAVE_XML_SUCCESS),
+					getMessage(PropertiesKeys.SAVE_XML_SUCCESS), JOptionPane.INFORMATION_MESSAGE);
 		} catch (JAXBException | IOException e) {
-			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.SAVE_XML_ERROR),
-					messages.getString(PropertiesKeys.SAVE_XML_ERROR), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.SAVE_XML_ERROR),
+					getMessage(PropertiesKeys.SAVE_XML_ERROR), JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 	}
@@ -171,8 +170,8 @@ public class Mediator {
 			Unmarshaller um = context.createUnmarshaller();
 			resultObject = (ResultObject) um.unmarshal(file);
 		} catch (JAXBException e) {
-			JOptionPane.showMessageDialog(new JFrame(), messages.getString(PropertiesKeys.LOAD_XML_ERROR),
-					messages.getString(PropertiesKeys.LOAD_XML_ERROR), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.LOAD_XML_ERROR),
+					getMessage(PropertiesKeys.LOAD_XML_ERROR), JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 			return;
 		}
@@ -356,8 +355,8 @@ public class Mediator {
 	public static double getMapHeight() {
 		return firstTabPanel.getMapSettings().getLengthZ();
 	}
-	
-	public static double getMapMaxY() {
+
+	public static double getMapMaxYSetting() {
 		return firstTabPanel.getMapSettings().getLengthY();
 	}
 
@@ -377,7 +376,16 @@ public class Mediator {
 		}
 		return -1;
 	}
+
+	public static double getMapHeightAt(int x, int y) {
+		return thirdTabPanel.getMapHeight(x, y);
+	}
+
+	public static double getMapMaxY() {
+		return thirdTabPanel.getMapMaxY();
+	}
 }
-//TODO nienachodzenie obiekow
-//TODO mapa prawodpodobienstwa dla kazdego obiektu, pozycja 1 obiektu i rozsiewanie, skupisko
-//TODO generator na siatce refularnej
+// TODO nienachodzenie obiekow
+// TODO mapa prawodpodobienstwa dla kazdego obiektu, pozycja 1 obiektu i
+// rozsiewanie, skupisko
+// TODO generator na siatce refularnej
