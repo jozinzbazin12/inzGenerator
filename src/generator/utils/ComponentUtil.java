@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import generator.Mediator;
 
@@ -47,6 +49,22 @@ public final class ComponentUtil {
 		Spinner minSpinner = new Spinner(new SpinnerNumberModel(0.0, min, max, 1), listen);
 		panel.add(attributelabel);
 		Spinner maxSpinner = new Spinner(new SpinnerNumberModel(0.0, min, max, 1), listen);
+		ChangeListener listener = new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Number low = (Number) minSpinner.getValue();
+				Number high = (Number) maxSpinner.getValue();
+				if (low.floatValue() > high.floatValue()) {
+					minSpinner.setValue(high);
+				}
+				if (high.floatValue() < low.floatValue()) {
+					maxSpinner.setValue(low);
+				}
+			}
+		};
+		minSpinner.addChangeListener(listener);
+		maxSpinner.addChangeListener(listener);
 		panel.add(attributelabel);
 		panel.add(minSpinner);
 		panel.add(maxSpinner);

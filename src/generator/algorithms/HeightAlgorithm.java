@@ -53,8 +53,8 @@ public class HeightAlgorithm extends Algorithm {
 		double max = info.getArgs().get(Consts.MAX_Y_HEIGHT);
 		int minPos = find(min / yRatio);
 		int maxPos = find(max / yRatio);
-		double min2 = incudedPoints.get(minPos).get(0).getY();
-		double max2 = incudedPoints.get(maxPos).get(0).getY();
+//		double min2 = incudedPoints.get(minPos).get(0).getY();
+//		double max2 = incudedPoints.get(maxPos).get(0).getY();
 //		if (min2 - min > yRatio || max2 - max > yRatio) {
 //			return null;
 //		}
