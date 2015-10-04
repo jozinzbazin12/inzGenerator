@@ -390,3 +390,5 @@ public class Mediator {
 // rozsiewanie, skupisko
 // TODO generator na siatce refularnej
 //TODO zapis i odczyt z paneli, static?
+//TODO obsluga sciezek relatywnych
+//TODO poprawic regularny

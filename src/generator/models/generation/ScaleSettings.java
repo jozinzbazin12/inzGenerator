@@ -14,6 +14,7 @@ public class ScaleSettings extends AbstractMinMax {
 	}
 
 	public ScaleSettings() {
+		equal = true;
 	}
 
 	public boolean isEqual() {

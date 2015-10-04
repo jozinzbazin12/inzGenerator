@@ -16,6 +16,7 @@ public class PositionSettings extends AbstractMinMax {
 	}
 
 	public PositionSettings() {
+		relative = true;
 	}
 
 	public boolean isRelative() {

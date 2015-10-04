@@ -49,22 +49,28 @@ public final class ComponentUtil {
 		Spinner minSpinner = new Spinner(new SpinnerNumberModel(0.0, min, max, 1), listen);
 		panel.add(attributelabel);
 		Spinner maxSpinner = new Spinner(new SpinnerNumberModel(0.0, min, max, 1), listen);
-		ChangeListener listener = new ChangeListener() {
+		minSpinner.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				// Number low = (Number) minSpinner.getValue();
-				// Number high = (Number) maxSpinner.getValue();
-				// if (low.floatValue() > high.floatValue()) {
-				// minSpinner.setValue(high);
-				// }
-				// if (high.floatValue() < low.floatValue()) {
-				// maxSpinner.setValue(low);
-				// }
+				Number low = (Number) minSpinner.getValue();
+				Number high = (Number) maxSpinner.getValue();
+				if (high.floatValue() < low.floatValue()) {
+					maxSpinner.setValue(low);
+				}
 			}
-		};
-		minSpinner.addChangeListener(listener);
-		maxSpinner.addChangeListener(listener);
+		});
+		maxSpinner.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Number low = (Number) minSpinner.getValue();
+				Number high = (Number) maxSpinner.getValue();
+				if (low.floatValue() > high.floatValue()) {
+					minSpinner.setValue(high);
+				}
+			}
+		});
 		panel.add(attributelabel);
 		panel.add(minSpinner);
 		panel.add(maxSpinner);
