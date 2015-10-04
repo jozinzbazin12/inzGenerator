@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,17 +37,12 @@ import generator.actions.model.DeleteModelAction;
 import generator.actions.model.EditModelAction;
 import generator.actions.model.LoadModelAction;
 import generator.algorithms.Algorithm;
-import generator.algorithms.FullRandomAlgorithm;
-import generator.algorithms.HeightAlgorithm;
-import generator.algorithms.RegularAlgorithm;
+import generator.algorithms.panels.main.AlgorithmMainPanel;
 import generator.models.generation.ModelInfo;
 import generator.tables.Table;
 import generator.tables.model.ObjectFileTableColumnModel;
 import generator.tables.model.ObjectFileTableModel;
-import generator.utils.ComponentUtil;
-import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
-import generator.utils.Spinner;
 
 public class SecondTabPanel extends AbstractPanel implements MouseListener {
 
@@ -59,12 +53,10 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 	private static final String EDIT_ACTION = "editAction";
 	private static final String NEW_ACTION = "newAction";
 	private static final long serialVersionUID = -2087487239161953473L;
-	private Map<Algorithm, JPanel> panels = new HashMap<>();
 	private JComboBox<Algorithm> algorithmList;
 	private JPopupMenu menu;
 	private JPopupMenu rowMenu;
 	private Table table;
-	private Map<String, Spinner> algorithmArgs = new HashMap<>();
 
 	private List<ModelInfo> modelsInfo = new ArrayList<>();
 	private JPanel options;
@@ -80,44 +72,30 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		JPanel algorithmPanel = new JPanel(new GridLayout(2, 0, 0, 10));
 		JPanel selectionPanel = new JPanel(new GridLayout(0, 2, 50, 0));
 		algorithmList = new JComboBox<>();
-		Algorithm fullRandom = new FullRandomAlgorithm(Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
-		Algorithm regular = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
-		Algorithm heightAlgorithm = new HeightAlgorithm(Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM));
-
-		algorithmList.addItem(fullRandom);
-		algorithmList.addItem(regular);
-		algorithmList.addItem(heightAlgorithm);
+		for (Algorithm i : Algorithm.getMainPanels().keySet()) {
+			algorithmList.addItem(i);
+		}
 		algorithmList.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				options.removeAll();
-				JPanel panel = panels.get(getAlgorithm());
+				JPanel panel = Algorithm.getMainPanels().get(getAlgorithm());
 				if (panel != null) {
 					options.add(panel);
 				}
 				options.revalidate();
+				options.repaint();
 			}
 		});
+		options.add(Algorithm.getMainPanels().get(getAlgorithm()));
 		selectionPanel.add(algorithmList);
 		selectionPanel.add(new JButton(new HelpAction(Mediator.getMessage(PropertiesKeys.HELP))));
 		algorithmPanel.add(selectionPanel);
 		algorithmPanel.add(new JSeparator());
 		optionsPanel.add(algorithmPanel, BorderLayout.NORTH);
 
-		createRegularPanel(regular);
 		optionsPanel.add(options, BorderLayout.CENTER);
 		add(optionsPanel);
-	}
-
-	private void createRegularPanel(Algorithm a) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(12, 1, 5, 5));
-		panel.add(ComponentUtil.createAtrributeLegendPanel());
-		panel.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.MIN_X, Consts.MAX_X,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), algorithmArgs));
-		panel.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.MIN_Z, Consts.MAX_Z,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), algorithmArgs));
-		panels.put(a, panel);
 	}
 
 	private void createModelsPanel() {
@@ -197,7 +175,6 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 	}
 
 	public SecondTabPanel() {
-		arguments = new HashMap<String, Spinner>();
 		setLayout(new GridLayout(0, 2));
 		createModelsPanel();
 		createAlgotithmsPanel();
@@ -247,20 +224,19 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		return objects;
 	}
 
-	public Map<String, Double> getAlgorithmArgs() {
-		Map<String, Double> map = new HashMap<>();
-		for (Map.Entry<String, Spinner> i : algorithmArgs.entrySet()) {
-			map.put(i.getKey(), (Double) i.getValue().getValue());
-		}
-		return map;
+	@Override
+	public void setArgs(Map<String, Double> args) {
+		AlgorithmMainPanel.setArgs(args);
 	}
 
-	public void setAlgorithmArgs(Map<String, Double> map) {
-		for (Map.Entry<String, Double> i : map.entrySet()) {
-			Spinner spinner = algorithmArgs.get(i.getKey());
-			if (spinner != null) {
-				spinner.setValue(i.getValue());
-			}
-		}
+	@Override
+	public Map<String, Double> getArgs() {
+		return getArgs(new HashMap<>(), false);
 	}
+
+	@Override
+	public Map<String, Double> getArgs(Map<String, Double> args, boolean checkModified) {
+		return AlgorithmMainPanel.getArgs(args);
+	}
+
 }

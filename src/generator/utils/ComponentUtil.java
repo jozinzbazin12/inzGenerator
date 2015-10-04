@@ -53,14 +53,14 @@ public final class ComponentUtil {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				Number low = (Number) minSpinner.getValue();
-				Number high = (Number) maxSpinner.getValue();
-				if (low.floatValue() > high.floatValue()) {
-					minSpinner.setValue(high);
-				}
-				if (high.floatValue() < low.floatValue()) {
-					maxSpinner.setValue(low);
-				}
+				// Number low = (Number) minSpinner.getValue();
+				// Number high = (Number) maxSpinner.getValue();
+				// if (low.floatValue() > high.floatValue()) {
+				// minSpinner.setValue(high);
+				// }
+				// if (high.floatValue() < low.floatValue()) {
+				// maxSpinner.setValue(low);
+				// }
 			}
 		};
 		minSpinner.addChangeListener(listener);

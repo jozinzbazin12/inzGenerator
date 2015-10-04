@@ -1,18 +1,49 @@
 package generator.algorithms;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import generator.Mediator;
+import generator.algorithms.panels.additional.EmptyPanel;
+import generator.algorithms.panels.additional.HeightAlgorithmPanel;
+import generator.algorithms.panels.main.AlgorithmMainPanel;
+import generator.algorithms.panels.main.EmptyMainPanel;
+import generator.algorithms.panels.main.RegularAlgorithmMainPanel;
 import generator.models.generation.GenerationInfo;
 import generator.models.generation.ModelInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
+import generator.panels.AbstractPanel;
+import generator.utils.PropertiesKeys;
 
 public abstract class Algorithm {
 	private Random rnd = new Random();
 	private final String helpKey;
 	private String name;
+	private static final Map<Algorithm, AlgorithmMainPanel> MAIN_PANELS;
+	private static final Map<Algorithm, AbstractPanel> ADDITIONAL_PANELS;
+
+	static {
+		EmptyPanel emptyPanel = new EmptyPanel();
+
+		ADDITIONAL_PANELS = new HashMap<>();
+		FullRandomAlgorithm randomAlgorithm = new FullRandomAlgorithm(Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
+		HeightAlgorithm height = new HeightAlgorithm(Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM));
+		RegularAlgorithm regularAlgorithm = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
+
+		ADDITIONAL_PANELS.put(randomAlgorithm, emptyPanel);
+		ADDITIONAL_PANELS.put(regularAlgorithm, emptyPanel);
+		ADDITIONAL_PANELS.put(height, new HeightAlgorithmPanel());
+
+		EmptyMainPanel emptyMainPanel = new EmptyMainPanel();
+		MAIN_PANELS = new HashMap<>();
+		MAIN_PANELS.put(randomAlgorithm, emptyMainPanel);
+		MAIN_PANELS.put(regularAlgorithm, new RegularAlgorithmMainPanel());
+		MAIN_PANELS.put(height, emptyMainPanel);
+
+	}
 
 	protected int getCount(ModelInfo obj) {
 		int count = 0;
@@ -71,6 +102,14 @@ public abstract class Algorithm {
 
 	public String getHelp() {
 		return Mediator.getMessage(helpKey);
+	}
+
+	public static Map<Algorithm, AlgorithmMainPanel> getMainPanels() {
+		return MAIN_PANELS;
+	}
+
+	public static Map<Algorithm, AbstractPanel> getAdditionalPanels() {
+		return ADDITIONAL_PANELS;
 	}
 
 }

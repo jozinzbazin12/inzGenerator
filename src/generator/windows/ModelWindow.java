@@ -19,11 +19,13 @@ import javax.swing.JTextField;
 
 import generator.Mediator;
 import generator.actions.model.LoadSingleModelAction;
+import generator.algorithms.Algorithm;
 import generator.models.generation.GenerationModel;
 import generator.models.generation.ModelInfo;
 import generator.models.generation.PositionSettings;
 import generator.models.generation.RotationSettings;
 import generator.models.generation.ScaleSettings;
+import generator.panels.AbstractPanel;
 import generator.utils.CheckBox;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
@@ -42,7 +44,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private JPanel spinnersZ;
 	private JPanel spinnersY;
 	private CheckBox relative;
-	private HashMap<String, Spinner> additionalArgs;
+	private AbstractPanel additionalPanel;
 
 	private void createWindow() {
 		setSize(1000, 600);
@@ -99,16 +101,10 @@ public class ModelWindow extends JFrame implements ActionListener {
 	}
 
 	private JPanel createAdditionalPanel() {
-		additionalArgs = new HashMap<String, Spinner>();
 		JPanel panel = new JPanel(new GridLayout(2, 0));
 		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
-		JPanel settings = new JPanel(new GridLayout(10, 3, 0, 0));
-		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ADDITIONAL)));
-		settings.add(ComponentUtil.createAtrributeLegendPanel());
-		settings.add(ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_Y_HEIGHT, Consts.MAX_Y_HEIGHT,
-				Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM_SETTINGS), additionalArgs, true));
-
-		panel.add(settings);
+		additionalPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ADDITIONAL)));
+		panel.add(additionalPanel);
 		return panel;
 	}
 
@@ -117,7 +113,6 @@ public class ModelWindow extends JFrame implements ActionListener {
 		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
 
 		JPanel additional = new JPanel(new GridLayout(0, 2));
-		// additional.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ADDITIONAL)));
 		relative = new CheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE));
 		additional.add(relative);
 		equalScale = new CheckBox(Mediator.getMessage(PropertiesKeys.EQUAL_SCALE));
@@ -160,6 +155,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 	public ModelWindow(String name, List<ModelInfo> generationModel) {
 		super(name);
+		additionalPanel = Algorithm.getAdditionalPanels().get(Mediator.getAlgorithm());
 		objects = generationModel;
 		createWindow();
 		fillValues();
@@ -206,9 +202,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 			arguments.get(Consts.MAX_SZ).setValue(scaleSettings.getMaxZ());
 			relative.setSelected(positionSettings.isRelative());
 			setEqualScale(scaleSettings.isEqual());
-			for (Map.Entry<String, Double> i : objectInfo.getArgs().entrySet()) {
-				additionalArgs.get(i.getKey()).setValue(i.getValue());
-			}
+			additionalPanel.setArgs(objectInfo.getArgs());
 		} else {
 			boolean lastEqual = objects.get(0).getScaleSettings().isEqual();
 			boolean diff = false;
@@ -360,7 +354,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 				if (maxC.isModified()) {
 					i.setMaxCount(getIntValue(maxC.getValue()));
 				}
-				fillArgs(i);
+				additionalPanel.setArgs(i.getArgs());
 			}
 			dispose();
 		} else if (e.getSource().equals(cancel)) {
@@ -370,16 +364,6 @@ public class ModelWindow extends JFrame implements ActionListener {
 				showScaleSpinners(false);
 			} else {
 				showScaleSpinners(true);
-			}
-		}
-	}
-
-	private void fillArgs(ModelInfo i) {
-		for (Map.Entry<String, Spinner> e : additionalArgs.entrySet()) {
-			Spinner spinner = e.getValue();
-			String key = e.getKey();
-			if (spinner.isModified()) {
-				i.getArgs().put(key, (Double) spinner.getValue());
 			}
 		}
 	}

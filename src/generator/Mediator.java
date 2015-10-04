@@ -145,7 +145,7 @@ public class Mediator {
 		mapObject.setLightData(firstTabPanel.getLightSettings());
 		mapObject.setMaterial(firstTabPanel.getMaterial());
 		resultObject.getGenerationInfo().setModels(new ArrayList<>(models.values()));
-		resultObject.getGenerationInfo().setArgs(secondTabPanel.getAlgorithmArgs());
+		resultObject.getGenerationInfo().setArgs(secondTabPanel.getArgs());
 		try {
 			context = JAXBContext.newInstance("generator.models.result");
 			Marshaller marshaller = context.createMarshaller();
@@ -177,7 +177,7 @@ public class Mediator {
 		}
 		Map<String, Double> args = resultObject.getGenerationInfo().getArgs();
 		if (args != null) {
-			secondTabPanel.setAlgorithmArgs(args);
+			secondTabPanel.setArgs(args);
 		}
 		models.clear();
 		List<ModelInfo> objects = resultObject.getGenerationInfo().getModels();
@@ -365,7 +365,7 @@ public class Mediator {
 	}
 
 	public static Map<String, Double> getAlgorithmArgs() {
-		return secondTabPanel.getAlgorithmArgs();
+		return secondTabPanel.getArgs();
 	}
 
 	public static int find(int[] tab, int index) {
@@ -389,3 +389,4 @@ public class Mediator {
 // TODO mapa prawodpodobienstwa dla kazdego obiektu, pozycja 1 obiektu i
 // rozsiewanie, skupisko
 // TODO generator na siatce refularnej
+//TODO zapis i odczyt z paneli, static?
