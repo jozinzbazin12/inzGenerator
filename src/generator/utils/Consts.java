@@ -73,4 +73,7 @@ public class Consts {
 	public static final String MATERIAL_NS = "mns";
 	public static final String MIN_Y_HEIGHT = "minYH";
 	public static final String MAX_Y_HEIGHT = "maxYH";
+	public static final String AGGREGATION_CHANCE = "aggregationChance";
+	public static final String MAX_AGGREGATION_RANGE = "maxAggregationRange";
+	public static final String MIN_AGGREGATION_RANGE = "minAggregationRange";
 }

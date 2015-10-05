@@ -57,7 +57,9 @@ public final class ComponentUtil {
 				Number high = (Number) maxSpinner.getValue();
 				if (high.floatValue() < low.floatValue() && !minSpinner.isSilent()) {
 					maxSpinner.setValue(low);
-					maxSpinner.setModified(true);
+					if (maxSpinner.isListeningEnabled()) {
+						maxSpinner.setModified(true);
+					}
 				}
 			}
 		});
@@ -69,7 +71,9 @@ public final class ComponentUtil {
 				Number high = (Number) maxSpinner.getValue();
 				if (low.floatValue() > high.floatValue() && !maxSpinner.isSilent()) {
 					minSpinner.setValue(high);
-					minSpinner.setModified(true);
+					if (maxSpinner.isListeningEnabled()) {
+						minSpinner.setModified(true);
+					}
 				}
 			}
 		});

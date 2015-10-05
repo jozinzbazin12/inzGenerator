@@ -16,6 +16,7 @@ public class Spinner extends JSpinner {
 	private boolean modified = false;
 	private boolean listen = false;
 	private boolean silent = false;
+	private boolean listeningEnabled;
 
 	public Spinner(boolean listen) {
 		init(listen);
@@ -24,6 +25,7 @@ public class Spinner extends JSpinner {
 
 	public Spinner(SpinnerNumberModel spinnerNumberModel) {
 		super(spinnerNumberModel);
+		init(false);
 	}
 
 	public Spinner(SpinnerNumberModel spinnerNumberModel, boolean listen) {
@@ -41,6 +43,7 @@ public class Spinner extends JSpinner {
 	}
 
 	private void init(boolean enableListening) {
+		listeningEnabled = enableListening;
 		if (enableListening) {
 			addChangeListener(new ChangeListener() {
 
@@ -80,4 +83,9 @@ public class Spinner extends JSpinner {
 	public void setSilent(boolean silent) {
 		this.silent = silent;
 	}
+
+	public boolean isListeningEnabled() {
+		return listeningEnabled;
+	}
+
 }

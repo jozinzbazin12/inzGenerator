@@ -9,6 +9,7 @@ import generator.Mediator;
 import generator.algorithms.panels.additional.AlgorithmAdditionalPanel;
 import generator.algorithms.panels.additional.EmptyPanel;
 import generator.algorithms.panels.additional.HeightAlgorithmPanel;
+import generator.algorithms.panels.main.AggregationAlgorithmPanel;
 import generator.algorithms.panels.main.AlgorithmMainPanel;
 import generator.algorithms.panels.main.EmptyMainPanel;
 import generator.algorithms.panels.main.RegularAlgorithmMainPanel;
@@ -32,16 +33,19 @@ public abstract class Algorithm {
 		FullRandomAlgorithm randomAlgorithm = new FullRandomAlgorithm(Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
 		HeightAlgorithm height = new HeightAlgorithm(Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM));
 		RegularAlgorithm regularAlgorithm = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
+		AggregationAlgorithm aggregation = new AggregationAlgorithm(Mediator.getMessage(PropertiesKeys.AGGREGATION_ALGORITHM));
 
 		ADDITIONAL_PANELS.put(randomAlgorithm, emptyPanel);
 		ADDITIONAL_PANELS.put(regularAlgorithm, emptyPanel);
 		ADDITIONAL_PANELS.put(height, new HeightAlgorithmPanel());
+		ADDITIONAL_PANELS.put(aggregation, emptyPanel);
 
 		EmptyMainPanel emptyMainPanel = new EmptyMainPanel();
 		MAIN_PANELS = new HashMap<>();
 		MAIN_PANELS.put(randomAlgorithm, emptyMainPanel);
 		MAIN_PANELS.put(regularAlgorithm, new RegularAlgorithmMainPanel());
 		MAIN_PANELS.put(height, emptyMainPanel);
+		MAIN_PANELS.put(aggregation, new AggregationAlgorithmPanel());
 
 	}
 
@@ -90,6 +94,14 @@ public abstract class Algorithm {
 			return max;
 		}
 		return min + (max - min) * rnd.nextDouble();
+	}
+
+	protected double randomizeSquareDouble(double min, double max) {
+		return max - randomizeDouble(min, 2 * max);
+	}
+
+	protected int randomizeInt(int min, int max) {
+		return rnd.nextInt(min + max) + min;
 	}
 
 	protected abstract List<GeneratedObject> generationMethod(GenerationInfo info);

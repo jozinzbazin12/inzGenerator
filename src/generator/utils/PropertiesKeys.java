@@ -97,4 +97,8 @@ public final class PropertiesKeys {
 	public static final String HEIGHT_ALGORITHM = "algorithm.height";
 	public static final String HEIGHT_ALGORITHM_HELP = "algorithm.height.help";
 	public static final String HEIGHT_ALGORITHM_SETTINGS = "algorithm.settings.height";
+	public static final String AGGREGATION_ALGORITHM = "algorithm.aggregation";
+	public static final String AGGREGATION_ALGORITHM_HELP = "algorithm.aggregation.help";
+	public static final String AGGREGATION_CHANCE = "algotithm.settings.aggregation.chance";
+	public static final String AGGREGATION_RANGE = "algotihm.settings.aggregation.range";
 }
