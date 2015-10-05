@@ -20,12 +20,12 @@ import javax.swing.JTextField;
 import generator.Mediator;
 import generator.actions.model.LoadSingleModelAction;
 import generator.algorithms.Algorithm;
+import generator.algorithms.panels.additional.AlgorithmAdditionalPanel;
 import generator.models.generation.GenerationModel;
 import generator.models.generation.ModelInfo;
 import generator.models.generation.PositionSettings;
 import generator.models.generation.RotationSettings;
 import generator.models.generation.ScaleSettings;
-import generator.panels.AbstractPanel;
 import generator.utils.CheckBox;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
@@ -44,7 +44,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private JPanel spinnersZ;
 	private JPanel spinnersY;
 	private CheckBox relative;
-	private AbstractPanel additionalPanel;
+	private AlgorithmAdditionalPanel additionalPanel;
 
 	private void createWindow() {
 		setSize(1000, 600);
@@ -174,6 +174,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private void fillValues() {
 		if (objects.size() == 1) {
 			ModelInfo objectInfo = objects.get(0);
+			setSilent(true);
 			arguments.get(Consts.MIN_COUNT).setValue(objectInfo.getMinCount());
 			arguments.get(Consts.MAX_COUNT).setValue(objectInfo.getMaxCount());
 
@@ -202,6 +203,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 			arguments.get(Consts.MAX_SZ).setValue(scaleSettings.getMaxZ());
 			relative.setSelected(positionSettings.isRelative());
 			setEqualScale(scaleSettings.isEqual());
+			setSilent(false);
 			additionalPanel.setArgs(objectInfo.getArgs());
 		} else {
 			boolean lastEqual = objects.get(0).getScaleSettings().isEqual();
@@ -233,6 +235,12 @@ public class ModelWindow extends JFrame implements ActionListener {
 			if (!diff) {
 				relative.setSelected(objects.get(0).getPositionSettings().isRelative());
 			}
+		}
+	}
+
+	private void setSilent(boolean value) {
+		for (Map.Entry<String, Spinner> i : arguments.entrySet()) {
+			i.getValue().setSilent(value);
 		}
 	}
 
@@ -354,7 +362,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 				if (maxC.isModified()) {
 					i.setMaxCount(getIntValue(maxC.getValue()));
 				}
-				additionalPanel.setArgs(i.getArgs());
+				additionalPanel.getArgs(i.getArgs(), true);
 			}
 			dispose();
 		} else if (e.getSource().equals(cancel)) {
@@ -366,6 +374,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 				showScaleSpinners(true);
 			}
 		}
+		additionalPanel.delete(Mediator.getAlgorithm());
 	}
 
 	private int getIntValue(Object value) {

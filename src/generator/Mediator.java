@@ -391,4 +391,4 @@ public class Mediator {
 // TODO generator na siatce refularnej
 //TODO zapis i odczyt z paneli, static?
 //TODO obsluga sciezek relatywnych
-//TODO poprawic regularny
+//TODO sprawdzic wysokosc mapy w generatorze i wyswietlaczu

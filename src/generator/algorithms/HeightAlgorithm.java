@@ -53,11 +53,16 @@ public class HeightAlgorithm extends Algorithm {
 		double max = info.getArgs().get(Consts.MAX_Y_HEIGHT);
 		int minPos = find(min / yRatio);
 		int maxPos = find(max / yRatio);
-//		double min2 = incudedPoints.get(minPos).get(0).getY();
-//		double max2 = incudedPoints.get(maxPos).get(0).getY();
-//		if (min2 - min > yRatio || max2 - max > yRatio) {
-//			return null;
-//		}
+		// double min2 = incudedPoints.get(minPos).get(0).getY();
+		// double max2 = incudedPoints.get(maxPos).get(0).getY();
+		// if (min2 - min > yRatio || max2 - max > yRatio) {
+		// return null;
+		// }
+		if (maxPos < incudedPoints.size() - 1) {
+			maxPos++;
+		} else if (minPos > 1) {
+			minPos--;
+		}
 		List<List<HeightInfo>> list = incudedPoints.subList(minPos, maxPos);
 		List<HeightInfo> result = new ArrayList<>();
 		for (List<HeightInfo> i : list) {
@@ -70,7 +75,7 @@ public class HeightAlgorithm extends Algorithm {
 		int size = incudedPoints.size();
 		int pos = size / 2;
 		int lastPos = -1;
-		int sectionSize = size / 2;
+		int sectionSize = size / 4;
 		double y = incudedPoints.get(pos).get(0).getY();
 		while (y != v) {
 			if (y == v) {
@@ -112,15 +117,18 @@ public class HeightAlgorithm extends Algorithm {
 			if (heights != null) {
 				for (int i = 0; i < count; i++) {
 					BasicModelData obj = new BasicModelData();
-					HeightInfo height = heights.get((int) randomizeDouble(0, heights.size()));
-					double x = (height.getX() - Mediator.getMapDimensions().width / 2) * xRatio;
-					double z = (Mediator.getMapDimensions().height / 2 - height.getZ()) * zRatio;
-					obj.setPosition(x + randomizeDouble(-xRatio, xRatio), randomizeDouble(pos.getMinY(), pos.getMaxY()),
-							z + randomizeDouble(-zRatio, zRatio));
-					obj.setRelative(pos.isRelative());
-					setRotation(objInfo, obj);
-					setScale(objInfo, obj);
-					list.add(new GeneratedObject(objInfo.getModel(), obj));
+					int heightPos = (int) randomizeDouble(0, heights.size());
+					if (heightPos > 0) {
+						HeightInfo height = heights.get(heightPos);
+						double x = (height.getX() - Mediator.getMapDimensions().width / 2) * xRatio;
+						double z = (Mediator.getMapDimensions().height / 2 - height.getZ()) * zRatio;
+						obj.setPosition(x + randomizeDouble(-xRatio, xRatio), randomizeDouble(pos.getMinY(), pos.getMaxY()),
+								z + randomizeDouble(-zRatio, zRatio));
+						obj.setRelative(pos.isRelative());
+						setRotation(objInfo, obj);
+						setScale(objInfo, obj);
+						list.add(new GeneratedObject(objInfo.getModel(), obj));
+					}
 				}
 			}
 		}

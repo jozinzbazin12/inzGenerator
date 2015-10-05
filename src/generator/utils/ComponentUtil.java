@@ -55,8 +55,9 @@ public final class ComponentUtil {
 			public void stateChanged(ChangeEvent e) {
 				Number low = (Number) minSpinner.getValue();
 				Number high = (Number) maxSpinner.getValue();
-				if (high.floatValue() < low.floatValue()) {
+				if (high.floatValue() < low.floatValue() && !minSpinner.isSilent()) {
 					maxSpinner.setValue(low);
+					maxSpinner.setModified(true);
 				}
 			}
 		});
@@ -66,8 +67,9 @@ public final class ComponentUtil {
 			public void stateChanged(ChangeEvent e) {
 				Number low = (Number) minSpinner.getValue();
 				Number high = (Number) maxSpinner.getValue();
-				if (low.floatValue() > high.floatValue()) {
+				if (low.floatValue() > high.floatValue() && !maxSpinner.isSilent()) {
 					minSpinner.setValue(high);
+					minSpinner.setModified(true);
 				}
 			}
 		});

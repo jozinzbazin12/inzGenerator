@@ -15,6 +15,7 @@ public class Spinner extends JSpinner {
 	private static final long serialVersionUID = -2310738112100364004L;
 	private boolean modified = false;
 	private boolean listen = false;
+	private boolean silent = false;
 
 	public Spinner(boolean listen) {
 		init(listen);
@@ -45,7 +46,7 @@ public class Spinner extends JSpinner {
 
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					if (listen) {
+					if (listen && !silent) {
 						modified = true;
 						getParent().repaint();
 					}
@@ -72,4 +73,11 @@ public class Spinner extends JSpinner {
 		this.modified = modified;
 	}
 
+	public boolean isSilent() {
+		return silent;
+	}
+
+	public void setSilent(boolean silent) {
+		this.silent = silent;
+	}
 }

@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 import generator.utils.Spinner;
 
-public class AbstractPanel extends JPanel {
+public abstract class AbstractPanel extends JPanel {
 	private static final long serialVersionUID = -4327845537212042650L;
 	protected static final int MAX_POSITION = 10000;
 	protected Map<String, Spinner> arguments = new HashMap<>();
@@ -31,7 +31,10 @@ public class AbstractPanel extends JPanel {
 		for (Map.Entry<String, Spinner> i : arguments.entrySet()) {
 			Double value = args.get(i.getKey());
 			if (value != null) {
-				i.getValue().setValue(value);
+				Spinner spinner = i.getValue();
+				spinner.setSilent(true);
+				spinner.setValue(value);
+				spinner.setSilent(false);
 			}
 		}
 	}
@@ -47,4 +50,5 @@ public class AbstractPanel extends JPanel {
 		}
 		return result;
 	}
+
 }

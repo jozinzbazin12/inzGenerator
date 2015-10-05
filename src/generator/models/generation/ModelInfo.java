@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import generator.utils.Consts;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ModelInfo implements Comparable<ModelInfo> {
 	@XmlTransient
@@ -77,9 +79,16 @@ public class ModelInfo implements Comparable<ModelInfo> {
 		positionSettings = new PositionSettings();
 		scaleSettings = new ScaleSettings();
 		rotationSettings = new RotationSettings();
+		fillArgs();
+	}
+
+	private void fillArgs() {
+		args.put(Consts.MIN_Y_HEIGHT, 0D);
+		args.put(Consts.MAX_Y_HEIGHT, 0D);
 	}
 
 	public ModelInfo() {
+
 	}
 
 	public GenerationModel getModel() {

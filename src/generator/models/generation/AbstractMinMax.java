@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlAttribute;
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractMinMax {
 	@XmlAttribute(name = "minX")
-	private double minX;
+	protected double minX;
 	@XmlAttribute(name = "maxX")
-	private double maxX;
+	protected double maxX;
 	@XmlAttribute(name = "minY")
-	private double minY;
+	protected double minY;
 	@XmlAttribute(name = "maxY")
-	private double maxY;
+	protected double maxY;
 	@XmlAttribute(name = "minZ")
-	private double minZ;
+	protected double minZ;
 	@XmlAttribute(name = "maxZ")
-	private double maxZ;
+	protected double maxZ;
 
 	public AbstractMinMax(double minx, double maxx, double miny, double maxy, double minz, double maxz) {
 		minX = minx;

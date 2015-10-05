@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 
 import generator.Mediator;
+import generator.algorithms.panels.additional.AlgorithmAdditionalPanel;
 import generator.algorithms.panels.additional.EmptyPanel;
 import generator.algorithms.panels.additional.HeightAlgorithmPanel;
 import generator.algorithms.panels.main.AlgorithmMainPanel;
@@ -15,7 +16,6 @@ import generator.models.generation.GenerationInfo;
 import generator.models.generation.ModelInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
-import generator.panels.AbstractPanel;
 import generator.utils.PropertiesKeys;
 
 public abstract class Algorithm {
@@ -23,7 +23,7 @@ public abstract class Algorithm {
 	private final String helpKey;
 	private String name;
 	private static final Map<Algorithm, AlgorithmMainPanel> MAIN_PANELS;
-	private static final Map<Algorithm, AbstractPanel> ADDITIONAL_PANELS;
+	private static final Map<Algorithm, AlgorithmAdditionalPanel> ADDITIONAL_PANELS;
 
 	static {
 		EmptyPanel emptyPanel = new EmptyPanel();
@@ -108,7 +108,7 @@ public abstract class Algorithm {
 		return MAIN_PANELS;
 	}
 
-	public static Map<Algorithm, AbstractPanel> getAdditionalPanels() {
+	public static Map<Algorithm, AlgorithmAdditionalPanel> getAdditionalPanels() {
 		return ADDITIONAL_PANELS;
 	}
 
