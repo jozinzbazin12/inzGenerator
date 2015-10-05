@@ -28,7 +28,6 @@ public class RegularAlgorithm extends Algorithm {
 		double maxZ = info.getArgs().get(Consts.MAX_Z).doubleValue();
 		double width = maxZ - minZ;
 		double height = maxX - minX;
-		double ratio = width / height;
 
 		int count = 0;
 		List<Integer> counts = new ArrayList<>();
@@ -43,8 +42,9 @@ public class RegularAlgorithm extends Algorithm {
 			}
 		}
 
-		double dx = (width / Math.floor(Math.sqrt(count))) / ratio;
-		double dz = (height / Math.floor(Math.sqrt(count))) * ratio;
+		double floor = Math.floor(Math.sqrt(count)) - 1;
+		double dx = (width / floor);
+		double dz = (height / floor);
 		int actualCount = 0;
 		int modelNumber = 0;
 		ModelInfo objInfo;
@@ -58,9 +58,7 @@ public class RegularAlgorithm extends Algorithm {
 
 			BasicModelData obj = new BasicModelData();
 			PositionSettings positionSettings = objInfo.getPositionSettings();
-			obj.setPosition(actualMinX,
-					randomizeDouble(positionSettings.getMinY(), positionSettings.getMaxY()),
-					actualMinZ);
+			obj.setPosition(actualMinX, randomizeDouble(positionSettings.getMinY(), positionSettings.getMaxY()), actualMinZ);
 			obj.setRelative(positionSettings.isRelative());
 
 			setRotation(objInfo, obj);

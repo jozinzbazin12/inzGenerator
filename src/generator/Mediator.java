@@ -392,3 +392,5 @@ public class Mediator {
 //TODO zapis i odczyt z paneli, static?
 //TODO obsluga sciezek relatywnych
 //TODO sprawdzic wysokosc mapy w generatorze i wyswietlaczu
+//TODO sprawdzic niekwadratowe mapy
+//TODO algorytm regularny- obliczyc ilosc na prostokacie
