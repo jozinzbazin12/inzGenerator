@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import javax.swing.JPanel;
 
@@ -59,7 +58,7 @@ public class PreviewPanel extends JPanel {
 		currentPoint = new Point((getWidth() - getResizedWidth()) / 2, (getHeight() - getResizedHeight()) / 2);
 	}
 
-	public PreviewPanel(BufferedImage image) throws IOException {
+	public PreviewPanel(BufferedImage image) {
 		this.image = image;
 		ImageListener listener = new ImageListener(this);
 		addMouseMotionListener(listener);
@@ -102,5 +101,9 @@ public class PreviewPanel extends JPanel {
 
 	public void setZoom(double zoom) {
 		this.zoom = zoom;
+	}
+
+	public BufferedImage getImage() {
+		return image;
 	}
 }

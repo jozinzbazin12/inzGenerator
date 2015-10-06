@@ -264,4 +264,8 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	public double getMapMaxY() {
 		return previewPanel.getMaxY();
 	}
+
+	public BufferedImage getMap() {
+		return previewPanel.getImage();
+	}
 }

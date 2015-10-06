@@ -101,4 +101,7 @@ public final class PropertiesKeys {
 	public static final String AGGREGATION_ALGORITHM_HELP = "algorithm.aggregation.help";
 	public static final String AGGREGATION_CHANCE = "algotithm.settings.aggregation.chance";
 	public static final String AGGREGATION_RANGE = "algotihm.settings.aggregation.range";
+	public static final String MASK_FILE_NAME = "mask.file.name";
+	public static final String LOAD_MASK = "mask.load";
+	public static final String DELETE_MASK = "mask.delete";
 }

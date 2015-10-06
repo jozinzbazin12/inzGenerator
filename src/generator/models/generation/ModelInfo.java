@@ -1,5 +1,6 @@
 package generator.models.generation;
 
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,8 @@ import generator.utils.Consts;
 public class ModelInfo implements Comparable<ModelInfo> {
 	@XmlTransient
 	private GenerationModel model;
+	@XmlTransient
+	private BufferedImage mask;
 
 	@XmlAttribute(name = "minCount")
 	private int minCount;
@@ -29,6 +32,8 @@ public class ModelInfo implements Comparable<ModelInfo> {
 	private RotationSettings rotationSettings;
 	@XmlElement(name = "Args")
 	private Map<String, Double> args = new HashMap<>();
+	@XmlAttribute(name = "maskFile")
+	private String maskFile;
 
 	@XmlAttribute(name = "path")
 	private String getPath() {
@@ -140,5 +145,21 @@ public class ModelInfo implements Comparable<ModelInfo> {
 
 	public void setArgs(Map<String, Double> args) {
 		this.args = args;
+	}
+
+	public BufferedImage getMask() {
+		return mask;
+	}
+
+	public void setMask(BufferedImage mask) {
+		this.mask = mask;
+	}
+
+	public String getMaskFile() {
+		return maskFile;
+	}
+
+	public void setMaskFile(String maskFile) {
+		this.maskFile = maskFile;
 	}
 }

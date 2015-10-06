@@ -1,6 +1,7 @@
 package generator;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -384,13 +385,22 @@ public class Mediator {
 	public static double getMapMaxY() {
 		return thirdTabPanel.getMapMaxY();
 	}
+
+	public static BufferedImage getMapImage() {
+		return thirdTabPanel.getMap();
+	}
+
+	public static void setMask(String path) {
+		modelWindow.setMask(path);
+	}
 }
 // TODO nienachodzenie obiekow
 // TODO mapa prawodpodobienstwa dla kazdego obiektu, pozycja 1 obiektu i
 // rozsiewanie, skupisko
 // TODO generator na siatce refularnej
-//TODO zapis i odczyt z paneli, static?
-//TODO obsluga sciezek relatywnych
-//TODO sprawdzic wysokosc mapy w generatorze i wyswietlaczu
-//TODO sprawdzic niekwadratowe mapy
-//TODO algorytm regularny- obliczyc ilosc na prostokacie
+// TODO zapis i odczyt z paneli, static?
+// TODO obsluga sciezek relatywnych
+// TODO sprawdzic wysokosc mapy w generatorze i wyswietlaczu
+// TODO sprawdzic niekwadratowe mapy
+// TODO algorytm regularny- obliczyc ilosc na prostokacie
+// TODO nie uzywac mediatora w akcjach
