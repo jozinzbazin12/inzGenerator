@@ -1,9 +1,12 @@
 package generator.models.generation;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -18,7 +21,8 @@ public class ModelInfo implements Comparable<ModelInfo> {
 	private GenerationModel model;
 	@XmlTransient
 	private BufferedImage mask;
-
+	@XmlTransient
+	private String maskFile;
 	@XmlAttribute(name = "minCount")
 	private int minCount;
 	@XmlAttribute(name = "maxCount")
@@ -32,8 +36,20 @@ public class ModelInfo implements Comparable<ModelInfo> {
 	private RotationSettings rotationSettings;
 	@XmlElement(name = "Args")
 	private Map<String, Double> args = new HashMap<>();
+
 	@XmlAttribute(name = "maskFile")
-	private String maskFile;
+	public String getMaskFile() {
+		return maskFile;
+	}
+
+	public void setMaskFile(String maskFile) {
+		this.maskFile = maskFile;
+		try {
+			this.mask = ImageIO.read(new File(maskFile));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@XmlAttribute(name = "path")
 	private String getPath() {
@@ -153,13 +169,5 @@ public class ModelInfo implements Comparable<ModelInfo> {
 
 	public void setMask(BufferedImage mask) {
 		this.mask = mask;
-	}
-
-	public String getMaskFile() {
-		return maskFile;
-	}
-
-	public void setMaskFile(String maskFile) {
-		this.maskFile = maskFile;
 	}
 }

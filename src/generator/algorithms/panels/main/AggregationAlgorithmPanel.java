@@ -2,7 +2,6 @@ package generator.algorithms.panels.main;
 
 import java.awt.GridLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JSeparator;
 
 import generator.Mediator;
@@ -19,7 +18,6 @@ public class AggregationAlgorithmPanel extends AlgorithmMainPanel {
 		add(ComponentUtil.createSpinner(0, 100, Consts.AGGREGATION_CHANCE, Mediator.getMessage(PropertiesKeys.AGGREGATION_CHANCE),
 				arguments));
 		add(new JSeparator());
-		setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ADDITIONAL)));
 		add(ComponentUtil.createAtrributeLegendPanel());
 		add(ComponentUtil.createSpinner(0, MAX_POSITION, Consts.MIN_AGGREGATION_RANGE, Consts.MAX_AGGREGATION_RANGE,
 				Mediator.getMessage(PropertiesKeys.AGGREGATION_RANGE), arguments));

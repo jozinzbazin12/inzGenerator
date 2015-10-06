@@ -19,7 +19,6 @@ import generator.utils.PropertiesKeys;
 public class HeightAlgorithm extends Algorithm {
 
 	private List<List<HeightInfo>> incudedPoints = new ArrayList<>();
-	private double yRatio;
 
 	public HeightAlgorithm(String name) {
 		super(name, PropertiesKeys.HEIGHT_ALGORITHM_HELP);
@@ -27,15 +26,19 @@ public class HeightAlgorithm extends Algorithm {
 
 	private void findHeights(GenerationInfo info) {
 		Map<Double, List<HeightInfo>> heights = new HashMap<>();
-		for (int i = 0; i < Mediator.getMapDimensions().width; i++) {
-			for (int j = 0; j < Mediator.getMapDimensions().height; j++) {
-				double height = Mediator.getMapHeightAt(i, j);
-				List<HeightInfo> list = heights.get(height);
+		int width = Mediator.getMapDimensions().width;
+		int height = Mediator.getMapDimensions().height;
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				double y = Mediator.getMapHeightAt(i, j);
+				List<HeightInfo> list = heights.get(y);
 				if (list == null) {
 					list = new ArrayList<>();
-					heights.put(height, list);
+					heights.put(y, list);
 				}
-				list.add(new HeightInfo(i, height, j));
+				double x = (i - width / 2) * xRatio;
+				double z = (height / 2 - j) * zRatio;
+				list.add(new HeightInfo(x, y, z));
 			}
 		}
 		incudedPoints = new ArrayList<>(heights.values());
@@ -53,11 +56,6 @@ public class HeightAlgorithm extends Algorithm {
 		double max = info.getArgs().get(Consts.MAX_Y_HEIGHT);
 		int minPos = find(min / yRatio);
 		int maxPos = find(max / yRatio);
-		// double min2 = incudedPoints.get(minPos).get(0).getY();
-		// double max2 = incudedPoints.get(maxPos).get(0).getY();
-		// if (min2 - min > yRatio || max2 - max > yRatio) {
-		// return null;
-		// }
 		if (maxPos < incudedPoints.size() - 1) {
 			maxPos++;
 		} else if (minPos > 1) {
@@ -105,9 +103,6 @@ public class HeightAlgorithm extends Algorithm {
 
 	@Override
 	public List<GeneratedObject> generationMethod(GenerationInfo info) {
-		double xRatio = Mediator.getMapWidth() / Mediator.getMapDimensions().width;
-		double zRatio = Mediator.getMapHeight() / Mediator.getMapDimensions().height;
-		yRatio = Mediator.getMapMaxYSetting() / Mediator.getMapMaxY();
 		List<GeneratedObject> list = new ArrayList<GeneratedObject>();
 		findHeights(info);
 		for (ModelInfo objInfo : info.getModels()) {
@@ -119,11 +114,7 @@ public class HeightAlgorithm extends Algorithm {
 					BasicModelData obj = new BasicModelData();
 					int heightPos = (int) randomizeDouble(0, heights.size());
 					if (heightPos > 0) {
-						HeightInfo height = heights.get(heightPos);
-						double x = (height.getX() - Mediator.getMapDimensions().width / 2) * xRatio;
-						double z = (Mediator.getMapDimensions().height / 2 - height.getZ()) * zRatio;
-						obj.setPosition(x + randomizeDouble(-xRatio, xRatio), randomizeDouble(pos.getMinY(), pos.getMaxY()),
-								z + randomizeDouble(-zRatio, zRatio));
+						setPosition(pos, heights, obj, heightPos);
 						obj.setRelative(pos.isRelative());
 						setRotation(objInfo, obj);
 						setScale(objInfo, obj);

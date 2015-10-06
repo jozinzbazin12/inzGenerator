@@ -1,11 +1,14 @@
 package generator.algorithms;
 
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import generator.Mediator;
+import generator.algorithms.models.HeightInfo;
 import generator.algorithms.panels.additional.AlgorithmAdditionalPanel;
 import generator.algorithms.panels.additional.EmptyPanel;
 import generator.algorithms.panels.additional.HeightAlgorithmPanel;
@@ -15,14 +18,19 @@ import generator.algorithms.panels.main.EmptyMainPanel;
 import generator.algorithms.panels.main.RegularAlgorithmMainPanel;
 import generator.models.generation.GenerationInfo;
 import generator.models.generation.ModelInfo;
+import generator.models.generation.PositionSettings;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
+import generator.panels.PreviewPanel;
 import generator.utils.PropertiesKeys;
 
 public abstract class Algorithm {
 	private Random rnd = new Random();
 	private final String helpKey;
 	private String name;
+	protected double xRatio;
+	protected double zRatio;
+	protected double yRatio;
 	private static final Map<Algorithm, AlgorithmMainPanel> MAIN_PANELS;
 	private static final Map<Algorithm, AlgorithmAdditionalPanel> ADDITIONAL_PANELS;
 
@@ -104,9 +112,32 @@ public abstract class Algorithm {
 		return rnd.nextInt(min + max) + min;
 	}
 
+	protected List<HeightInfo> availableSpace(ModelInfo info) {
+		List<HeightInfo> list = new LinkedList<>();
+		BufferedImage mask = info.getMask();
+		int width = mask.getWidth();
+		int height = mask.getHeight();
+		double xr = Mediator.getMapWidth() / width;
+		double zr = Mediator.getMapHeight() / height;
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				double y = PreviewPanel.getColor(mask, i, j);
+				if (y >= 128) {
+					double x = (i - width / 2) * xr;
+					double z = (height / 2 - j) * zr;
+					list.add(new HeightInfo(x, y, z));
+				}
+			}
+		}
+		return list;
+	}
+
 	protected abstract List<GeneratedObject> generationMethod(GenerationInfo info);
 
 	public List<GeneratedObject> generate(GenerationInfo info) {
+		xRatio = Mediator.getMapWidth() / Mediator.getMapDimensions().width;
+		zRatio = Mediator.getMapHeight() / Mediator.getMapDimensions().height;
+		yRatio = Mediator.getMapMaxYSetting() / Mediator.getMapMaxY();
 		List<GeneratedObject> result = generationMethod(info);
 		Mediator.updateModels(result);
 		return result;
@@ -122,6 +153,12 @@ public abstract class Algorithm {
 
 	public static Map<Algorithm, AlgorithmAdditionalPanel> getAdditionalPanels() {
 		return ADDITIONAL_PANELS;
+	}
+
+	protected void setPosition(PositionSettings pos, List<HeightInfo> heights, BasicModelData obj, int heightPos) {
+		HeightInfo height = heights.get(heightPos);
+		obj.setPosition(height.getX(), randomizeDouble(pos.getMinY(), pos.getMaxY()),
+				height.getZ() + randomizeDouble(-zRatio, zRatio));
 	}
 
 }

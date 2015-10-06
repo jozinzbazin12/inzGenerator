@@ -1,21 +1,21 @@
 package generator.algorithms.models;
 
 public class HeightInfo implements Comparable<HeightInfo> {
-	private int x;
-	private int z;
+	private double x;
+	private double z;
 	private double y;
 
-	public HeightInfo(int x, double y, int z) {
+	public HeightInfo(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
-	public int getZ() {
+	public double getZ() {
 		return z;
 	}
 

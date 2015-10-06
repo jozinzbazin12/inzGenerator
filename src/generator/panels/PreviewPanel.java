@@ -68,7 +68,11 @@ public class PreviewPanel extends JPanel {
 	}
 
 	public int getColor(int x, int y) {
-		int rgb = image.getRGB(x, y);
+		return getColor(image, x, y);
+	}
+
+	public static int getColor(BufferedImage img, int x, int y) {
+		int rgb = img.getRGB(x, y);
 		int r = (rgb >> 16) & 0x000000FF;
 		int g = (rgb >> 8) & 0x000000FF;
 		int b = (rgb) & 0x000000FF;

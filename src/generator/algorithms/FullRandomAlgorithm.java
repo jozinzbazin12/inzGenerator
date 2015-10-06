@@ -1,8 +1,10 @@
 package generator.algorithms;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import generator.algorithms.models.HeightInfo;
 import generator.models.generation.GenerationInfo;
 import generator.models.generation.ModelInfo;
 import generator.models.generation.PositionSettings;
@@ -22,13 +24,21 @@ public class FullRandomAlgorithm extends Algorithm {
 
 		for (ModelInfo objInfo : info.getModels()) {
 			int count = getCount(objInfo);
+			BufferedImage mask = objInfo.getMask();
+			List<HeightInfo> positions = null;
+			if (mask != null) {
+				positions = availableSpace(objInfo);
+			}
 			for (int i = 0; i < count; i++) {
 				BasicModelData obj = new BasicModelData();
-				PositionSettings positionSettings = objInfo.getPositionSettings();
-				obj.setPosition(randomizeDouble(positionSettings.getMinX(), positionSettings.getMaxX()),
-						randomizeDouble(positionSettings.getMinY(), positionSettings.getMaxY()),
-						randomizeDouble(positionSettings.getMinZ(), positionSettings.getMaxZ()));
-				obj.setRelative(positionSettings.isRelative());
+				PositionSettings pos = objInfo.getPositionSettings();
+				if (positions != null && !positions.isEmpty()) {
+					setPosition(pos, positions, obj, randomizeInt(0, positions.size()));
+				} else {
+					obj.setPosition(randomizeDouble(pos.getMinX(), pos.getMaxX()), randomizeDouble(pos.getMinY(), pos.getMaxY()),
+							randomizeDouble(pos.getMinZ(), pos.getMaxZ()));
+				}
+				obj.setRelative(pos.isRelative());
 
 				setRotation(objInfo, obj);
 				setScale(objInfo, obj);
