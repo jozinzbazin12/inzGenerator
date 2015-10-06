@@ -33,17 +33,18 @@ import generator.models.result.RGBA;
 import generator.models.result.Texture;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
+import generator.utils.Label;
 import generator.utils.PropertiesKeys;
 import generator.utils.Spinner;
 
 public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	private static final long serialVersionUID = -2087487239161953473L;
 
-	private JLabel mapLabel;
-	private JLabel mapWidthLabel;
-	private JLabel mapHeightLabel;
+	private Label mapLabel;
+	private Label mapWidthLabel;
+	private Label mapHeightLabel;
 	private JPopupMenu menu;
-	private JLabel texturePath;
+	private Label texturePath;
 	private JPanel texture;
 
 	public String getMapName() {
@@ -66,15 +67,15 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		JPanel options = new JPanel();
 		options.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_OPTIONS_BORDER)));
 		options.setLayout(new GridLayout(15, 0, 5, 5));
-		mapLabel = new JLabel();
+		mapLabel = new Label();
 		mapLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_BORDER)));
 		options.add(mapLabel);
 		JPanel size = new JPanel();
 		size.setLayout(new GridLayout(0, 2));
-		mapWidthLabel = new JLabel();
+		mapWidthLabel = new Label();
 		mapWidthLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.WIDTH)));
 		size.add(mapWidthLabel);
-		mapHeightLabel = new JLabel();
+		mapHeightLabel = new Label();
 		mapHeightLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.HEIGHT)));
 		size.add(mapHeightLabel);
 		options.add(size);
@@ -122,7 +123,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		JPanel lightLegend = new JPanel();
 		lightLegend.setLayout(new GridLayout(0, 5));
 		addRGBLegend(lightLegend);
-		lightLegend.add(new JLabel("A", SwingConstants.CENTER));
+		lightLegend.add(new Label("A", SwingConstants.CENTER));
 		return lightLegend;
 	}
 
@@ -134,10 +135,10 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	}
 
 	private void addRGBLegend(JPanel lightLegend) {
-		lightLegend.add(new JLabel());
-		lightLegend.add(new JLabel("R", SwingConstants.CENTER));
-		lightLegend.add(new JLabel("G", SwingConstants.CENTER));
-		lightLegend.add(new JLabel("B", SwingConstants.CENTER));
+		lightLegend.add(new Label());
+		lightLegend.add(new Label("R", SwingConstants.CENTER));
+		lightLegend.add(new Label("G", SwingConstants.CENTER));
+		lightLegend.add(new Label("B", SwingConstants.CENTER));
 	}
 
 	private void createTextureOptionsPanel() {
@@ -146,7 +147,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 
 		textureOptions.setLayout(new GridLayout(15, 0, 5, 5));
 
-		texturePath = new JLabel();
+		texturePath = new Label();
 		texturePath.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE_PATH)));
 		textureOptions.add(texturePath);
 
@@ -158,7 +159,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		textureOptions.add(ComponentUtil.createSpinner(0.01, 9999, Consts.SCALE,
 				Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE), 1, arguments));
 
-		textureOptions.add(new JLabel(Mediator.getMessage(PropertiesKeys.MATERIAL), SwingConstants.CENTER));
+		textureOptions.add(new Label(Mediator.getMessage(PropertiesKeys.MATERIAL), SwingConstants.CENTER));
 		textureOptions.add(createMaterialsSettingsTitle());
 		textureOptions.add(createMaterialSpinners(0, 1, Consts.MATERIAL_AMBIENT_R, Consts.MATERIAL_AMBIENT_G,
 				Consts.MATERIAL_AMBIENT_B, Mediator.getMessage(PropertiesKeys.AMBIENT), 0.5));

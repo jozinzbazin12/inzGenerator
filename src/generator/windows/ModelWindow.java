@@ -18,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -37,6 +36,7 @@ import generator.panels.MaskPreviewPanel;
 import generator.utils.CheckBox;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
+import generator.utils.Label;
 import generator.utils.PropertiesKeys;
 import generator.utils.Spinner;
 
@@ -46,7 +46,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private JButton cancel;
 	private JButton ok;
 	private List<ModelInfo> objects;
-	private JLabel fileName;
+	private Label fileName;
 	private JTextField pathField;
 	private CheckBox equalScale;
 	private JPanel spinnersZ;
@@ -54,7 +54,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private CheckBox relative;
 	private AlgorithmAdditionalPanel additionalPanel;
 	private MaskPreviewPanel preview;
-	private JLabel maskName;
+	private Label maskName;
 	private boolean maskChanged;
 
 	private void createWindow() {
@@ -157,7 +157,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 	private JPanel createMaskOptionsPanel() {
 		JPanel maskOptions = new JPanel();
-		maskName = new JLabel();
+		maskName = new Label();
 		maskOptions.setLayout(new GridLayout(0, 3, 5, 5));
 		ModelInfo modelInfo = objects.get(0);
 		String maskFile = modelInfo.getMaskFile();
@@ -201,7 +201,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 		fileOptions.setLayout(new GridLayout(0, 3, 5, 5));
 		// fileOptions.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.FILE_MENU)));
 		if (objects.size() == 1) {
-			fileName = new JLabel(objects.get(0).getModel().getName());
+			fileName = new Label(objects.get(0).getModel().getName());
 			pathField = new JTextField(objects.get(0).getModel().getPath());
 		} else {
 			StringBuilder str = new StringBuilder();
@@ -210,7 +210,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 				str.append(", ");
 			}
 			str.deleteCharAt(str.length() - 2);
-			fileName = new JLabel(str.toString());
+			fileName = new Label(str.toString());
 			pathField = new JTextField();
 			pathField.setEnabled(false);
 		}

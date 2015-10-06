@@ -4,10 +4,11 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
+
+import generator.utils.Label;
 
 public class CellRenderer implements TableCellRenderer {
 
@@ -17,7 +18,7 @@ public class CellRenderer implements TableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object txt, boolean isSelected, boolean hasFocus, int row,
 			int column) {
-		JLabel label = new JLabel(txt.toString(), SwingConstants.CENTER);
+		Label label = new Label(txt.toString(), SwingConstants.CENTER);
 		setColor(isSelected, row, table, label);
 		label.setOpaque(true);
 		return label;
