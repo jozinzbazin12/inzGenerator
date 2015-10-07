@@ -104,4 +104,6 @@ public final class PropertiesKeys {
 	public static final String MASK_FILE_NAME = "mask.file.name";
 	public static final String LOAD_MASK = "mask.load";
 	public static final String DELETE_MASK = "mask.delete";
+	public static final String WARNING = "window.warning.title";
+	public static final String INFO = "window.information.title";
 }

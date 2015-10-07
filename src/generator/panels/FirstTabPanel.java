@@ -14,9 +14,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SpinnerNumberModel;
@@ -36,6 +34,7 @@ import generator.utils.Consts;
 import generator.utils.Label;
 import generator.utils.PropertiesKeys;
 import generator.utils.Spinner;
+import generator.utils.WindowUtil;
 
 public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	private static final long serialVersionUID = -2087487239161953473L;
@@ -401,8 +400,8 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 			texture.add(new PreviewPanel(pic));
 			texturePath.setText(path);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(new JFrame(), Mediator.getMessage(PropertiesKeys.FILE_NOT_IMAGE),
-					Mediator.getMessage(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
+			WindowUtil.displayError(PropertiesKeys.FILE_NOT_IMAGE);
+			e.printStackTrace();
 		}
 
 	}

@@ -18,7 +18,6 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -37,11 +36,14 @@ import generator.panels.FirstTabPanel;
 import generator.panels.SecondTabPanel;
 import generator.panels.ThirdTabPanel;
 import generator.utils.PropertiesKeys;
+import generator.utils.WindowUtil;
 import generator.windows.MainWindow;
 import generator.windows.ModelWindow;
 import generator.windows.ObjectWindow;
 
 public class Mediator {
+	private static final String GENERATOR_MODELS_RESULT = "generator.models.result";
+	private static final String XML = ".xml";
 	private static final String PROPERTIES_FILE = "config.properties";
 	private static final String LANGUAGE_KEY = "language";
 	private static MainWindow mainWindow;
@@ -87,8 +89,7 @@ public class Mediator {
 	public static void changeLocale(Locale locale) {
 		properties.setProperty(LANGUAGE_KEY, locale.getLanguage());
 		try {
-			int dialogResult = JOptionPane.showConfirmDialog(null, getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING),
-					getMessage(PropertiesKeys.CHANGE_LANGUAGE_WARNING), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			int dialogResult = WindowUtil.displayConfirm(PropertiesKeys.CHANGE_LANGUAGE_WARNING);
 			if (dialogResult == JOptionPane.YES_OPTION) {
 				saveProperties();
 				mainWindow.dispose();
@@ -109,8 +110,7 @@ public class Mediator {
 			resultObject.getMapObject().setMapFileName(path);
 			mainWindow.getContentPane().revalidate();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.FILE_NOT_IMAGE),
-					getMessage(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
+			WindowUtil.displayError(PropertiesKeys.FILE_NOT_IMAGE);
 		}
 		Dimension imageSize = thirdTabPanel.getImageSize();
 		return imageSize;
@@ -143,17 +143,15 @@ public class Mediator {
 		resultObject.getGenerationInfo().setModels(new ArrayList<>(models.values()));
 		resultObject.getGenerationInfo().setArgs(secondTabPanel.getArgs());
 		try {
-			context = JAXBContext.newInstance("generator.models.result");
+			context = JAXBContext.newInstance(GENERATOR_MODELS_RESULT);
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			FileOutputStream os = new FileOutputStream(new File(name.endsWith(".xml") ? name : name + ".xml"));
+			FileOutputStream os = new FileOutputStream(new File(name.endsWith(XML) ? name : name + XML));
 			marshaller.marshal(resultObject, os);
 			os.close();
-			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.SAVE_XML_SUCCESS),
-					getMessage(PropertiesKeys.SAVE_XML_SUCCESS), JOptionPane.INFORMATION_MESSAGE);
+			WindowUtil.displayInfo(PropertiesKeys.SAVE_XML_SUCCESS);
 		} catch (JAXBException | IOException e) {
-			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.SAVE_XML_ERROR),
-					getMessage(PropertiesKeys.SAVE_XML_ERROR), JOptionPane.ERROR_MESSAGE);
+			WindowUtil.displayError(PropertiesKeys.SAVE_XML_ERROR);
 			e.printStackTrace();
 		}
 	}
@@ -162,12 +160,11 @@ public class Mediator {
 		File file = new File(name);
 		JAXBContext context;
 		try {
-			context = JAXBContext.newInstance("generator.models.result");
+			context = JAXBContext.newInstance(GENERATOR_MODELS_RESULT);
 			Unmarshaller um = context.createUnmarshaller();
 			resultObject = (ResultObject) um.unmarshal(file);
 		} catch (JAXBException e) {
-			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.LOAD_XML_ERROR),
-					getMessage(PropertiesKeys.LOAD_XML_ERROR), JOptionPane.ERROR_MESSAGE);
+			WindowUtil.displayError(PropertiesKeys.LOAD_XML_ERROR);
 			e.printStackTrace();
 			return;
 		}
@@ -202,8 +199,7 @@ public class Mediator {
 		try {
 			thirdTabPanel.addPreview(mapObject.getMapFileName());
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.FILE_NOT_IMAGE),
-					getMessage(PropertiesKeys.SAVE_XML_ERROR), JOptionPane.ERROR_MESSAGE);
+			WindowUtil.displayError(PropertiesKeys.FILE_NOT_IMAGE);
 			e.printStackTrace();
 		}
 		firstTabPanel.setMapObject(mapObject);
@@ -375,7 +371,6 @@ public class Mediator {
 // TODO mapa prawodpodobienstwa dla kazdego obiektu, pozycja 1 obiektu i
 // rozsiewanie, skupisko
 // TODO generator na siatce refularnej
-// TODO zapis i odczyt z paneli, static?
 // TODO obsluga sciezek relatywnych
 // TODO sprawdzic wysokosc mapy w generatorze i wyswietlaczu
 // TODO sprawdzic niekwadratowe mapy
