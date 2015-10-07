@@ -157,7 +157,7 @@ public abstract class Algorithm {
 
 	protected void setPosition(PositionSettings pos, List<HeightInfo> heights, BasicModelData obj, int heightPos) {
 		HeightInfo height = heights.get(heightPos);
-		obj.setPosition(height.getX(), randomizeDouble(pos.getMinY(), pos.getMaxY()),
+		obj.setPosition(height.getX() + randomizeDouble(-xRatio, xRatio), randomizeDouble(pos.getMinY(), pos.getMaxY()),
 				height.getZ() + randomizeDouble(-zRatio, zRatio));
 	}
 

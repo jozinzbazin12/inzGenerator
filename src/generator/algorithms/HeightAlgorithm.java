@@ -3,6 +3,7 @@ package generator.algorithms;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,10 +62,23 @@ public class HeightAlgorithm extends Algorithm {
 		} else if (minPos > 1) {
 			minPos--;
 		}
+
 		List<List<HeightInfo>> list = incudedPoints.subList(minPos, maxPos);
 		List<HeightInfo> result = new ArrayList<>();
 		for (List<HeightInfo> i : list) {
 			result.addAll(i);
+		}
+		if (info.getMask() != null) {
+			List<HeightInfo> availableSpace = availableSpace(info);
+			List<HeightInfo> result2 = new LinkedList<>();
+			if (!availableSpace.isEmpty()) {
+				for (HeightInfo i : availableSpace) {
+					if (result.contains(i)) {
+						result2.add(i);
+					}
+				}
+			}
+			return result2;
 		}
 		return result;
 	}

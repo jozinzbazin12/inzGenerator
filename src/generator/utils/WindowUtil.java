@@ -8,7 +8,7 @@ import generator.Mediator;
 public final class WindowUtil {
 
 	public static void displayInfo(String messageKey) {
-		displayInfo(messageKey, PropertiesKeys.INFO);
+		displayInfo(PropertiesKeys.INFO, messageKey);
 	}
 
 	public static void displayInfo(String titleKey, String messageKey) {
@@ -22,7 +22,7 @@ public final class WindowUtil {
 	}
 
 	public static void displayError(String messageKey) {
-		displayError(messageKey, PropertiesKeys.ERROR_WINDOW_TITLE);
+		displayError(PropertiesKeys.ERROR_WINDOW_TITLE, messageKey);
 	}
 
 	public static int displayConfirm(String titleKey, String messageKey) {
@@ -31,6 +31,6 @@ public final class WindowUtil {
 	}
 
 	public static int displayConfirm(String messageKey) {
-		return displayConfirm(messageKey, PropertiesKeys.WARNING);
+		return displayConfirm(PropertiesKeys.WARNING, messageKey);
 	}
 }

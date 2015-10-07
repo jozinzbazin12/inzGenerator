@@ -1,16 +1,17 @@
 package generator.listeners;
 
-import generator.Mediator;
-import generator.models.result.GeneratedObject;
-import generator.panels.ObjectsPreviewPanel;
-import generator.panels.PreviewPanel;
-
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+
+import generator.Mediator;
+import generator.models.result.GeneratedObject;
+import generator.panels.ObjectsPreviewPanel;
+import generator.panels.PreviewPanel;
 
 public class ImageListener extends MouseAdapter {
 	private PreviewPanel panel;
@@ -20,8 +21,9 @@ public class ImageListener extends MouseAdapter {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (SwingUtilities.isRightMouseButton(e)) {
-			panel.getPreviousPoint().x = e.getX();
-			panel.getPreviousPoint().y = e.getY();
+			Point previousPoint = panel.getPreviousPoint();
+			previousPoint.x = e.getX();
+			previousPoint.y = e.getY();
 		}
 		if (SwingUtilities.isMiddleMouseButton(e)) {
 			panel.setDefaultZoom();
@@ -35,10 +37,13 @@ public class ImageListener extends MouseAdapter {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		Point currentPoint = panel.getCurrentPoint();
 		if (SwingUtilities.isRightMouseButton(e) && e.getX() > 0 && e.getY() > 0 && e.getX() < panel.getWidth()
 				&& e.getY() < panel.getHeight()) {
-			panel.getCurrentPoint().x += (e.getPoint().x - panel.getPreviousPoint().x) / 20;
-			panel.getCurrentPoint().y += (e.getPoint().y - panel.getPreviousPoint().y) / 20;
+			Point previousPoint = panel.getPreviousPoint();
+			currentPoint.x += e.getPoint().x - previousPoint.x;
+			currentPoint.y += e.getPoint().y - previousPoint.y;
+			panel.setPreviousPoint(e.getPoint());
 		}
 		if (e.getSource() instanceof JComponent) {
 			((JComponent) e.getSource()).repaint();
@@ -48,12 +53,11 @@ public class ImageListener extends MouseAdapter {
 			int mapWidth = Mediator.getMapDimensions().width;
 			int mapHeight = Mediator.getMapDimensions().height;
 			currentObject.getBasic()
-					.setX((Mediator.getMapWidth()
-							* (-2 * e.getX() + panel.getZoom() * mapWidth + 2 * panel.getCurrentPoint().x + mapWidth))
+					.setX((Mediator.getMapWidth() * (-2 * e.getX() + panel.getZoom() * mapWidth + 2 * currentPoint.x + mapWidth))
 							/ (-2 * mapWidth * (panel.getZoom() + 1)));
 			currentObject.getBasic()
 					.setZ((Mediator.getMapHeight()
-							* (-2 * e.getY() + panel.getZoom() * mapHeight + 2 * panel.getCurrentPoint().y + mapHeight))
+							* (-2 * e.getY() + panel.getZoom() * mapHeight + 2 * currentPoint.y + mapHeight))
 							/ (2 * mapHeight * (panel.getZoom() + 1)));
 			Mediator.setClicked(currentObject);
 			panel.repaint();
@@ -62,7 +66,7 @@ public class ImageListener extends MouseAdapter {
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		panel.setZoom(panel.getZoom() - e.getUnitsToScroll() / 250d);
+		panel.setZoom(panel.getZoom() - e.getUnitsToScroll() / 100d);
 		if (e.getSource() instanceof JComponent) {
 			((JComponent) e.getSource()).repaint();
 		}

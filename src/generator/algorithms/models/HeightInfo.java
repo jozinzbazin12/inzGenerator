@@ -1,6 +1,7 @@
 package generator.algorithms.models;
 
 public class HeightInfo implements Comparable<HeightInfo> {
+	private static final double THRESHOLD = 1;
 	private double x;
 	private double z;
 	private double y;
@@ -21,6 +22,15 @@ public class HeightInfo implements Comparable<HeightInfo> {
 
 	public double getY() {
 		return y;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof HeightInfo)) {
+			return false;
+		}
+		HeightInfo obj = (HeightInfo) object;
+		return Math.abs(obj.x - x) < THRESHOLD && Math.abs(obj.z - z) < THRESHOLD;
 	}
 
 	@Override
