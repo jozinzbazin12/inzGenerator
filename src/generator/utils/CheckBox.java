@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.Action;
 import javax.swing.JCheckBox;
 
 public class CheckBox extends JCheckBox {
@@ -47,19 +46,32 @@ public class CheckBox extends JCheckBox {
 		addListener();
 	}
 
-	public CheckBox(Action a) {
-		super(a);
-		addListener();
-	}
-
 	public CheckBox(String text, boolean selected) {
 		super(text, selected);
-		addListener();
+		init(text);
 	}
 
 	public CheckBox(String text) {
 		super(text);
+		init(text);
+	}
+
+	public CheckBox(String text, String tooltip) {
+		super(text);
+		init(text, tooltip);
+	}
+
+	private void init(String text) {
+		init(text, (String) null);
+	}
+
+	private void init(String text, String tooltip) {
 		addListener();
+		if (tooltip != null) {
+			setToolTipText(tooltip);
+		} else {
+			setToolTipText(text);
+		}
 	}
 
 	public boolean isModified() {

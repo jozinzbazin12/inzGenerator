@@ -3,9 +3,9 @@ package generator.utils;
 import java.awt.GridLayout;
 import java.util.Map;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -13,14 +13,28 @@ import generator.Mediator;
 
 public final class ComponentUtil {
 
+	public static JPanel createDoubleLegendPanel() {
+		JPanel legendPanel = new JPanel();
+		legendPanel.setLayout(new GridLayout(0, 2));
+		Label attributelabel = new Label(Mediator.getMessage(PropertiesKeys.ATTRIBUTE),
+				Mediator.getMessage(PropertiesKeys.ATTRIBUTE_TOOLTIP));
+		legendPanel.add(attributelabel);
+		Label valueLabel = new Label(Mediator.getMessage(PropertiesKeys.VALUE), Mediator.getMessage(PropertiesKeys.VALUE_TOOLTIP),
+				SwingConstants.CENTER);
+		legendPanel.add(attributelabel);
+		legendPanel.add(valueLabel);
+		return legendPanel;
+	}
+
 	public static JPanel createAtrributeLegendPanel() {
 		JPanel legendPanel = new JPanel();
 		legendPanel.setLayout(new GridLayout(0, 3));
-		JLabel attributelabel = new JLabel(Mediator.getMessage(PropertiesKeys.ATTRIBUTE));
+		Label attributelabel = new Label(Mediator.getMessage(PropertiesKeys.ATTRIBUTE),
+				Mediator.getMessage(PropertiesKeys.ATTRIBUTE_TOOLTIP));
 		legendPanel.add(attributelabel);
-		JLabel minLabel = new JLabel(Mediator.getMessage(PropertiesKeys.MIN));
+		Label minLabel = new Label(Mediator.getMessage(PropertiesKeys.MIN), Mediator.getMessage(PropertiesKeys.MIN_TOOLTIP));
 		legendPanel.add(attributelabel);
-		JLabel maxLabel = new JLabel(Mediator.getMessage(PropertiesKeys.MAX));
+		Label maxLabel = new Label(Mediator.getMessage(PropertiesKeys.MIN), Mediator.getMessage(PropertiesKeys.MAX_TOOLTIP));
 		legendPanel.add(attributelabel);
 		legendPanel.add(minLabel);
 		legendPanel.add(maxLabel);
@@ -28,10 +42,10 @@ public final class ComponentUtil {
 	}
 
 	public static JPanel createSpinner(double min, double max, String key, String description, double defValue,
-			Map<String, Spinner> arguments, boolean listen) {
+			Map<String, Spinner> arguments, String tooltip, boolean listen) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
-		JLabel attributelabel = new JLabel(description);
+		Label attributelabel = new Label(description, tooltip);
 		panel.add(attributelabel);
 		Spinner spinner = new Spinner(new SpinnerNumberModel(defValue, min, max, 1), listen);
 		panel.add(attributelabel);
@@ -41,10 +55,10 @@ public final class ComponentUtil {
 	}
 
 	public static JPanel createSpinner(double min, double max, String key1, String key2, String description,
-			Map<String, Spinner> arguments, boolean listen) {
+			Map<String, Spinner> arguments, String tooltip, boolean listen) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 3));
-		JLabel attributelabel = new JLabel(description);
+		Label attributelabel = new Label(description, tooltip);
 		panel.add(attributelabel);
 		Spinner minSpinner = new Spinner(new SpinnerNumberModel(0.0, min, max, 1), listen);
 		panel.add(attributelabel);
@@ -87,7 +101,7 @@ public final class ComponentUtil {
 
 	public static JPanel createSpinner(double min, double max, String key1, String key2, String description,
 			Map<String, Spinner> arguments) {
-		return createSpinner(min, max, key1, key2, description, arguments, false);
+		return createSpinner(min, max, key1, key2, description, arguments, null, false);
 	}
 
 	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Spinner> arguments) {
@@ -96,11 +110,78 @@ public final class ComponentUtil {
 
 	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Spinner> arguments,
 			boolean listen) {
-		return createSpinner(min, max, key, description, 0.0, arguments, listen);
+		return createSpinner(min, max, key, description, 0.0, arguments, null, listen);
 	}
 
 	public static JPanel createSpinner(double min, double max, String key, String description, double defValue,
 			Map<String, Spinner> arguments) {
-		return createSpinner(min, max, key, description, defValue, arguments, false);
+		return createSpinner(min, max, key, description, defValue, arguments, null, false);
 	}
+
+	public static JPanel createSpinner(double min, double max, String key1, String key2, String description,
+			Map<String, Spinner> arguments, String tooltip) {
+		return createSpinner(min, max, key1, key2, description, arguments, null, false);
+	}
+
+	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Spinner> arguments,
+			String tooltip, boolean listen) {
+		return createSpinner(min, max, key, description, 0.0, arguments, tooltip, listen);
+	}
+
+	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Spinner> arguments,
+			String tooltip) {
+		return createSpinner(min, max, key, description, 0.0, arguments, tooltip, false);
+	}
+
+	public static JPanel createSpinner(double min, double max, String key, String description, double defValue,
+			Map<String, Spinner> arguments, String tooltip) {
+		return createSpinner(min, max, key, description, defValue, arguments, tooltip, false);
+	}
+
+	public static JPanel createSpinner(int min, int max, String minCount, String maxCount, String message,
+			Map<String, Spinner> arguments, boolean listen) {
+		return createSpinner(min, max, minCount, maxCount, message, arguments, null, listen);
+	}
+
+	public static JPanel createLightSpinners(double min, double max, String keyR, String keyG, String keyB, String keyA,
+			String description, String tooltip, double defValue, Map<String, Spinner> arguments) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(0, 5));
+		Label attributelabel = new Label(description, tooltip);
+		panel.add(attributelabel);
+		Spinner spinnerR = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		Spinner spinnerG = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		Spinner spinnerB = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		Spinner spinnerA = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		panel.add(attributelabel);
+		panel.add(spinnerR);
+		panel.add(spinnerG);
+		panel.add(spinnerB);
+		panel.add(spinnerA);
+		arguments.put(keyR, spinnerR);
+		arguments.put(keyG, spinnerG);
+		arguments.put(keyB, spinnerB);
+		arguments.put(keyA, spinnerA);
+		return panel;
+	}
+
+	public static JPanel createMaterialSpinners(double min, double max, String keyR, String keyG, String keyB, String description,
+			String tooltip, double defValue, Map<String, Spinner> arguments) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(0, 4));
+		Label attributelabel = new Label(description, tooltip);
+		panel.add(attributelabel);
+		Spinner spinnerR = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		Spinner spinnerG = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		Spinner spinnerB = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
+		panel.add(attributelabel);
+		panel.add(spinnerR);
+		panel.add(spinnerG);
+		panel.add(spinnerB);
+		arguments.put(keyR, spinnerR);
+		arguments.put(keyG, spinnerG);
+		arguments.put(keyB, spinnerB);
+		return panel;
+	}
+
 }

@@ -116,9 +116,11 @@ public class ModelWindow extends JFrame implements ActionListener {
 		panel.add(fileOptions);
 
 		JPanel additional = new JPanel(new GridLayout(0, 2));
-		relative = new CheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE));
+		relative = new CheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE),
+				Mediator.getMessage(PropertiesKeys.RELATIVE_TOOLTIP));
 		additional.add(relative);
-		equalScale = new CheckBox(Mediator.getMessage(PropertiesKeys.EQUAL_SCALE));
+		equalScale = new CheckBox(Mediator.getMessage(PropertiesKeys.EQUAL_SCALE),
+				Mediator.getMessage(PropertiesKeys.EQUAL_SCALE_TOOLTIP));
 		equalScale.addActionListener(this);
 
 		additional.add(equalScale);

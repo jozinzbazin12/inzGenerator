@@ -14,10 +14,8 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import generator.Mediator;
@@ -93,36 +91,40 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		});
 		controls.add(loadMapButton);
 		options.add(controls);
-		options.add(new JLabel(Mediator.getMessage(PropertiesKeys.SIZE), SwingConstants.CENTER));
+		options.add(new Label(Mediator.getMessage(PropertiesKeys.SIZE), Mediator.getMessage(PropertiesKeys.SIZE_TOOLTIP),
+				SwingConstants.CENTER));
 
-		JPanel legendPanel = new JPanel();
-		legendPanel.setLayout(new GridLayout(0, 2));
-		JLabel attributelabel = new JLabel(Mediator.getMessage(PropertiesKeys.ATTRIBUTE));
-		legendPanel.add(attributelabel);
-		JLabel valueLabel = new JLabel(Mediator.getMessage(PropertiesKeys.VALUE), SwingConstants.CENTER);
-		legendPanel.add(attributelabel);
-		legendPanel.add(valueLabel);
+		JPanel legendPanel = ComponentUtil.createDoubleLegendPanel();
 
 		options.add(legendPanel);
 		options.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.X,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.X), arguments));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.X), arguments,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTHT_TOOLTIP), Consts.X)));
 		options.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Y,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.Y), arguments));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.Y), arguments,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTHT_TOOLTIP), Consts.Y)));
 		options.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Z,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.Z), arguments));
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.Z), arguments,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTHT_TOOLTIP), Consts.Z)));
 
-		options.add(new JLabel(Mediator.getMessage(PropertiesKeys.LIGHT), SwingConstants.CENTER));
+		options.add(new Label(Mediator.getMessage(PropertiesKeys.LIGHT), Mediator.getMessage(PropertiesKeys.LIGHT_TOOLTIP),
+				SwingConstants.CENTER));
 
 		options.add(createLightSettingsTitle());
 
-		options.add(createLightSpinners(0, 1, Consts.LIGHT_AMBIENT_R, Consts.LIGHT_AMBIENT_G, Consts.LIGHT_AMBIENT_B,
-				Consts.LIGHT_AMBIENT_A, Mediator.getMessage(PropertiesKeys.AMBIENT), 0.5));
-		options.add(createLightSpinners(0, 1, Consts.LIGHT_DIFFUSE_R, Consts.LIGHT_DIFFUSE_G, Consts.LIGHT_DIFFUSE_B,
-				Consts.LIGHT_DIFFUSE_A, Mediator.getMessage(PropertiesKeys.DIFFUSE), 0.8));
-		options.add(createLightSpinners(0, 1, Consts.LIGHT_SPECULAR_R, Consts.LIGHT_SPECULAR_G, Consts.LIGHT_SPECULAR_B,
-				Consts.LIGHT_SPECULAR_A, Mediator.getMessage(PropertiesKeys.SPECULAR), 0.5));
-		options.add(createLightSpinners(-MAX_POSITION, MAX_POSITION, Consts.LIGHT_POSITION_X, Consts.LIGHT_POSITION_Y,
-				Consts.LIGHT_POSITION_Z, Consts.LIGHT_POSITION_MODE, Mediator.getMessage(PropertiesKeys.LIGHT_POSITION), 1));
+		options.add(ComponentUtil.createLightSpinners(0, 1, Consts.LIGHT_AMBIENT_R, Consts.LIGHT_AMBIENT_G,
+				Consts.LIGHT_AMBIENT_B, Consts.LIGHT_AMBIENT_A, Mediator.getMessage(PropertiesKeys.AMBIENT),
+				Mediator.getMessage(PropertiesKeys.AMBIENT_TOOLTIP), 0.5, arguments));
+		options.add(ComponentUtil.createLightSpinners(0, 1, Consts.LIGHT_DIFFUSE_R, Consts.LIGHT_DIFFUSE_G,
+				Consts.LIGHT_DIFFUSE_B, Consts.LIGHT_DIFFUSE_A, Mediator.getMessage(PropertiesKeys.DIFFUSE),
+				Mediator.getMessage(PropertiesKeys.DIFFUSE_TOOLTIP), 0.8, arguments));
+		options.add(ComponentUtil.createLightSpinners(0, 1, Consts.LIGHT_SPECULAR_R, Consts.LIGHT_SPECULAR_G,
+				Consts.LIGHT_SPECULAR_B, Consts.LIGHT_SPECULAR_A, Mediator.getMessage(PropertiesKeys.SPECULAR),
+				Mediator.getMessage(PropertiesKeys.SPECULAR_TOOLTIP), 0.5, arguments));
+		options.add(
+				ComponentUtil.createLightSpinners(-MAX_POSITION, MAX_POSITION, Consts.LIGHT_POSITION_X, Consts.LIGHT_POSITION_Y,
+						Consts.LIGHT_POSITION_Z, Consts.LIGHT_POSITION_MODE, Mediator.getMessage(PropertiesKeys.LIGHT_POSITION),
+						Mediator.getMessage(PropertiesKeys.LIGHT_POSITION_TOOLTIP), 1, arguments));
 
 		add(options);
 	}
@@ -131,7 +133,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		JPanel lightLegend = new JPanel();
 		lightLegend.setLayout(new GridLayout(0, 5));
 		addRGBLegend(lightLegend);
-		lightLegend.add(new Label("A", SwingConstants.CENTER));
+		lightLegend.add(new Label("A", Mediator.getMessage(PropertiesKeys.COLOR_ALPHA_TOOLTIP), SwingConstants.CENTER));
 		return lightLegend;
 	}
 
@@ -144,9 +146,9 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 
 	private void addRGBLegend(JPanel lightLegend) {
 		lightLegend.add(new Label());
-		lightLegend.add(new Label("R", SwingConstants.CENTER));
-		lightLegend.add(new Label("G", SwingConstants.CENTER));
-		lightLegend.add(new Label("B", SwingConstants.CENTER));
+		lightLegend.add(new Label("R", Mediator.getMessage(PropertiesKeys.COLOR_RED_TOOLTIP), SwingConstants.CENTER));
+		lightLegend.add(new Label("G", Mediator.getMessage(PropertiesKeys.COLOR_GREEN_TOOLTIP), SwingConstants.CENTER));
+		lightLegend.add(new Label("B", Mediator.getMessage(PropertiesKeys.COLOR_BLUE_TOOLTIP), SwingConstants.CENTER));
 	}
 
 	private void createTextureOptionsPanel() {
@@ -172,22 +174,27 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		});
 		buttonHolder.add(open);
 		textureOptions.add(buttonHolder);
-		textureOptions.add(ComponentUtil.createSpinner(0.01, 9999, Consts.SCALE,
-				Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE), 1, arguments));
+		textureOptions
+				.add(ComponentUtil.createSpinner(0.01, 9999, Consts.SCALE, Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE), 1,
+						arguments, Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE_TOOLTIP)));
 
-		textureOptions.add(new Label(Mediator.getMessage(PropertiesKeys.MATERIAL), SwingConstants.CENTER));
+		textureOptions.add(new Label(Mediator.getMessage(PropertiesKeys.MATERIAL),
+				Mediator.getMessage(PropertiesKeys.MATERIAL_TOOLTIP), SwingConstants.CENTER));
 		textureOptions.add(createMaterialsSettingsTitle());
-		textureOptions.add(createMaterialSpinners(0, 1, Consts.MATERIAL_AMBIENT_R, Consts.MATERIAL_AMBIENT_G,
-				Consts.MATERIAL_AMBIENT_B, Mediator.getMessage(PropertiesKeys.AMBIENT), 0.5));
-		textureOptions.add(createMaterialSpinners(0, 1, Consts.MATERIAL_DIFFUSE_R, Consts.MATERIAL_DIFFUSE_G,
-				Consts.MATERIAL_DIFFUSE_B, Mediator.getMessage(PropertiesKeys.DIFFUSE), 0.8));
-		textureOptions.add(createMaterialSpinners(0, 1, Consts.MATERIAL_SPECULAR_R, Consts.MATERIAL_SPECULAR_G,
-				Consts.MATERIAL_SPECULAR_B, Mediator.getMessage(PropertiesKeys.SPECULAR), 0.5));
+		textureOptions.add(ComponentUtil.createMaterialSpinners(0, 1, Consts.MATERIAL_AMBIENT_R, Consts.MATERIAL_AMBIENT_G,
+				Consts.MATERIAL_AMBIENT_B, Mediator.getMessage(PropertiesKeys.AMBIENT),
+				Mediator.getMessage(PropertiesKeys.MATERIAL_AMBIENT_TOOLTIP), 0.5, arguments));
+		textureOptions.add(ComponentUtil.createMaterialSpinners(0, 1, Consts.MATERIAL_DIFFUSE_R, Consts.MATERIAL_DIFFUSE_G,
+				Consts.MATERIAL_DIFFUSE_B, Mediator.getMessage(PropertiesKeys.DIFFUSE),
+				Mediator.getMessage(PropertiesKeys.MATERIAL_DIFFUSE_TOOLTIP), 0.8, arguments));
+		textureOptions.add(ComponentUtil.createMaterialSpinners(0, 1, Consts.MATERIAL_SPECULAR_R, Consts.MATERIAL_SPECULAR_G,
+				Consts.MATERIAL_SPECULAR_B, Mediator.getMessage(PropertiesKeys.SPECULAR),
+				Mediator.getMessage(PropertiesKeys.MATERIAL_SPECULAR_TOOLTIP), 0.5, arguments));
 
-		textureOptions.add(
-				ComponentUtil.createSpinner(0, 1, Consts.MATERIAL_D, Mediator.getMessage(PropertiesKeys.OPACITY), 1, arguments));
+		textureOptions.add(ComponentUtil.createSpinner(0, 1, Consts.MATERIAL_D, Mediator.getMessage(PropertiesKeys.OPACITY), 1,
+				arguments, Mediator.getMessage(PropertiesKeys.MATERIAL_OPACITY_TOOLTIP)));
 		textureOptions.add(ComponentUtil.createSpinner(0, 1000, Consts.MATERIAL_NS, Mediator.getMessage(PropertiesKeys.SHINESS),
-				1, arguments));
+				1, arguments, Mediator.getMessage(PropertiesKeys.MATERIAL_SHINESS_TOOLTIP)));
 
 		add(textureOptions);
 	}
@@ -203,47 +210,6 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		texturePanel.add(texture);
 
 		add(texturePanel);
-	}
-
-	private JPanel createLightSpinners(double min, double max, String keyR, String keyG, String keyB, String keyA,
-			String description, double defValue) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(0, 5));
-		JLabel attributelabel = new JLabel(description);
-		panel.add(attributelabel);
-		Spinner spinnerR = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		Spinner spinnerG = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		Spinner spinnerB = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		Spinner spinnerA = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		panel.add(attributelabel);
-		panel.add(spinnerR);
-		panel.add(spinnerG);
-		panel.add(spinnerB);
-		panel.add(spinnerA);
-		arguments.put(keyR, spinnerR);
-		arguments.put(keyG, spinnerG);
-		arguments.put(keyB, spinnerB);
-		arguments.put(keyA, spinnerA);
-		return panel;
-	}
-
-	private JPanel createMaterialSpinners(double min, double max, String keyR, String keyG, String keyB, String description,
-			double defValue) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(0, 4));
-		JLabel attributelabel = new JLabel(description);
-		panel.add(attributelabel);
-		Spinner spinnerR = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		Spinner spinnerG = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		Spinner spinnerB = new Spinner(new SpinnerNumberModel(defValue, min, max, 0.01));
-		panel.add(attributelabel);
-		panel.add(spinnerR);
-		panel.add(spinnerG);
-		panel.add(spinnerB);
-		arguments.put(keyR, spinnerR);
-		arguments.put(keyG, spinnerG);
-		arguments.put(keyB, spinnerB);
-		return panel;
 	}
 
 	public FirstTabPanel() {

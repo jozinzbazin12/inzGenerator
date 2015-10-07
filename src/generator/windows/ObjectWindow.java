@@ -16,7 +16,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
@@ -28,6 +27,7 @@ import generator.models.result.GeneratedObject;
 import generator.utils.CheckBox;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
+import generator.utils.Label;
 import generator.utils.PropertiesKeys;
 import generator.utils.Spinner;
 
@@ -49,7 +49,7 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
 
 		JPanel modelPanel = new JPanel(new GridLayout(0, 2, 0, 30));
-		modelPanel.add(new JLabel(Mediator.getMessage(PropertiesKeys.MODEL)));
+		modelPanel.add(new Label(Mediator.getMessage(PropertiesKeys.MODEL), Mediator.getMessage(PropertiesKeys.MODEL_TOOLTIP)));
 		Collection<ModelInfo> values = Mediator.getModels().values();
 		List<GenerationModel> options = new ArrayList<>();
 		for (ModelInfo i : values) {
@@ -60,7 +60,8 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		models = new JComboBox<>(array);
 		modelPanel.add(models);
 		panel.add(modelPanel);
-		relative = new CheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE));
+		relative = new CheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE),
+				Mediator.getMessage(PropertiesKeys.RELATIVE_TOOLTIP));
 		panel.add(relative);
 
 		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.X,
