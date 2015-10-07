@@ -13,16 +13,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 import generator.Mediator;
+import generator.actions.Action;
 import generator.actions.LoadImageAction;
 import generator.actions.model.LoadSingleModelAction;
 import generator.algorithms.Algorithm;
@@ -58,6 +57,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private boolean maskChanged;
 	private JPanel spinnersX;
 	private JPanel spinnersZ;
+	private JButton delete;
 
 	private void createWindow() {
 		setSize(1000, 600);
@@ -172,17 +172,19 @@ public class ModelWindow extends JFrame implements ActionListener {
 			@Override
 			protected void onSucess(String path) {
 				Mediator.setMask(path);
+				delete.setEnabled(true);
+
 			}
 
 		});
-		JButton delete = new JButton(new AbstractAction(Mediator.getMessage(PropertiesKeys.DELETE_MASK)) {
+		delete = new JButton(new Action(Mediator.getMessage(PropertiesKeys.DELETE_MASK)) {
 			private static final long serialVersionUID = -7854144403814938858L;
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			protected void additionalAction() {
 				preview.deleteMask();
 				maskName.setText(null);
-				((JComponent) e.getSource()).setEnabled(false);
+				delete.setEnabled(false);
 			}
 		});
 
@@ -202,7 +204,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 		maskOptions.add(open);
 		maskOptions.add(delete);
 		if (objects.size() > 1) {
-			open.setEnabled(false);
+			open.setEnabled(true);
 			delete.setEnabled(false);
 		}
 		return maskOptions;
