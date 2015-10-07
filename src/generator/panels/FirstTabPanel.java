@@ -1,5 +1,6 @@
 package generator.panels;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,8 +23,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import generator.Mediator;
-import generator.actions.LoadMapAction;
-import generator.actions.LoadTextureAction;
+import generator.actions.LoadImageAction;
 import generator.models.result.BasicMapData;
 import generator.models.result.LightData;
 import generator.models.result.MapObject;
@@ -82,7 +82,16 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 
 		JPanel controls = new JPanel();
 		controls.setLayout(new GridLayout(0, 2));
-		JButton loadMapButton = new JButton(new LoadMapAction(Mediator.getMessage(PropertiesKeys.LOAD_MAP_BUTTON)));
+		JButton loadMapButton = new JButton(new LoadImageAction(Mediator.getMessage(PropertiesKeys.LOAD_MAP_BUTTON)) {
+			private static final long serialVersionUID = 7367163999541143871L;
+
+			@Override
+			protected void onSucess(String path) {
+				Dimension imageSize = Mediator.setMapFile(path);
+				setMapProperties(path, imageSize);
+			}
+
+		});
 		controls.add(loadMapButton);
 		options.add(controls);
 		options.add(new JLabel(Mediator.getMessage(PropertiesKeys.SIZE), SwingConstants.CENTER));
@@ -153,7 +162,15 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 
 		JPanel buttonHolder = new JPanel();
 		buttonHolder.setLayout(new GridLayout(0, 2));
-		JButton open = new JButton(new LoadTextureAction(Mediator.getMessage(PropertiesKeys.OPEN_TEXTURE)));
+		JButton open = new JButton(new LoadImageAction(Mediator.getMessage(PropertiesKeys.OPEN_TEXTURE)) {
+			private static final long serialVersionUID = -864076895016573176L;
+
+			@Override
+			protected void onSucess(String path) {
+				setTexturePath(path);
+				Mediator.setTextureFile(path);
+			}
+		});
 		buttonHolder.add(open);
 		textureOptions.add(buttonHolder);
 		textureOptions.add(ComponentUtil.createSpinner(0.01, 9999, Consts.SCALE,
@@ -371,24 +388,29 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 			Texture txt = mtl.getTexture();
 			if (txt != null) {
 				setTextureScale(txt.getScale());
-				try {
-					setTexturePath(txt.getPath());
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(new JFrame(), Mediator.getMessage(PropertiesKeys.FILE_NOT_IMAGE),
-							Mediator.getMessage(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
-				}
+				setTexturePath(txt.getPath());
 			}
 		}
 	}
 
-	public void setTexturePath(String path) throws IOException {
+	public void setTexturePath(String path) {
 		texture.removeAll();
-		BufferedImage pic = ImageIO.read(new File(path));
-		if (pic == null) {
-			throw new IOException("Not an image");
+		BufferedImage pic;
+		try {
+			pic = ImageIO.read(new File(path));
+			texture.add(new PreviewPanel(pic));
+			texturePath.setText(path);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(new JFrame(), Mediator.getMessage(PropertiesKeys.FILE_NOT_IMAGE),
+					Mediator.getMessage(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
 		}
-		texture.add(new PreviewPanel(pic));
-		texturePath.setText(path);
+
+	}
+
+	public void setMapProperties(String path, Dimension imageSize) {
+		setMapFileName(path);
+		setMapHeight(String.valueOf(imageSize.height) + " px");
+		setMapWidth(String.valueOf(imageSize.width) + " px");
 	}
 
 	public void setTextureScale(double scale) {

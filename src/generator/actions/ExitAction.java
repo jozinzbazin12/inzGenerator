@@ -2,9 +2,7 @@ package generator.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
-public class ExitAction extends AbstractAction {
+public class ExitAction extends Action {
 
 	private static final long serialVersionUID = 7785544546608983193L;
 
@@ -14,6 +12,7 @@ public class ExitAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		System.exit(0);
 	}
 

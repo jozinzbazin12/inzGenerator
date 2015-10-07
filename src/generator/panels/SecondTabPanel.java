@@ -32,9 +32,8 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import generator.Mediator;
+import generator.actions.Action;
 import generator.actions.HelpAction;
-import generator.actions.model.DeleteModelAction;
-import generator.actions.model.EditModelAction;
 import generator.actions.model.LoadModelAction;
 import generator.algorithms.Algorithm;
 import generator.algorithms.panels.main.AlgorithmMainPanel;
@@ -43,12 +42,46 @@ import generator.tables.Table;
 import generator.tables.model.ObjectFileTableColumnModel;
 import generator.tables.model.ObjectFileTableModel;
 import generator.utils.PropertiesKeys;
+import generator.windows.ModelWindow;
 
 public class SecondTabPanel extends AbstractPanel implements MouseListener {
 
-	private final DeleteModelAction deleteAction = new DeleteModelAction(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
-	private final EditModelAction editAction = new EditModelAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
-	private final LoadModelAction newAction = new LoadModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT));
+	private final Action deleteAction = new Action(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT)) {
+		private static final long serialVersionUID = 8236759084604074679L;
+
+		@Override
+		protected void additionalAction() {
+			Map<String, ModelInfo> models = Mediator.getModels();
+			List<ModelInfo> selectedRows = getSelectedRows();
+			for (ModelInfo i : selectedRows) {
+				models.remove(i.getModel().getPath());
+			}
+
+			updateModels(models.values());
+		}
+	};
+
+	private final Action editAction = new Action(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT)) {
+		private static final long serialVersionUID = -1373378695620341768L;
+
+		@Override
+		protected void additionalAction() {
+			List<ModelInfo> selectedRows = getSelectedRows();
+			if (!selectedRows.isEmpty()) {
+				new ModelWindow(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT_SETTINGS), selectedRows);
+			}
+		}
+	};
+	private final LoadModelAction newAction = new LoadModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT)) {
+		private static final long serialVersionUID = 5761150114867749004L;
+
+		@Override
+		protected void onSucess(String s) {
+			Mediator.loadModel(s);
+			updateModels(Mediator.getModels().values());
+		}
+
+	};
 	private static final String DELETE_ACTION = "deleteAction";
 	private static final String EDIT_ACTION = "editAction";
 	private static final String NEW_ACTION = "newAction";

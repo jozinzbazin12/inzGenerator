@@ -23,7 +23,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 import generator.Mediator;
-import generator.actions.LoadMaskAction;
+import generator.actions.LoadImageAction;
 import generator.actions.model.LoadSingleModelAction;
 import generator.algorithms.Algorithm;
 import generator.algorithms.panels.additional.AlgorithmAdditionalPanel;
@@ -49,13 +49,15 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private Label fileName;
 	private JTextField pathField;
 	private CheckBox equalScale;
-	private JPanel spinnersZ;
-	private JPanel spinnersY;
+	private JPanel spinnersSZ;
+	private JPanel spinnersSY;
 	private CheckBox relative;
 	private AlgorithmAdditionalPanel additionalPanel;
 	private MaskPreviewPanel preview;
 	private Label maskName;
 	private boolean maskChanged;
+	private JPanel spinnersX;
+	private JPanel spinnersZ;
 
 	private void createWindow() {
 		setSize(1000, 600);
@@ -127,22 +129,24 @@ public class ModelWindow extends JFrame implements ActionListener {
 		panel.add(ComponentUtil.createSpinner(0, 10000, Consts.MIN_COUNT, Consts.MAX_COUNT,
 				Mediator.getMessage(PropertiesKeys.COUNT), arguments, true));
 		panel.add(new JSeparator());
-		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_X, Consts.MAX_X,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments, true));
+		spinnersX = ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_X, Consts.MAX_X,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments, true);
 		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_Y, Consts.MAX_Y,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y), arguments, true));
-		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_Z, Consts.MAX_Z,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), arguments, true));
+		spinnersZ = ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_Z, Consts.MAX_Z,
+				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), arguments, true);
+		panel.add(spinnersX);
+		panel.add(spinnersZ);
 		panel.add(new JSeparator());
 
 		panel.add(ComponentUtil.createSpinner(-1000, 1000, Consts.MIN_SX, Consts.MAX_SX,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.X), arguments, true));
-		spinnersY = ComponentUtil.createSpinner(-1000, 1000, Consts.MIN_SY, Consts.MAX_SY,
+		spinnersSY = ComponentUtil.createSpinner(-1000, 1000, Consts.MIN_SY, Consts.MAX_SY,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Y), arguments, true);
-		spinnersZ = ComponentUtil.createSpinner(-1000, 1000, Consts.MIN_SZ, Consts.MAX_SZ,
+		spinnersSZ = ComponentUtil.createSpinner(-1000, 1000, Consts.MIN_SZ, Consts.MAX_SZ,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.SCALE), Consts.Z), arguments, true);
-		panel.add(spinnersY);
-		panel.add(spinnersZ);
+		panel.add(spinnersSY);
+		panel.add(spinnersSZ);
 
 		panel.add(new JSeparator());
 		panel.add(ComponentUtil.createSpinner(-180, 180, Consts.MIN_RX, Consts.MAX_RX,
@@ -162,7 +166,15 @@ public class ModelWindow extends JFrame implements ActionListener {
 		ModelInfo modelInfo = objects.get(0);
 		String maskFile = modelInfo.getMaskFile();
 
-		JButton open = new JButton(new LoadMaskAction(Mediator.getMessage(PropertiesKeys.LOAD_MASK)));
+		JButton open = new JButton(new LoadImageAction(Mediator.getMessage(PropertiesKeys.LOAD_MASK)) {
+			private static final long serialVersionUID = -2212330075704003715L;
+
+			@Override
+			protected void onSucess(String path) {
+				Mediator.setMask(path);
+			}
+
+		});
 		JButton delete = new JButton(new AbstractAction(Mediator.getMessage(PropertiesKeys.DELETE_MASK)) {
 			private static final long serialVersionUID = -7854144403814938858L;
 
@@ -241,8 +253,8 @@ public class ModelWindow extends JFrame implements ActionListener {
 	}
 
 	private void showScaleSpinners(boolean b) {
-		spinnersY.setVisible(b);
-		spinnersZ.setVisible(b);
+		spinnersSY.setVisible(b);
+		spinnersSZ.setVisible(b);
 	}
 
 	private void fillValues() {
@@ -281,13 +293,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 			additionalPanel.setArgs(objectInfo.getArgs());
 
 			BufferedImage mask = objectInfo.getMask();
-			String maskFile = objectInfo.getMaskFile();
-			if (mask != null) {
-				preview.setMask(mask);
-				maskName.setText(maskFile);
-			} else if (maskFile != null) {
-				openMask(maskFile);
-			}
+			setMask(objectInfo, mask);
 		} else {
 			boolean lastEqual = objects.get(0).getScaleSettings().isEqual();
 			boolean diff = false;
@@ -318,6 +324,16 @@ public class ModelWindow extends JFrame implements ActionListener {
 			if (!diff) {
 				relative.setSelected(objects.get(0).getPositionSettings().isRelative());
 			}
+		}
+	}
+
+	private void setMask(ModelInfo objectInfo, BufferedImage mask) {
+		String maskFile = objectInfo.getMaskFile();
+		if (mask != null) {
+			preview.setMask(mask);
+			maskName.setText(maskFile);
+		} else if (maskFile != null) {
+			openMask(maskFile);
 		}
 	}
 

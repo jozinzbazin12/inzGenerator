@@ -2,13 +2,12 @@ package generator.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import generator.Mediator;
 
-public abstract class AbstractLoadAction extends AbstractAction {
+public abstract class AbstractLoadAction extends Action {
 
 	private static final long serialVersionUID = 8390116511929514494L;
 
@@ -16,8 +15,12 @@ public abstract class AbstractLoadAction extends AbstractAction {
 
 	protected abstract void onSucess(String path);
 
+	protected void onFail() {
+		// Override me
+	}
+
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
 		String fileName = null;
 		int rVal = chooser.showOpenDialog(new JFrame());
 		if (rVal == JFileChooser.APPROVE_OPTION) {
@@ -29,7 +32,10 @@ public abstract class AbstractLoadAction extends AbstractAction {
 		}
 		if (fileName != null) {
 			onSucess(fileName);
+		} else {
+			onFail();
 		}
+		super.actionPerformed(e);
 	}
 
 	public AbstractLoadAction(String name, JFileChooser chooser) {

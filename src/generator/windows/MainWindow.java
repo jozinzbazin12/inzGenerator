@@ -47,11 +47,27 @@ public class MainWindow extends JFrame {
 		setJMenuBar(menuBar);
 		JMenu menu = new JMenu(Mediator.getMessage(PropertiesKeys.FILE_MENU));
 
-		JMenuItem openXmlOption = new JMenuItem(new LoadXMLAction(Mediator.getMessage(PropertiesKeys.LOAD_XML_OPTION)));
+		JMenuItem openXmlOption = new JMenuItem(new LoadXMLAction(Mediator.getMessage(PropertiesKeys.LOAD_XML_OPTION)) {
+			private static final long serialVersionUID = -6720737308249773635L;
+
+			@Override
+			protected void onSucess(String path) {
+				Mediator.loadXMLFile(path);
+			}
+
+		});
 		openXmlOption.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		menu.add(openXmlOption);
 
-		JMenuItem saveXmlOption = new JMenuItem(new SaveXMLAction(Mediator.getMessage(PropertiesKeys.SAVE_XML_OPTION)));
+		JMenuItem saveXmlOption = new JMenuItem(new SaveXMLAction(Mediator.getMessage(PropertiesKeys.SAVE_XML_OPTION)) {
+			private static final long serialVersionUID = -2803868446968416714L;
+
+			@Override
+			protected void onSucess(String path) {
+				Mediator.saveXMLFile(path);
+			}
+
+		});
 		saveXmlOption.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		menu.add(saveXmlOption);
 

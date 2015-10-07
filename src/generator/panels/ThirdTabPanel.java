@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,24 +30,56 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import generator.Mediator;
-import generator.actions.object.DeleteObjectAction;
-import generator.actions.object.EditObjectAction;
-import generator.actions.object.NewObjectAction;
+import generator.actions.Action;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
+import generator.models.result.ResultObject;
 import generator.tables.Table;
 import generator.tables.object.ObjectTableColumnModel;
 import generator.tables.object.ObjectTableModel;
 import generator.utils.PropertiesKeys;
+import generator.windows.ObjectWindow;
 
 public class ThirdTabPanel extends JPanel implements MouseListener {
 
 	private static final String DELETE_ACTION = "deleteAction";
 	private static final String EDIT_ACTION = "editAction";
 	private static final String NEW_ACTION = "newAction";
-	private final EditObjectAction editAction = new EditObjectAction(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT));
-	private final NewObjectAction newAction = new NewObjectAction(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
-	private final DeleteObjectAction deleteAction = new DeleteObjectAction(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT));
+	private final Action editAction = new Action(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT)) {
+		private static final long serialVersionUID = -3567790752381825146L;
+
+		@Override
+		protected void additionalAction() {
+			List<GeneratedObject> generatedObjects = Mediator.getGeneratedObjects();
+			if (!generatedObjects.isEmpty()) {
+				String objectName = generatedObjects.size() > 1 ? "" : generatedObjects.get(0).getObjectName();
+				new ObjectWindow(MessageFormat.format(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), objectName),
+						generatedObjects);
+			}
+		}
+	};
+	private final Action newAction = new Action(Mediator.getMessage(PropertiesKeys.NEW_OBJECT)) {
+		private static final long serialVersionUID = 298336929138538316L;
+
+		@Override
+		protected void additionalAction() {
+			new ObjectWindow(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
+		};
+	};
+	private final Action deleteAction = new Action(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT)) {
+		private static final long serialVersionUID = -3567790752381825146L;
+
+		@Override
+		protected void additionalAction() {
+			List<GeneratedObject> rows = getSelectedRows();
+			if (rows != null) {
+				ResultObject resultObject = Mediator.getResultObject();
+				List<GeneratedObject> objects = resultObject.getGeneratedObjects();
+				objects.removeAll(rows);
+				updateObjects(objects);
+			}
+		};
+	};
 
 	private static final long serialVersionUID = -2087487239161953473L;
 	private JPopupMenu menu;
@@ -230,13 +263,14 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		previewPanel.repaint();
 	}
 
-	public void updateModels(Collection<GeneratedObject> collection) {
+	public void updateObjects(Collection<GeneratedObject> collection) {
 		List<GeneratedObject> objectsList = new ArrayList<>(collection);
 		Collections.sort(objectsList);
 		objects.clear();
 		objects.addAll(objectsList);
 		TableModel model = table.getModel();
 		((DefaultTableModel) model).addRow(objectsList.toArray(new GeneratedObject[0]));
+		revalidate();
 		printOnPreview();
 	}
 

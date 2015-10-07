@@ -103,40 +103,35 @@ public class Mediator {
 		mainWindow = mw;
 	}
 
-	public static void setMapFile(String imgName) {
+	public static Dimension setMapFile(String imgName) {
 		try {
-			resultObject.getMapObject().setMapFileName(thirdTabPanel.addPreview(imgName).getAbsolutePath());
-			firstTabPanel.setMapFileName(imgName);
+			String path = thirdTabPanel.addPreview(imgName).getAbsolutePath();
+			resultObject.getMapObject().setMapFileName(path);
 			mainWindow.getContentPane().revalidate();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.FILE_NOT_IMAGE),
 					getMessage(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
 		}
-		firstTabPanel.setMapHeight(String.valueOf(thirdTabPanel.getImageSize().height) + " px");
-		firstTabPanel.setMapWidth(String.valueOf(thirdTabPanel.getImageSize().width) + " px");
+		Dimension imageSize = thirdTabPanel.getImageSize();
+		return imageSize;
 	}
 
 	public static void setTextureFile(String path) {
-		try {
-			MapObject mapObject = resultObject.getMapObject();
-			Material material = mapObject.getMaterial();
-			if (material == null) {
-				material = new Material();
-				mapObject.setMaterial(material);
-			}
-			Texture texture = material.getTexture();
-			if (texture == null) {
-				texture = new Texture();
-				mapObject.getMaterial().setTexture(texture);
-			}
-
-			texture.setPath(path);
-			firstTabPanel.setTexturePath(path);
-			mainWindow.getContentPane().revalidate();
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.FILE_NOT_IMAGE),
-					getMessage(PropertiesKeys.ERROR_WINDOW_TITLE), JOptionPane.ERROR_MESSAGE, null);
+		MapObject mapObject = resultObject.getMapObject();
+		Material material = mapObject.getMaterial();
+		if (material == null) {
+			material = new Material();
+			mapObject.setMaterial(material);
 		}
+		Texture texture = material.getTexture();
+		if (texture == null) {
+			texture = new Texture();
+			mapObject.getMaterial().setTexture(texture);
+		}
+
+		texture.setPath(path);
+
+		mainWindow.getContentPane().revalidate();
 	}
 
 	public static void saveXMLFile(String name) {
@@ -203,11 +198,20 @@ public class Mediator {
 				i.setModel(objectInfo.getModel());
 			}
 		}
-		firstTabPanel.setMapObject(resultObject.getMapObject());
-		updateModelsPanel();
-		setMapFile(resultObject.getMapObject().getMapFileName());
+		MapObject mapObject = resultObject.getMapObject();
+		try {
+			thirdTabPanel.addPreview(mapObject.getMapFileName());
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(new JFrame(), getMessage(PropertiesKeys.FILE_NOT_IMAGE),
+					getMessage(PropertiesKeys.SAVE_XML_ERROR), JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		firstTabPanel.setMapObject(mapObject);
+		firstTabPanel.setMapProperties(mapObject.getMapFileName(), thirdTabPanel.getImageSize());
+		secondTabPanel.updateModels(models.values());
+		setMapFile(mapObject.getMapFileName());
 		updateModels(resultObject.getGeneratedObjects());
-		updateObjects();
+		thirdTabPanel.updateObjects(resultObject.getGeneratedObjects());
 	}
 
 	public static void registerSecondTabPanel(SecondTabPanel secondPanel) {
@@ -244,11 +248,6 @@ public class Mediator {
 		Mediator.resultObject = resultObject;
 	}
 
-	public static void updateObjects() {
-		thirdTabPanel.updateModels(resultObject.getGeneratedObjects());
-		thirdTabPanel.revalidate();
-	}
-
 	public static double getGenerationInfoArguments(String key) {
 		return (double) firstTabPanel.getArguments().get(key).getValue();
 	}
@@ -262,26 +261,7 @@ public class Mediator {
 	}
 
 	public static void updateModels(List<GeneratedObject> objects) {
-		thirdTabPanel.updateModels(objects);
-	}
-
-	public static void deleteObjects() {
-		List<GeneratedObject> rows = thirdTabPanel.getSelectedRows();
-		if (rows != null) {
-			List<GeneratedObject> objects = resultObject.getGeneratedObjects();
-			objects.removeAll(rows);
-			thirdTabPanel.updateModels(objects);
-			updateObjects();
-		}
-	}
-
-	public static void deleteModels() {
-		List<ModelInfo> selectedRows = secondTabPanel.getSelectedRows();
-		for (ModelInfo i : selectedRows) {
-			models.remove(i.getModel().getPath());
-		}
-
-		secondTabPanel.updateModels(models.values());
+		thirdTabPanel.updateObjects(objects);
 	}
 
 	public static void registerObjectWindow(ObjectWindow window) {
@@ -309,7 +289,7 @@ public class Mediator {
 	}
 
 	public static void refreshPreview() {
-		thirdTabPanel.updateModels(resultObject.getGeneratedObjects());
+		thirdTabPanel.updateObjects(resultObject.getGeneratedObjects());
 		thirdTabPanel.refreshPreview();
 	}
 
@@ -323,10 +303,6 @@ public class Mediator {
 			ModelInfo obj = new ModelInfo(model);
 			models.put(path, obj);
 		}
-	}
-
-	public static void updateModelsPanel() {
-		secondTabPanel.updateModels(models.values());
 	}
 
 	public static Map<String, ModelInfo> getModels() {
@@ -361,10 +337,6 @@ public class Mediator {
 		return firstTabPanel.getMapSettings().getLengthY();
 	}
 
-	public static List<ModelInfo> getSelectedModels() {
-		return secondTabPanel.getSelectedRows();
-	}
-
 	public static Map<String, Double> getAlgorithmArgs() {
 		return secondTabPanel.getArgs();
 	}
@@ -392,6 +364,11 @@ public class Mediator {
 
 	public static void setMask(String path) {
 		modelWindow.setMask(path);
+	}
+
+	public static void updateObjects() {
+		thirdTabPanel.updateObjects(resultObject.getGeneratedObjects());
+
 	}
 }
 // TODO nienachodzenie obiekow
