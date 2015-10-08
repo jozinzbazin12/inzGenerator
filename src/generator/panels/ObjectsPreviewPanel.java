@@ -2,7 +2,6 @@ package generator.panels;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -13,9 +12,6 @@ import generator.models.result.GeneratedObject;
 public class ObjectsPreviewPanel extends PreviewPanel {
 	private static final long serialVersionUID = -9061500843600921283L;
 	private List<GeneratedObject> generatedObjects;
-	private double posX, posY, posZ;
-	private int minY;
-	private int maxY;
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -32,12 +28,7 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 					g.fillRect(getObjectX(i), getObjectY(i), 4, 4);
 				}
 			}
-			g.setColor(Color.BLACK);
-			int y = getHeight() - 10;
-
-			g.drawString("X: " + posX, 5, y);
-			g.drawString("Y: " + posY, (int) (getWidth() * 0.45 - 20), y);
-			g.drawString("Z: " + posZ, (int) (getWidth() * 0.75 + 20), y);
+			drawPosition(g);
 		}
 	}
 
@@ -50,49 +41,6 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 	private int getObjectX(GeneratedObject i) {
 		int mapWidth = image.getWidth();
 		return (int) (((i.getBasic().getX() * (mapWidth / Mediator.getMapWidth())) + mapWidth / 2) * (1 + zoom) + currentPoint.x);
-	}
-
-	public double getPointXAt(Point p) {
-		int mapWidth = image.getWidth();
-		return (Mediator.getMapWidth() * (-2 * p.getX() + zoom * mapWidth + 2 * currentPoint.x + mapWidth))
-				/ (-2 * mapWidth * (zoom + 1));
-	}
-
-	public double getPointZAt(Point p) {
-		int mapHeight = image.getHeight();
-
-		return (Mediator.getMapHeight() * (-2 * p.getY() + zoom * mapHeight + 2 * currentPoint.y + mapHeight))
-				/ (2 * mapHeight * (zoom + 1));
-	}
-
-	public void setPoint(Point p) {
-		posX = getPointXAt(p);
-		posZ = getPointZAt(p);
-
-		int x = (int) (posX / (Mediator.getMapWidth() / image.getWidth())) + image.getWidth() / 2;
-		int y = (int) -(posZ / (Mediator.getMapHeight() / image.getHeight())) + image.getHeight() / 2;
-		if (x >= 0 && x < image.getWidth() && y >= 0 && y < image.getHeight()) {
-			posY = getColor(x, y) * Mediator.getMapMaxYSetting() / maxY;
-		}
-		repaint();
-	}
-
-	private void findMinMax() {
-		int w = image.getWidth();
-		int h = image.getHeight();
-		minY = Integer.MAX_VALUE;
-		maxY = Integer.MIN_VALUE;
-		for (int i = 0; i < w; i++) {
-			for (int j = 0; j < h; j++) {
-				int value = getColor(i, j);
-				if (value < minY) {
-					minY = value;
-				}
-				if (value > maxY) {
-					maxY = value;
-				}
-			}
-		}
 	}
 
 	public ObjectsPreviewPanel(BufferedImage image) throws IOException {
@@ -110,14 +58,6 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 
 	public List<GeneratedObject> getGeneratedObjects() {
 		return generatedObjects;
-	}
-
-	public int getMinY() {
-		return minY;
-	}
-
-	public int getMaxY() {
-		return maxY;
 	}
 
 }

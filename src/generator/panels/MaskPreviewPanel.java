@@ -2,7 +2,6 @@ package generator.panels;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -20,12 +19,12 @@ public class MaskPreviewPanel extends PreviewPanel {
 	public MaskPreviewPanel() {
 	}
 
-	public MaskPreviewPanel(BufferedImage img, boolean bnw) {
-		super(img);
+	public MaskPreviewPanel(BufferedImage img, boolean showPosition, boolean bnw) {
+		super(img, showPosition);
 		this.bnw = bnw;
 		setLayout(new BorderLayout());
 		transparency = new JSlider(JSlider.VERTICAL, 0, 100, 50);
-		transparency.setMaximumSize(new Dimension(50, 500));
+		transparency.setOpaque(false);
 		add(transparency, BorderLayout.WEST);
 	}
 

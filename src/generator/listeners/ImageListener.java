@@ -81,9 +81,9 @@ public class ImageListener extends MouseAdapter {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		panel.setPoint(e.getPoint());
 		if (objectsPanel) {
 			ObjectsPreviewPanel panel = (ObjectsPreviewPanel) this.panel;
-			panel.setPoint(e.getPoint());
 			if (panel.getGeneratedObjects() != null) {
 				for (GeneratedObject i : panel.getGeneratedObjects()) {
 					int mapWidth = Mediator.getMapDimensions().width;

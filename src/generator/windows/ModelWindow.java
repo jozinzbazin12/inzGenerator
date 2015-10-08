@@ -86,7 +86,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 	private JPanel createAdditionalPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 0));
-		preview = new MaskPreviewPanel(Mediator.getMapImage(), true);
+		preview = new MaskPreviewPanel(Mediator.getMapImage(), true, true);
 		panel.add(preview);
 		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
 		panel.add(additionalPanel);
