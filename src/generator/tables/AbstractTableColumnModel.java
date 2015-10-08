@@ -15,7 +15,7 @@ public class AbstractTableColumnModel extends DefaultTableColumnModel {
 		TableColumn color = new TableColumn(index++);
 		color.setHeaderValue(Mediator.getMessage(PropertiesKeys.COLOR));
 		color.setMinWidth(10);
-		color.setMaxWidth(50);
+		color.setMaxWidth(35);
 		color.setCellRenderer(new ColorCellRenderer());
 		addColumn(color);
 	}
@@ -30,10 +30,17 @@ public class AbstractTableColumnModel extends DefaultTableColumnModel {
 	}
 
 	protected void createColumn(String msg, int minWidth, int maxWidth) {
+		createColumn(msg, minWidth, maxWidth, 0);
+	}
+
+	protected void createColumn(String msg, int minWidth, int maxWidth, int preffered) {
 		TableColumn col = new TableColumn(index++);
 		col.setHeaderValue(msg);
 		col.setMinWidth(minWidth);
 		col.setMaxWidth(maxWidth);
+		if (preffered > 0) {
+			col.setPreferredWidth(preffered);
+		}
 		col.setCellRenderer(new CellRenderer());
 		addColumn(col);
 	}

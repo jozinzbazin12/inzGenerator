@@ -3,9 +3,9 @@ package generator.tables;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 
 import generator.utils.Label;
@@ -18,7 +18,8 @@ public class CellRenderer implements TableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object txt, boolean isSelected, boolean hasFocus, int row,
 			int column) {
-		Label label = new Label(txt.toString(), SwingConstants.CENTER);
+		Label label = new Label(txt.toString());
+		label.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 		setColor(isSelected, row, table, label);
 		label.setOpaque(true);
 		return label;

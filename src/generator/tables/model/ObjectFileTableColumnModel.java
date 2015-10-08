@@ -15,15 +15,15 @@ public class ObjectFileTableColumnModel extends AbstractTableColumnModel {
 	public ObjectFileTableColumnModel() {
 		createColorColumn();
 
-		createColumn(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_NAME), 100, 300);
-		createColumn(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_LOCATION), 100, 300);
-		createColumn(Mediator.getMessage(PropertiesKeys.COUNT), 100, 300);
-		createColumn(Mediator.getMessage(PropertiesKeys.MIN_POSITION), 100, 300);
-		createColumn(Mediator.getMessage(PropertiesKeys.MAX_POSITION), 100, 300);
-		createColumn(Mediator.getMessage(PropertiesKeys.MIN_SCALE), 100, 300);
-		createColumn(Mediator.getMessage(PropertiesKeys.MAX_SCALE), 100, 300);
-		createColumn(Mediator.getMessage(PropertiesKeys.MIN_ROTATION), 100, 300);
-		createColumn(Mediator.getMessage(PropertiesKeys.MAX_ROTATION), 100, 300);
+		createColumn(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_NAME), 100, 300, 110);
+		createColumn(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_LOCATION), 100, 300, 110);
+		createColumn(Mediator.getMessage(PropertiesKeys.COUNT), 50, 100, 60);
+		createColumn(Mediator.getMessage(PropertiesKeys.MIN_POSITION), 100, 300, 140);
+		createColumn(Mediator.getMessage(PropertiesKeys.MAX_POSITION), 100, 300, 140);
+		createColumn(Mediator.getMessage(PropertiesKeys.MIN_SCALE), 100, 300, 140);
+		createColumn(Mediator.getMessage(PropertiesKeys.MAX_SCALE), 100, 300, 140);
+		createColumn(Mediator.getMessage(PropertiesKeys.MIN_ROTATION), 100, 300, 140);
+		createColumn(Mediator.getMessage(PropertiesKeys.MAX_ROTATION), 100, 300, 140);
 
 		createRelativeColumn();
 		setColumnSelectionAllowed(false);

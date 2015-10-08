@@ -1,7 +1,9 @@
 package generator.tables;
 
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -20,6 +22,7 @@ public class Table extends JTable {
 		}
 		setColumnSelectionAllowed(false);
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		((DefaultTableCellRenderer) getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
 	}
 
 	public int getHighlighted() {
