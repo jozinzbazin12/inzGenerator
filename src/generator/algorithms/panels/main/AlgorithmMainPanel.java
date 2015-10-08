@@ -3,8 +3,11 @@ package generator.algorithms.panels.main;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import generator.Mediator;
+import generator.utils.PropertiesKeys;
 import generator.utils.Spinner;
 
 public class AlgorithmMainPanel extends JPanel {
@@ -28,5 +31,9 @@ public class AlgorithmMainPanel extends JPanel {
 				i.getValue().setValue(value);
 			}
 		}
+	}
+
+	public AlgorithmMainPanel() {
+		setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_MAIN_ARGUMENTS)));
 	}
 }

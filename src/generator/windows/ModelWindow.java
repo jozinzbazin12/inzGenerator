@@ -89,7 +89,6 @@ public class ModelWindow extends JFrame implements ActionListener {
 		preview = new MaskPreviewPanel(Mediator.getMapImage(), true);
 		panel.add(preview);
 		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
-		additionalPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ADDITIONAL)));
 		panel.add(additionalPanel);
 		return panel;
 	}
@@ -133,12 +132,13 @@ public class ModelWindow extends JFrame implements ActionListener {
 		panel.add(new JSeparator());
 		spinnersX = ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_X, Consts.MAX_X,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments, true);
+		panel.add(spinnersX);
 		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_Y, Consts.MAX_Y,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y), arguments, true));
 		spinnersZ = ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_Z, Consts.MAX_Z,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), arguments, true);
-		panel.add(spinnersX);
 		panel.add(spinnersZ);
+
 		panel.add(new JSeparator());
 
 		panel.add(ComponentUtil.createSpinner(-1000, 1000, Consts.MIN_SX, Consts.MAX_SX,

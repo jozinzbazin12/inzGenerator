@@ -131,4 +131,9 @@ public final class PropertiesKeys {
 	public static final String MAX_TOOLTIP = "settings.max.tooltip";
 	public static final String RELATIVE_TOOLTIP = "settings.coordinate.relative.tooltip";
 	public static final String EQUAL_SCALE_TOOLTIP = "scale.equal.tooltip";
+	public static final String ALGORITHM_MAIN_ARGUMENTS = "algorithm.settings.arguments.main";
+	public static final String ALGORITHM_ADDITIONAL_ARGUMENTS = "algorithm.settings.arguments.additional";
+	public static final String AGGREGATION_CHANCE_TOOLTIP = "algotithm.settings.aggregation.chance.tooltip";
+	public static final String AGGREGATION_RANGE_TOOLTIP = "algotihm.settings.aggregation.range.tooltip";
+	public static final String HEIGHT_ALGORITHM_SETTINGS_TOOLTIP = "algorithm.settings.heigh.tooltip";
 }

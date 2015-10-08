@@ -15,11 +15,13 @@ public class AggregationAlgorithmPanel extends AlgorithmMainPanel {
 
 	public AggregationAlgorithmPanel() {
 		setLayout(new GridLayout(13, 3, 5, 5));
+		add(ComponentUtil.createDoubleLegendPanel());
 		add(ComponentUtil.createSpinner(0, 100, Consts.AGGREGATION_CHANCE, Mediator.getMessage(PropertiesKeys.AGGREGATION_CHANCE),
-				arguments));
+				arguments, Mediator.getMessage(PropertiesKeys.AGGREGATION_CHANCE_TOOLTIP)));
 		add(new JSeparator());
 		add(ComponentUtil.createAtrributeLegendPanel());
 		add(ComponentUtil.createSpinner(0, MAX_POSITION, Consts.MIN_AGGREGATION_RANGE, Consts.MAX_AGGREGATION_RANGE,
-				Mediator.getMessage(PropertiesKeys.AGGREGATION_RANGE), arguments));
+				Mediator.getMessage(PropertiesKeys.AGGREGATION_RANGE), arguments,
+				Mediator.getMessage(PropertiesKeys.AGGREGATION_RANGE_TOOLTIP)));
 	}
 }

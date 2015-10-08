@@ -17,7 +17,7 @@ public final class ComponentUtil {
 		JPanel legendPanel = new JPanel();
 		legendPanel.setLayout(new GridLayout(0, 2));
 		Label attributelabel = new Label(Mediator.getMessage(PropertiesKeys.ATTRIBUTE),
-				Mediator.getMessage(PropertiesKeys.ATTRIBUTE_TOOLTIP));
+				Mediator.getMessage(PropertiesKeys.ATTRIBUTE_TOOLTIP), SwingConstants.CENTER);
 		legendPanel.add(attributelabel);
 		Label valueLabel = new Label(Mediator.getMessage(PropertiesKeys.VALUE), Mediator.getMessage(PropertiesKeys.VALUE_TOOLTIP),
 				SwingConstants.CENTER);
@@ -30,11 +30,13 @@ public final class ComponentUtil {
 		JPanel legendPanel = new JPanel();
 		legendPanel.setLayout(new GridLayout(0, 3));
 		Label attributelabel = new Label(Mediator.getMessage(PropertiesKeys.ATTRIBUTE),
-				Mediator.getMessage(PropertiesKeys.ATTRIBUTE_TOOLTIP));
+				Mediator.getMessage(PropertiesKeys.ATTRIBUTE_TOOLTIP), SwingConstants.CENTER);
 		legendPanel.add(attributelabel);
-		Label minLabel = new Label(Mediator.getMessage(PropertiesKeys.MIN), Mediator.getMessage(PropertiesKeys.MIN_TOOLTIP));
+		Label minLabel = new Label(Mediator.getMessage(PropertiesKeys.MIN), Mediator.getMessage(PropertiesKeys.MIN_TOOLTIP),
+				SwingConstants.CENTER);
 		legendPanel.add(attributelabel);
-		Label maxLabel = new Label(Mediator.getMessage(PropertiesKeys.MIN), Mediator.getMessage(PropertiesKeys.MAX_TOOLTIP));
+		Label maxLabel = new Label(Mediator.getMessage(PropertiesKeys.MIN), Mediator.getMessage(PropertiesKeys.MAX_TOOLTIP),
+				SwingConstants.CENTER);
 		legendPanel.add(attributelabel);
 		legendPanel.add(minLabel);
 		legendPanel.add(maxLabel);
@@ -120,7 +122,7 @@ public final class ComponentUtil {
 
 	public static JPanel createSpinner(double min, double max, String key1, String key2, String description,
 			Map<String, Spinner> arguments, String tooltip) {
-		return createSpinner(min, max, key1, key2, description, arguments, null, false);
+		return createSpinner(min, max, key1, key2, description, arguments, tooltip, false);
 	}
 
 	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Spinner> arguments,
