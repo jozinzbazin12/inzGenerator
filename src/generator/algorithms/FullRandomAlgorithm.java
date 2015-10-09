@@ -1,6 +1,5 @@
 package generator.algorithms;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +23,8 @@ public class FullRandomAlgorithm extends Algorithm {
 
 		for (ModelInfo objInfo : info.getModels()) {
 			int count = getCount(objInfo);
-			BufferedImage mask = objInfo.getMask();
-			List<HeightInfo> positions = null;
-			if (mask != null) {
-				positions = availableSpace(objInfo);
-			}
+			List<HeightInfo> positions = availableSpace(objInfo);
+
 			for (int i = 0; i < count; i++) {
 				BasicModelData obj = new BasicModelData();
 				PositionSettings pos = objInfo.getPositionSettings();

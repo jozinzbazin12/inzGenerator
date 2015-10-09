@@ -57,6 +57,10 @@ public abstract class Algorithm {
 
 	}
 
+	protected double getLength(double x, double z, double x2, double z2) {
+		return Math.sqrt(Math.pow((x - x2), 2) + Math.pow((z - z2), 2));
+	}
+
 	protected int getCount(ModelInfo obj) {
 		int count = 0;
 		int max = obj.getMaxCount();
@@ -115,6 +119,9 @@ public abstract class Algorithm {
 	protected List<HeightInfo> availableSpace(ModelInfo info) {
 		List<HeightInfo> list = new LinkedList<>();
 		BufferedImage mask = info.getMask();
+		if (mask == null) {
+			return list;
+		}
 		int width = mask.getWidth();
 		int height = mask.getHeight();
 		double xr = Mediator.getMapWidth() / width;

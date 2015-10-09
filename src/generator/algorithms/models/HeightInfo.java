@@ -1,7 +1,7 @@
 package generator.algorithms.models;
 
 public class HeightInfo implements Comparable<HeightInfo> {
-	private static final double THRESHOLD = 1;
+	public static final double THRESHOLD = 1;
 	private double x;
 	private double z;
 	private double y;
