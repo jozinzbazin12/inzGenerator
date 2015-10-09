@@ -33,7 +33,6 @@ import javax.swing.table.TableModel;
 
 import generator.Mediator;
 import generator.actions.Action;
-import generator.actions.HelpAction;
 import generator.actions.model.LoadModelAction;
 import generator.algorithms.Algorithm;
 import generator.algorithms.panels.main.AlgorithmMainPanel;
@@ -42,6 +41,7 @@ import generator.tables.Table;
 import generator.tables.model.ObjectFileTableColumnModel;
 import generator.tables.model.ObjectFileTableModel;
 import generator.utils.PropertiesKeys;
+import generator.windows.HelpWindow;
 import generator.windows.ModelWindow;
 
 public class SecondTabPanel extends AbstractPanel implements MouseListener {
@@ -122,7 +122,15 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		});
 		options.add(Algorithm.getMainPanels().get(getAlgorithm()));
 		selectionPanel.add(algorithmList);
-		selectionPanel.add(new JButton(new HelpAction(Mediator.getMessage(PropertiesKeys.HELP))));
+		selectionPanel.add(new JButton(new Action(Mediator.getMessage(PropertiesKeys.ALGORITHM_HELP)) {
+			private static final long serialVersionUID = -7408409695654287430L;
+
+			@Override
+			protected void additionalAction() {
+				new HelpWindow(Mediator.getMessage(PropertiesKeys.ALGORITHM_HELP), getAlgorithm().getHelp());
+			}
+
+		}));
 		algorithmPanel.add(selectionPanel);
 		algorithmPanel.add(new JSeparator());
 		optionsPanel.add(algorithmPanel, BorderLayout.NORTH);

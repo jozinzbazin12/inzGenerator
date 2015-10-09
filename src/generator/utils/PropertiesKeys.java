@@ -91,7 +91,7 @@ public final class PropertiesKeys {
 	public static final String EDIT_OBJECT_SETTINGS = "object.settings.edit";
 	public static final String REGULAR_ALGORITHM_HELP = "algorithm.regular.help";
 	public static final String FULL_RANDOM_ALGORITHM_HELP = "algorithm.fullRandom.help";
-	public static final String HELP = "help";
+	public static final String ALGORITHM_HELP = "algorithm.help";
 	public static final String MODEL = "model";
 	public static final String ADDITIONAL = "additional";
 	public static final String HEIGHT_ALGORITHM = "algorithm.height";

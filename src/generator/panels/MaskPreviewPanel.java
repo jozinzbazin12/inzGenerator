@@ -49,6 +49,8 @@ public class MaskPreviewPanel extends PreviewPanel {
 			float opacity = 1 - transparency.getValue() / 100f;
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 			g.drawImage(mask, (int) currentPoint.getX(), (int) currentPoint.getY(), null);
+			drawPosition(g);
+			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 		}
 	}
 
