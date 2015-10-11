@@ -77,8 +77,18 @@ public class HeightAlgorithm extends Algorithm {
 						result2.add(i);
 					}
 				}
-				return result2;
+				result = result2;
 			}
+		} else {
+			PositionSettings positionSettings = info.getPositionSettings();
+			List<HeightInfo> result2 = new ArrayList<>();
+			for (HeightInfo i : result) {
+				if (i.getX() <= positionSettings.getMaxX() && i.getX() >= positionSettings.getMinX()
+						&& i.getZ() <= positionSettings.getMaxZ() && i.getZ() >= positionSettings.getMinZ()) {
+					result2.add(i);
+				}
+			}
+			result = result2;
 		}
 		return result;
 	}
