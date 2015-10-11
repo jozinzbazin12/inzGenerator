@@ -1,7 +1,7 @@
 package generator.algorithms.models;
 
 public class HeightInfo implements Comparable<HeightInfo> {
-	public static final double THRESHOLD = 1;
+	private static double threshold = 1;
 	private double x;
 	private double z;
 	private double y;
@@ -30,7 +30,7 @@ public class HeightInfo implements Comparable<HeightInfo> {
 			return false;
 		}
 		HeightInfo obj = (HeightInfo) object;
-		return Math.abs(obj.x - x) < THRESHOLD && Math.abs(obj.z - z) < THRESHOLD;
+		return Math.sqrt(Math.pow(x - obj.x, 2) + Math.pow(z - obj.z, 2)) < threshold;
 	}
 
 	@Override
@@ -49,5 +49,13 @@ public class HeightInfo implements Comparable<HeightInfo> {
 		StringBuilder str = new StringBuilder();
 		str.append("[X: ").append(x).append(", Y: ").append(y).append(", Z: ").append(z).append("]");
 		return str.toString();
+	}
+
+	public static double getThreshold() {
+		return threshold;
+	}
+
+	public static void setThreshold(double threshold) {
+		HeightInfo.threshold = threshold;
 	}
 }

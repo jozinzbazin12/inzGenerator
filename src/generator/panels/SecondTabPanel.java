@@ -105,7 +105,9 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		JPanel algorithmPanel = new JPanel(new GridLayout(2, 0, 0, 10));
 		JPanel selectionPanel = new JPanel(new GridLayout(0, 2, 50, 0));
 		algorithmList = new JComboBox<>();
-		for (Algorithm i : Algorithm.getMainPanels().keySet()) {
+		List<Algorithm> keySet = new ArrayList<>(Algorithm.getMainPanels().keySet());
+		Collections.sort(keySet);
+		for (Algorithm i : keySet) {
 			algorithmList.addItem(i);
 		}
 		algorithmList.addActionListener(new ActionListener() {

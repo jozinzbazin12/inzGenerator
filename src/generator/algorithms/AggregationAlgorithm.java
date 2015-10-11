@@ -24,18 +24,6 @@ public class AggregationAlgorithm extends Algorithm {
 
 	private void correctPosition(BasicModelData obj, ModelInfo info, List<HeightInfo> positions) {
 		PositionSettings pos = info.getPositionSettings();
-		if (obj.getX() > pos.getMaxX()) {
-			obj.setX(pos.getMaxX());
-		}
-		if (obj.getX() < pos.getMinX()) {
-			obj.setX(pos.getMinX());
-		}
-		if (obj.getZ() > pos.getMaxZ()) {
-			obj.setZ(pos.getMaxZ());
-		}
-		if (obj.getZ() < pos.getMinZ()) {
-			obj.setZ(pos.getMinZ());
-		}
 		if (!positions.isEmpty()) {
 			HeightInfo actual = new HeightInfo(obj.getX(), 0, obj.getZ());
 			double minLength = Double.MAX_VALUE;
@@ -56,6 +44,7 @@ public class AggregationAlgorithm extends Algorithm {
 			obj.setX(nearest.getX() + randomizeDouble(-xRatio, xRatio));
 			obj.setZ(nearest.getZ() + randomizeDouble(-zRatio, zRatio));
 		}
+		correctPosition(obj, pos);
 	}
 
 	@Override
@@ -83,8 +72,8 @@ public class AggregationAlgorithm extends Algorithm {
 			List<HeightInfo> positions = heights.get(objInfo);
 			if (aggregation <= threshold && !list.isEmpty()) {
 				BasicModelData target = list.get(randomizeInt(0, list.size())).getBasic();
-				obj.setPosition(target.getX() + randomizeSquareDouble(minRange, maxRange),
-						randomizeDouble(pos.getMinY(), pos.getMaxY()), target.getZ() + randomizeSquareDouble(minRange, maxRange));
+				obj.setPosition(target.getX() + randomizeRange(minRange, maxRange), randomizeDouble(pos.getMinY(), pos.getMaxY()),
+						target.getZ() + randomizeRange(minRange, maxRange));
 				correctPosition(obj, objInfo, positions);
 			} else {
 				if (positions.isEmpty()) {

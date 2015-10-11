@@ -12,6 +12,7 @@ import generator.algorithms.models.HeightInfo;
 import generator.algorithms.panels.additional.AlgorithmAdditionalPanel;
 import generator.algorithms.panels.additional.EmptyPanel;
 import generator.algorithms.panels.additional.HeightAlgorithmPanel;
+import generator.algorithms.panels.additional.SpreadAlgorithmPanel;
 import generator.algorithms.panels.main.AggregationAlgorithmPanel;
 import generator.algorithms.panels.main.AlgorithmMainPanel;
 import generator.algorithms.panels.main.EmptyMainPanel;
@@ -24,7 +25,7 @@ import generator.models.result.GeneratedObject;
 import generator.panels.PreviewPanel;
 import generator.utils.PropertiesKeys;
 
-public abstract class Algorithm {
+public abstract class Algorithm implements Comparable<Algorithm> {
 	private Random rnd = new Random();
 	private final String helpKey;
 	private String name;
@@ -42,11 +43,13 @@ public abstract class Algorithm {
 		HeightAlgorithm height = new HeightAlgorithm(Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM));
 		RegularAlgorithm regularAlgorithm = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
 		AggregationAlgorithm aggregation = new AggregationAlgorithm(Mediator.getMessage(PropertiesKeys.AGGREGATION_ALGORITHM));
+		SpreadAlgorithm spread = new SpreadAlgorithm(Mediator.getMessage(PropertiesKeys.SPREAD_ALGORITHM));
 
 		ADDITIONAL_PANELS.put(randomAlgorithm, emptyPanel);
 		ADDITIONAL_PANELS.put(regularAlgorithm, emptyPanel);
 		ADDITIONAL_PANELS.put(height, new HeightAlgorithmPanel());
 		ADDITIONAL_PANELS.put(aggregation, emptyPanel);
+		ADDITIONAL_PANELS.put(spread, new SpreadAlgorithmPanel());
 
 		EmptyMainPanel emptyMainPanel = new EmptyMainPanel();
 		MAIN_PANELS = new HashMap<>();
@@ -54,11 +57,27 @@ public abstract class Algorithm {
 		MAIN_PANELS.put(regularAlgorithm, new RegularAlgorithmMainPanel());
 		MAIN_PANELS.put(height, emptyMainPanel);
 		MAIN_PANELS.put(aggregation, new AggregationAlgorithmPanel());
+		MAIN_PANELS.put(spread, emptyMainPanel);
 
 	}
 
 	protected double getLength(double x, double z, double x2, double z2) {
 		return Math.sqrt(Math.pow((x - x2), 2) + Math.pow((z - z2), 2));
+	}
+
+	protected void correctPosition(BasicModelData obj, PositionSettings pos) {
+		if (obj.getX() > pos.getMaxX() - randomizeDouble(0, xRatio)) {
+			obj.setX(pos.getMaxX());
+		}
+		if (obj.getX() < pos.getMinX() + randomizeDouble(0, xRatio)) {
+			obj.setX(pos.getMinX());
+		}
+		if (obj.getZ() > pos.getMaxZ() - randomizeDouble(0, zRatio)) {
+			obj.setZ(pos.getMaxZ());
+		}
+		if (obj.getZ() < pos.getMinZ() + randomizeDouble(0, zRatio)) {
+			obj.setZ(pos.getMinZ());
+		}
 	}
 
 	protected int getCount(ModelInfo obj) {
@@ -108,12 +127,21 @@ public abstract class Algorithm {
 		return min + (max - min) * rnd.nextDouble();
 	}
 
-	protected double randomizeSquareDouble(double min, double max) {
-		return max - randomizeDouble(min, 2 * max);
+	protected double randomizeRange(double min, double max) {
+		double min2 = min;
+		double max2 = max;
+		if (rnd.nextBoolean()) {
+			min2 *= -1;
+			max2 *= -1;
+		}
+		return randomizeDouble(min2, max2);
 	}
 
 	protected int randomizeInt(int min, int max) {
-		return rnd.nextInt(min + max) + min;
+		if (min == max) {
+			return min;
+		}
+		return rnd.nextInt(Math.abs(max - min)) + min;
 	}
 
 	protected List<HeightInfo> availableSpace(ModelInfo info) {
@@ -145,6 +173,7 @@ public abstract class Algorithm {
 		xRatio = Mediator.getMapWidth() / Mediator.getMapDimensions().width;
 		zRatio = Mediator.getMapHeight() / Mediator.getMapDimensions().height;
 		yRatio = Mediator.getMapMaxYSetting() / Mediator.getMapMaxY();
+		HeightInfo.setThreshold((xRatio + zRatio) / 2);
 		List<GeneratedObject> result = generationMethod(info);
 		Mediator.updateModels(result);
 		return result;
@@ -168,4 +197,8 @@ public abstract class Algorithm {
 				height.getZ() + randomizeDouble(-zRatio, zRatio));
 	}
 
+	@Override
+	public int compareTo(Algorithm o) {
+		return name.compareTo(o.name);
+	}
 }

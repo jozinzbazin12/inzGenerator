@@ -23,6 +23,9 @@ public class ModelInfo implements Comparable<ModelInfo> {
 	private BufferedImage mask;
 	@XmlTransient
 	private String maskFile;
+	@XmlTransient
+	private Map<String, Double> args = new HashMap<>();
+
 	@XmlAttribute(name = "minCount")
 	private int minCount;
 	@XmlAttribute(name = "maxCount")
@@ -34,8 +37,16 @@ public class ModelInfo implements Comparable<ModelInfo> {
 	private ScaleSettings scaleSettings;
 	@XmlElement(name = "Rotation")
 	private RotationSettings rotationSettings;
+
 	@XmlElement(name = "Args")
-	private Map<String, Double> args = new HashMap<>();
+	public Map<String, Double> getArgs() {
+		return args;
+	}
+
+	public void setArgs(Map<String, Double> args) {
+		this.args = args;
+		fillArgs();
+	}
 
 	@XmlAttribute(name = "maskFile")
 	public String getMaskFile() {
@@ -44,10 +55,12 @@ public class ModelInfo implements Comparable<ModelInfo> {
 
 	public void setMaskFile(String maskFile) {
 		this.maskFile = maskFile;
-		try {
-			this.mask = ImageIO.read(new File(maskFile));
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (maskFile != null) {
+			try {
+				this.mask = ImageIO.read(new File(maskFile));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -104,8 +117,17 @@ public class ModelInfo implements Comparable<ModelInfo> {
 	}
 
 	private void fillArgs() {
-		args.put(Consts.MIN_Y_HEIGHT, 0D);
-		args.put(Consts.MAX_Y_HEIGHT, 0D);
+		setArg(Consts.MIN_Y_HEIGHT, 0D);
+		setArg(Consts.MAX_Y_HEIGHT, 0D);
+		setArg(Consts.MIN_AGGREGATION_RANGE, 0D);
+		setArg(Consts.MAX_AGGREGATION_RANGE, 0D);
+		setArg(Consts.AGGREGATION_CHANCE, 0D);
+	}
+
+	private void setArg(String key, Double value) {
+		if (!args.containsKey(key)) {
+			args.put(key, value);
+		}
 	}
 
 	public ModelInfo() {
@@ -153,14 +175,6 @@ public class ModelInfo implements Comparable<ModelInfo> {
 
 	public void setMaxCount(int maxCount) {
 		this.maxCount = maxCount;
-	}
-
-	public Map<String, Double> getArgs() {
-		return args;
-	}
-
-	public void setArgs(Map<String, Double> args) {
-		this.args = args;
 	}
 
 	public BufferedImage getMask() {

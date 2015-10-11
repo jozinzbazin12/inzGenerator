@@ -72,13 +72,13 @@ public class HeightAlgorithm extends Algorithm {
 			List<HeightInfo> availableSpace = availableSpace(info);
 			List<HeightInfo> result2 = new LinkedList<>();
 			if (!availableSpace.isEmpty()) {
-				for (HeightInfo i : availableSpace) {
-					if (result.contains(i)) {
+				for (HeightInfo i : result) {
+					if (availableSpace.contains(i)) {
 						result2.add(i);
 					}
 				}
+				return result2;
 			}
-			return result2;
 		}
 		return result;
 	}
@@ -123,17 +123,15 @@ public class HeightAlgorithm extends Algorithm {
 			int count = getCount(objInfo);
 			PositionSettings pos = objInfo.getPositionSettings();
 			List<HeightInfo> heights = getHeights(objInfo);
-			if (heights != null) {
+			if (!heights.isEmpty()) {
 				for (int i = 0; i < count; i++) {
 					BasicModelData obj = new BasicModelData();
-					int heightPos = (int) randomizeDouble(0, heights.size());
-					if (heightPos > 0) {
-						setPosition(pos, heights, obj, heightPos);
-						obj.setRelative(pos.isRelative());
-						setRotation(objInfo, obj);
-						setScale(objInfo, obj);
-						list.add(new GeneratedObject(objInfo.getModel(), obj));
-					}
+					int heightPos = randomizeInt(0, heights.size());
+					setPosition(pos, heights, obj, heightPos);
+					obj.setRelative(pos.isRelative());
+					setRotation(objInfo, obj);
+					setScale(objInfo, obj);
+					list.add(new GeneratedObject(objInfo.getModel(), obj));
 				}
 			}
 		}

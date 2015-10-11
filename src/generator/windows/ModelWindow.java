@@ -175,7 +175,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 			protected void onSucess(String path) {
 				Mediator.setMask(path);
 				delete.setEnabled(true);
-
+				maskChanged = true;
 			}
 
 		});
@@ -187,6 +187,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 				preview.deleteMask();
 				maskName.setText(null);
 				delete.setEnabled(false);
+				maskChanged = true;
 			}
 		});
 
