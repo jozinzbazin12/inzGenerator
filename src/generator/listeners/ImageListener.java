@@ -66,7 +66,7 @@ public class ImageListener extends MouseAdapter {
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		panel.setZoom(panel.getZoom() - e.getUnitsToScroll() / 100d);
+		panel.setZoom(panel.getZoom() - e.getUnitsToScroll() / 50d);
 		if (e.getSource() instanceof JComponent) {
 			((JComponent) e.getSource()).repaint();
 		}

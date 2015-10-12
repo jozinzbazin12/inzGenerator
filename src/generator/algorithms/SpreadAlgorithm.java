@@ -20,31 +20,6 @@ public class SpreadAlgorithm extends Algorithm {
 		super(name, PropertiesKeys.AGGREGATION_ALGORITHM_HELP);
 	}
 
-	private void correctPosition(BasicModelData obj, ModelInfo info, List<HeightInfo> positions) {
-		PositionSettings pos = info.getPositionSettings();
-		if (!positions.isEmpty()) {
-			HeightInfo actual = new HeightInfo(obj.getX(), 0, obj.getZ());
-			double minLength = Double.MAX_VALUE;
-			HeightInfo nearest = new HeightInfo(Double.MAX_VALUE, 0, Double.MAX_VALUE);
-			for (HeightInfo i : positions) {
-				if (i.equals(actual)) {
-					return;
-				}
-				double tempLenght = getLength(i.getX(), nearest.getX(), i.getZ(), nearest.getZ());
-				if (minLength < 0.5) {
-					break;
-				}
-				if (tempLenght < minLength) {
-					minLength = tempLenght;
-					nearest = i;
-				}
-			}
-			obj.setX(nearest.getX() + randomizeDouble(-xRatio, xRatio));
-			obj.setZ(nearest.getZ() + randomizeDouble(-zRatio, zRatio));
-		}
-		correctPosition(obj, pos);
-	}
-
 	@Override
 	protected List<GeneratedObject> generationMethod(GenerationInfo info) {
 		Map<ModelInfo, List<GeneratedObject>> objects = new HashMap<>();

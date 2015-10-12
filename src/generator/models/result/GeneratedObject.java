@@ -90,4 +90,11 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 		return model.getName();
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		s.append(model).append(", X:").append(basic.getX()).append(" ,Y:").append(basic.getY()).append(", Z:")
+				.append(basic.getZ());
+		return s.toString();
+	}
 }

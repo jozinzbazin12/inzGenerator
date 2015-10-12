@@ -1,6 +1,7 @@
 package generator.algorithms;
 
 import java.awt.image.BufferedImage;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,17 +67,17 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 	}
 
 	protected void correctPosition(BasicModelData obj, PositionSettings pos) {
-		if (obj.getX() > pos.getMaxX() - randomizeDouble(0, xRatio)) {
-			obj.setX(pos.getMaxX());
+		if (obj.getX() > pos.getMaxX()) {
+			obj.setX(pos.getMaxX() - randomizeDouble(0, xRatio));
 		}
-		if (obj.getX() < pos.getMinX() + randomizeDouble(0, xRatio)) {
-			obj.setX(pos.getMinX());
+		if (obj.getX() < pos.getMinX()) {
+			obj.setX(pos.getMinX() + randomizeDouble(0, xRatio));
 		}
-		if (obj.getZ() > pos.getMaxZ() - randomizeDouble(0, zRatio)) {
-			obj.setZ(pos.getMaxZ());
+		if (obj.getZ() > pos.getMaxZ()) {
+			obj.setZ(pos.getMaxZ() - randomizeDouble(0, zRatio));
 		}
-		if (obj.getZ() < pos.getMinZ() + randomizeDouble(0, zRatio)) {
-			obj.setZ(pos.getMinZ());
+		if (obj.getZ() < pos.getMinZ()) {
+			obj.setZ(pos.getMinZ() + randomizeDouble(0, zRatio));
 		}
 	}
 
@@ -179,6 +180,32 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		return result;
 	}
 
+	protected void correctPosition(BasicModelData obj, ModelInfo info, List<HeightInfo> positions) {
+		PositionSettings pos = info.getPositionSettings();
+		if (!positions.isEmpty()) {
+			HeightInfo actual = new HeightInfo(obj.getX(), 0, obj.getZ());
+			double minLength = Double.MAX_VALUE;
+			HeightInfo nearest = new HeightInfo(Double.MAX_VALUE, 0, Double.MAX_VALUE);
+			Collections.shuffle(positions);
+			for (HeightInfo i : positions) {
+				if (i.equals(actual)) {
+					return;
+				}
+				double tempLenght = getLength(i.getX(), nearest.getX(), i.getZ(), nearest.getZ());
+				if (minLength < 0.5) {
+					break;
+				}
+				if (tempLenght < minLength) {
+					minLength = tempLenght;
+					nearest = i;
+				}
+			}
+			obj.setX(nearest.getX() + randomizeDouble(-xRatio, xRatio));
+			obj.setZ(nearest.getZ() + randomizeDouble(-zRatio, zRatio));
+		}
+		correctPosition(obj, pos);
+	}
+
 	public String getHelp() {
 		return Mediator.getMessage(helpKey);
 	}
@@ -195,6 +222,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		HeightInfo height = heights.get(heightPos);
 		obj.setPosition(height.getX() + randomizeDouble(-xRatio, xRatio), randomizeDouble(pos.getMinY(), pos.getMaxY()),
 				height.getZ() + randomizeDouble(-zRatio, zRatio));
+		correctPosition(obj, pos);
 	}
 
 	@Override
