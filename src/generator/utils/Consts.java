@@ -76,4 +76,10 @@ public class Consts {
 	public static final String AGGREGATION_CHANCE = "aggregationChance";
 	public static final String MAX_AGGREGATION_RANGE = "maxAggregationRange";
 	public static final String MIN_AGGREGATION_RANGE = "minAggregationRange";
+	public static final String START_MIN_X = "startMinX";
+	public static final String START_MIN_Z = "startMinZ";
+	public static final String START_MAX_X = "startMaxX";
+	public static final String START_MAX_Z = "startMaxZ";
+	public static final String MAX_PROPAGATION = "maxPropagation";
+	public static final String MIN_PROPAGATION = "minPropagation";
 }

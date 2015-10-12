@@ -25,6 +25,7 @@ public class MaskPreviewPanel extends PreviewPanel {
 		setLayout(new BorderLayout());
 		transparency = new JSlider(JSlider.VERTICAL, 0, 100, 50);
 		transparency.setOpaque(false);
+		transparency.setEnabled(false);
 		add(transparency, BorderLayout.WEST);
 	}
 
@@ -56,10 +57,12 @@ public class MaskPreviewPanel extends PreviewPanel {
 
 	public void setMask(BufferedImage img) {
 		originalMask = img;
+		transparency.setEnabled(true);
 	}
 
 	public void deleteMask() {
 		originalMask = null;
+		transparency.setEnabled(false);
 	}
 
 	public BufferedImage getMask() {

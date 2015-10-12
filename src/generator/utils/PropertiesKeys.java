@@ -138,4 +138,10 @@ public final class PropertiesKeys {
 	public static final String WIDTH = "settings.width";
 	public static final String WINDOW_NAME = "window.name";
 	public static final String XML_FILES = "files.xml";
+	public static final String START_X_POSITION = "algorithm.settings.spread.start.x";
+	public static final String START_X_POSITION_TOOLTIP = "algorithm.settings.spread.start.x.tooltip";
+	public static final String START_Z_POSITION = "algorithm.settings.spread.start.z";
+	public static final String START_Z_POSITION_TOOLTIP = "algorithm.settings.spread.start.z.tooltip";
+	public static final String PROPAGATION = "algorithm.settings.spread.propagation";
+	public static final String PROPAGATION_TOOLTIP = "algorithm.settings.spread.propagation.tooltip";
 }
