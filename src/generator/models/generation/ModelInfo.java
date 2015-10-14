@@ -128,6 +128,7 @@ public class ModelInfo implements Comparable<ModelInfo> {
 		setArg(Consts.START_MIN_Z, 0D);
 		setArg(Consts.MIN_PROPAGATION, 0D);
 		setArg(Consts.MAX_PROPAGATION, 0D);
+		setArg(Consts.RATE, 0D);
 	}
 
 	private void setArg(String key, Double value) {

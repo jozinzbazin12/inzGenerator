@@ -25,6 +25,7 @@ import generator.actions.Action;
 import generator.actions.LoadImageAction;
 import generator.actions.model.LoadSingleModelAction;
 import generator.algorithms.Algorithm;
+import generator.algorithms.MaskAlgorithm;
 import generator.algorithms.panels.additional.AlgorithmAdditionalPanel;
 import generator.models.generation.GenerationModel;
 import generator.models.generation.ModelInfo;
@@ -58,6 +59,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private JPanel spinnersX;
 	private JPanel spinnersZ;
 	private JButton delete;
+	private Algorithm algorithm;
 
 	private void createWindow() {
 		setSize(1000, 600);
@@ -86,7 +88,8 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 	private JPanel createAdditionalPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 0));
-		preview = new MaskPreviewPanel(Mediator.getMapImage(), true, true);
+		boolean bnw = algorithm instanceof MaskAlgorithm ? false : true;
+		preview = new MaskPreviewPanel(Mediator.getMapImage(), true, bnw);
 		panel.add(preview);
 		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
 		panel.add(additionalPanel);
@@ -245,7 +248,8 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 	public ModelWindow(String name, List<ModelInfo> generationModel) {
 		super(name);
-		additionalPanel = Algorithm.getAdditionalPanels().get(Mediator.getAlgorithm());
+		algorithm = Mediator.getAlgorithm();
+		additionalPanel = Algorithm.getAdditionalPanels().get(algorithm);
 		objects = generationModel;
 		createWindow();
 		fillValues();

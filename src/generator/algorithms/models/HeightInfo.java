@@ -45,6 +45,11 @@ public class HeightInfo implements Comparable<HeightInfo> {
 	}
 
 	@Override
+	public int hashCode() {
+		return (int) (y / 16);
+	}
+
+	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
 		str.append("[X: ").append(x).append(", Y: ").append(y).append(", Z: ").append(z).append("]");

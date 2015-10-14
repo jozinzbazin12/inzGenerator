@@ -82,4 +82,5 @@ public class Consts {
 	public static final String START_MAX_Z = "startMaxZ";
 	public static final String MAX_PROPAGATION = "maxPropagation";
 	public static final String MIN_PROPAGATION = "minPropagation";
+	public static final String RATE = "rate";
 }

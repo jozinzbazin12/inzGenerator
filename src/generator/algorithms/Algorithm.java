@@ -1,7 +1,9 @@
 package generator.algorithms;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +15,7 @@ import generator.algorithms.models.HeightInfo;
 import generator.algorithms.panels.additional.AlgorithmAdditionalPanel;
 import generator.algorithms.panels.additional.EmptyPanel;
 import generator.algorithms.panels.additional.HeightAlgorithmPanel;
+import generator.algorithms.panels.additional.MaskAlgorithmPanel;
 import generator.algorithms.panels.additional.SpreadAlgorithmPanel;
 import generator.algorithms.panels.main.AggregationAlgorithmPanel;
 import generator.algorithms.panels.main.AlgorithmMainPanel;
@@ -40,17 +43,19 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		EmptyPanel emptyPanel = new EmptyPanel();
 
 		ADDITIONAL_PANELS = new HashMap<>();
-		FullRandomAlgorithm randomAlgorithm = new FullRandomAlgorithm(Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
-		HeightAlgorithm height = new HeightAlgorithm(Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM));
-		RegularAlgorithm regularAlgorithm = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
-		AggregationAlgorithm aggregation = new AggregationAlgorithm(Mediator.getMessage(PropertiesKeys.AGGREGATION_ALGORITHM));
-		SpreadAlgorithm spread = new SpreadAlgorithm(Mediator.getMessage(PropertiesKeys.SPREAD_ALGORITHM));
+		Algorithm randomAlgorithm = new FullRandomAlgorithm(Mediator.getMessage(PropertiesKeys.FULL_RANDOM_ALGORITHM));
+		Algorithm height = new HeightAlgorithm(Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM));
+		Algorithm regularAlgorithm = new RegularAlgorithm(Mediator.getMessage(PropertiesKeys.REGULAR_ALGORITHM));
+		Algorithm aggregation = new AggregationAlgorithm(Mediator.getMessage(PropertiesKeys.AGGREGATION_ALGORITHM));
+		Algorithm spread = new SpreadAlgorithm(Mediator.getMessage(PropertiesKeys.SPREAD_ALGORITHM));
+		Algorithm mask = new MaskAlgorithm(Mediator.getMessage(PropertiesKeys.MASK_ALGORITHM));
 
 		ADDITIONAL_PANELS.put(randomAlgorithm, emptyPanel);
 		ADDITIONAL_PANELS.put(regularAlgorithm, emptyPanel);
 		ADDITIONAL_PANELS.put(height, new HeightAlgorithmPanel());
 		ADDITIONAL_PANELS.put(aggregation, emptyPanel);
 		ADDITIONAL_PANELS.put(spread, new SpreadAlgorithmPanel());
+		ADDITIONAL_PANELS.put(mask, new MaskAlgorithmPanel());
 
 		EmptyMainPanel emptyMainPanel = new EmptyMainPanel();
 		MAIN_PANELS = new HashMap<>();
@@ -59,7 +64,40 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		MAIN_PANELS.put(height, emptyMainPanel);
 		MAIN_PANELS.put(aggregation, new AggregationAlgorithmPanel());
 		MAIN_PANELS.put(spread, emptyMainPanel);
+		MAIN_PANELS.put(mask, emptyMainPanel);
 
+	}
+
+	protected List<List<HeightInfo>> findHeights(BufferedImage img, double dx, double dz) {
+		Map<Double, List<HeightInfo>> heights = new HashMap<>();
+		int width = img.getWidth();
+		int height = img.getHeight();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				double y = PreviewPanel.getColor(img, i, j);
+				List<HeightInfo> list = heights.get(y);
+				if (list == null) {
+					list = new ArrayList<>();
+					heights.put(y, list);
+				}
+				double x = (i - width / 2) * dx;
+				double z = (height / 2 - j) * dz;
+				list.add(new HeightInfo(x, y, z));
+			}
+		}
+		List<List<HeightInfo>> points = new ArrayList<>(heights.values());
+		points.sort(new Comparator<List<HeightInfo>>() {
+
+			@Override
+			public int compare(List<HeightInfo> o1, List<HeightInfo> o2) {
+				return o1.get(0).compareTo(o2.get(0));
+			}
+		});
+		return points;
+	}
+
+	protected List<List<HeightInfo>> findHeights() {
+		return findHeights(Mediator.getMapImage(), xRatio, zRatio);
 	}
 
 	protected double getLength(double x, double z, double x2, double z2) {
