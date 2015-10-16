@@ -10,7 +10,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class Spinner extends JSpinner {
+public class Spinner extends JSpinner implements Component {
 
 	private static final long serialVersionUID = -2310738112100364004L;
 	private boolean modified = false;
@@ -86,6 +86,16 @@ public class Spinner extends JSpinner {
 
 	public boolean isListeningEnabled() {
 		return listeningEnabled;
+	}
+
+	@Override
+	public double value() {
+		return (double) getValue();
+	}
+
+	@Override
+	public void setValue(double value) {
+		super.setValue(value);
 	}
 
 }

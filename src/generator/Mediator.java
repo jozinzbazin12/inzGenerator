@@ -245,11 +245,11 @@ public class Mediator {
 	}
 
 	public static double getGenerationInfoArguments(String key) {
-		return (double) firstTabPanel.getArguments().get(key).getValue();
+		return (double) firstTabPanel.getArguments().get(key).value();
 	}
 
 	public static double getGeneratedObjectArguments(String key) {
-		return (double) objectWindow.getArguments().get(key).getValue();
+		return (double) objectWindow.getArguments().get(key).value();
 	}
 
 	public static Locale getLocale() {
@@ -368,8 +368,6 @@ public class Mediator {
 	}
 }
 // TODO nienachodzenie obiekow
-// TODO mapa prawodpodobienstwa dla kazdego obiektu, pozycja 1 obiektu i
-// rozsiewanie, skupisko
 // TODO generator na siatce refularnej
 // TODO obsluga sciezek relatywnych
 // TODO sprawdzic wysokosc mapy w generatorze i wyswietlaczu

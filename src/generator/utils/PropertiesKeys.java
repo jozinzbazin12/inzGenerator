@@ -148,4 +148,6 @@ public final class PropertiesKeys {
 	public static final String MASK_ALGORITHM = "algorithm.mask";
 	public static final String COLOR_RATE = "algorithm.settings.mask.color.rate";
 	public static final String COLOR_RATE_TOOLTIP = "algorithm.settings.mask.color.rate.tooltip";
+	public static final String PREVENT_COLLISIONS = "algorithm.settings.prevent.collisions";
+	public static final String PREVENT_COLLISIONS_TOOLTIP = "algorithm.settings.prevent.collisions.tooltip";
 }

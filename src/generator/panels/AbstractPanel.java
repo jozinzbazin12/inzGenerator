@@ -5,19 +5,20 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import generator.utils.Component;
 import generator.utils.Spinner;
 
 public abstract class AbstractPanel extends JPanel {
 	private static final long serialVersionUID = -4327845537212042650L;
 	protected static final int MAX_POSITION = 10000;
-	protected Map<String, Spinner> arguments = new HashMap<>();
+	protected Map<String, Component> arguments = new HashMap<>();
 
 	public Map<String, Double> getArgs(Map<String, Double> args, boolean checkModified) {
-		for (Map.Entry<String, Spinner> e : arguments.entrySet()) {
-			Spinner spinner = e.getValue();
+		for (Map.Entry<String, Component> e : arguments.entrySet()) {
+			Component spinner = e.getValue();
 			String key = e.getKey();
 			if (spinner.isModified() || !checkModified) {
-				args.put(key, (Double) spinner.getValue());
+				args.put(key, (Double) spinner.value());
 			}
 		}
 		return args;
@@ -28,10 +29,10 @@ public abstract class AbstractPanel extends JPanel {
 	}
 
 	public void setArgs(Map<String, Double> args) {
-		for (Map.Entry<String, Spinner> i : arguments.entrySet()) {
+		for (Map.Entry<String, Component> i : arguments.entrySet()) {
 			Double value = args.get(i.getKey());
 			if (value != null) {
-				Spinner spinner = i.getValue();
+				Component spinner = i.getValue();
 				spinner.setSilent(true);
 				spinner.setValue(value);
 				spinner.setSilent(false);
@@ -40,7 +41,7 @@ public abstract class AbstractPanel extends JPanel {
 	}
 
 	protected double getValue(String key) {
-		return (double) arguments.get(key).getValue();
+		return (double) arguments.get(key).value();
 	}
 
 	protected Map<String, Double> transform(Map<String, Spinner> map) {

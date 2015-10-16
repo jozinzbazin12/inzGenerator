@@ -34,14 +34,14 @@ import generator.models.generation.RotationSettings;
 import generator.models.generation.ScaleSettings;
 import generator.panels.MaskPreviewPanel;
 import generator.utils.CheckBox;
+import generator.utils.Component;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.Label;
 import generator.utils.PropertiesKeys;
-import generator.utils.Spinner;
 
 public class ModelWindow extends JFrame implements ActionListener {
-	private Map<String, Spinner> arguments = new HashMap<>();
+	private Map<String, Component> arguments = new HashMap<>();
 	private static final long serialVersionUID = 5328377975510513084L;
 	private JButton cancel;
 	private JButton ok;
@@ -119,10 +119,10 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 		JPanel additional = new JPanel(new GridLayout(0, 2));
 		relative = new CheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE),
-				Mediator.getMessage(PropertiesKeys.RELATIVE_TOOLTIP));
+				Mediator.getMessage(PropertiesKeys.RELATIVE_TOOLTIP), true);
 		additional.add(relative);
 		equalScale = new CheckBox(Mediator.getMessage(PropertiesKeys.EQUAL_SCALE),
-				Mediator.getMessage(PropertiesKeys.EQUAL_SCALE_TOOLTIP));
+				Mediator.getMessage(PropertiesKeys.EQUAL_SCALE_TOOLTIP), true);
 		equalScale.addActionListener(this);
 
 		additional.add(equalScale);
@@ -347,40 +347,40 @@ public class ModelWindow extends JFrame implements ActionListener {
 	}
 
 	private void setSilent(boolean value) {
-		for (Map.Entry<String, Spinner> i : arguments.entrySet()) {
+		for (Map.Entry<String, Component> i : arguments.entrySet()) {
 			i.getValue().setSilent(value);
 		}
 	}
 
-	public Map<String, Spinner> getArguments() {
+	public Map<String, Component> getArguments() {
 		return arguments;
 	}
 
 	private PositionSettings getPosition(PositionSettings data) {
-		Spinner minX = arguments.get(Consts.MIN_X);
-		Spinner minY = arguments.get(Consts.MIN_Y);
-		Spinner minZ = arguments.get(Consts.MIN_Z);
-		Spinner maxX = arguments.get(Consts.MAX_X);
-		Spinner maxY = arguments.get(Consts.MAX_Y);
-		Spinner maxZ = arguments.get(Consts.MAX_Z);
+		Component minX = arguments.get(Consts.MIN_X);
+		Component minY = arguments.get(Consts.MIN_Y);
+		Component minZ = arguments.get(Consts.MIN_Z);
+		Component maxX = arguments.get(Consts.MAX_X);
+		Component maxY = arguments.get(Consts.MAX_Y);
+		Component maxZ = arguments.get(Consts.MAX_Z);
 
 		if (minX.isModified()) {
-			data.setMinX((double) minX.getValue());
+			data.setMinX((double) minX.value());
 		}
 		if (minY.isModified()) {
-			data.setMinY((double) minY.getValue());
+			data.setMinY((double) minY.value());
 		}
 		if (minZ.isModified()) {
-			data.setMinZ((double) minZ.getValue());
+			data.setMinZ((double) minZ.value());
 		}
 		if (maxX.isModified()) {
-			data.setMaxX((double) maxX.getValue());
+			data.setMaxX((double) maxX.value());
 		}
 		if (maxY.isModified()) {
-			data.setMaxY((double) maxY.getValue());
+			data.setMaxY((double) maxY.value());
 		}
 		if (maxZ.isModified()) {
-			data.setMaxZ((double) maxZ.getValue());
+			data.setMaxZ((double) maxZ.value());
 		}
 		if (relative.isModified()) {
 			data.setRelative(relative.isSelected());
@@ -390,49 +390,49 @@ public class ModelWindow extends JFrame implements ActionListener {
 	}
 
 	private RotationSettings getRotation(RotationSettings data) {
-		Spinner minX = arguments.get(Consts.MIN_RX);
-		Spinner minY = arguments.get(Consts.MIN_RY);
-		Spinner minZ = arguments.get(Consts.MIN_RZ);
-		Spinner maxX = arguments.get(Consts.MAX_RX);
-		Spinner maxY = arguments.get(Consts.MAX_RY);
-		Spinner maxZ = arguments.get(Consts.MAX_RZ);
+		Component minX = arguments.get(Consts.MIN_RX);
+		Component minY = arguments.get(Consts.MIN_RY);
+		Component minZ = arguments.get(Consts.MIN_RZ);
+		Component maxX = arguments.get(Consts.MAX_RX);
+		Component maxY = arguments.get(Consts.MAX_RY);
+		Component maxZ = arguments.get(Consts.MAX_RZ);
 
 		if (minX.isModified()) {
-			data.setMinX((double) minX.getValue());
+			data.setMinX((double) minX.value());
 		}
 		if (minY.isModified()) {
-			data.setMinY((double) minY.getValue());
+			data.setMinY((double) minY.value());
 		}
 		if (minZ.isModified()) {
-			data.setMinZ((double) minZ.getValue());
+			data.setMinZ((double) minZ.value());
 		}
 		if (maxX.isModified()) {
-			data.setMaxX((double) maxX.getValue());
+			data.setMaxX((double) maxX.value());
 		}
 		if (maxY.isModified()) {
-			data.setMaxY((double) maxY.getValue());
+			data.setMaxY((double) maxY.value());
 		}
 		if (maxZ.isModified()) {
-			data.setMaxZ((double) maxZ.getValue());
+			data.setMaxZ((double) maxZ.value());
 		}
 
 		return data;
 	}
 
 	private ScaleSettings getScale(ScaleSettings data) {
-		Spinner sminX = arguments.get(Consts.MIN_SX);
-		Spinner sminY = arguments.get(Consts.MIN_SY);
-		Spinner sminZ = arguments.get(Consts.MIN_SZ);
-		Spinner smaxX = arguments.get(Consts.MAX_SX);
-		Spinner smaxY = arguments.get(Consts.MAX_SY);
-		Spinner smaxZ = arguments.get(Consts.MAX_SZ);
+		Component sminX = arguments.get(Consts.MIN_SX);
+		Component sminY = arguments.get(Consts.MIN_SY);
+		Component sminZ = arguments.get(Consts.MIN_SZ);
+		Component smaxX = arguments.get(Consts.MAX_SX);
+		Component smaxY = arguments.get(Consts.MAX_SY);
+		Component smaxZ = arguments.get(Consts.MAX_SZ);
 
-		double minX = sminX.isModified() ? (double) sminX.getValue() : data.getMinX();
-		double minY = sminY.isModified() ? (double) sminY.getValue() : data.getMinY();
-		double minZ = sminZ.isModified() ? (double) sminZ.getValue() : data.getMinZ();
-		double maxX = smaxX.isModified() ? (double) smaxX.getValue() : data.getMaxX();
-		double maxY = smaxY.isModified() ? (double) smaxY.getValue() : data.getMaxY();
-		double maxZ = smaxZ.isModified() ? (double) smaxZ.getValue() : data.getMaxZ();
+		double minX = sminX.isModified() ? (double) sminX.value() : data.getMinX();
+		double minY = sminY.isModified() ? (double) sminY.value() : data.getMinY();
+		double minZ = sminZ.isModified() ? (double) sminZ.value() : data.getMinZ();
+		double maxX = smaxX.isModified() ? (double) smaxX.value() : data.getMaxX();
+		double maxY = smaxY.isModified() ? (double) smaxY.value() : data.getMaxY();
+		double maxZ = smaxZ.isModified() ? (double) smaxZ.value() : data.getMaxZ();
 
 		if (data.isEqual() || (equalScale.isModified())) {
 			data.setMinX(minX);
@@ -462,13 +462,13 @@ public class ModelWindow extends JFrame implements ActionListener {
 				i.setPositionSettings(getPosition(i.getPositionSettings()));
 				i.setRotationSettings(getRotation(i.getRotationSettings()));
 				i.setScaleSettings(getScale(i.getScaleSettings()));
-				Spinner minC = arguments.get(Consts.MIN_COUNT);
-				Spinner maxC = arguments.get(Consts.MAX_COUNT);
+				Component minC = arguments.get(Consts.MIN_COUNT);
+				Component maxC = arguments.get(Consts.MAX_COUNT);
 				if (minC.isModified()) {
-					i.setMinCount(getIntValue(minC.getValue()));
+					i.setMinCount(getIntValue(minC.value()));
 				}
 				if (maxC.isModified()) {
-					i.setMaxCount(getIntValue(maxC.getValue()));
+					i.setMaxCount(getIntValue(maxC.value()));
 				}
 				additionalPanel.getArgs(i.getArgs(), true);
 

@@ -27,11 +27,11 @@ import generator.models.result.Material;
 import generator.models.result.RGB;
 import generator.models.result.RGBA;
 import generator.models.result.Texture;
+import generator.utils.Component;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.Label;
 import generator.utils.PropertiesKeys;
-import generator.utils.Spinner;
 import generator.utils.WindowUtil;
 
 public class FirstTabPanel extends AbstractPanel implements MouseListener {
@@ -213,7 +213,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	}
 
 	public FirstTabPanel() {
-		arguments = new HashMap<String, Spinner>();
+		arguments = new HashMap<>();
 		setLayout(new GridLayout(0, 3));
 		createMapOptionsPanel();
 		createTextureOptionsPanel();
@@ -221,7 +221,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		Mediator.registerFirstTabPanel(this);
 	}
 
-	public Map<String, Spinner> getArguments() {
+	public Map<String, Component> getArguments() {
 		return arguments;
 	}
 

@@ -5,13 +5,14 @@ import java.awt.Graphics;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.Action;
 import javax.swing.JCheckBox;
 
-public class CheckBox extends JCheckBox {
+public class CheckBox extends JCheckBox implements Component {
 
 	private static final long serialVersionUID = 2049556437007670432L;
-
 	private boolean modified = false;
+	private boolean listeningEnabled;
 
 	@Override
 	public void paint(Graphics g) {
@@ -22,51 +23,54 @@ public class CheckBox extends JCheckBox {
 		}
 	}
 
-	private void addListener() {
-		addItemListener(new ItemListener() {
+	private void addListener(boolean enableListening) {
+		listeningEnabled = enableListening;
+		if (enableListening) {
+			addItemListener(new ItemListener() {
 
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (hasFocus()) {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
 					modified = true;
 				}
-				getParent().repaint();
-			}
-		});
-	}
-
-	@Override
-	public void setSelected(boolean b) {
-		super.setSelected(b);
-		modified = false;
+			});
+		}
 	}
 
 	public CheckBox() {
 		super();
-		addListener();
 	}
 
-	public CheckBox(String text, boolean selected) {
-		super(text, selected);
-		init(text);
+	public CheckBox(String text, boolean listen) {
+		super(text);
+		init(text, false);
 	}
 
 	public CheckBox(String text) {
 		super(text);
-		init(text);
+		init(text, false);
 	}
 
 	public CheckBox(String text, String tooltip) {
 		super(text);
-		init(text, tooltip);
+		init(text, tooltip, false);
 	}
 
-	private void init(String text) {
-		init(text, (String) null);
+	public CheckBox(Action a, String tooltip) {
+		super(a);
+		setToolTipText(tooltip);
 	}
 
-	private void init(String text, String tooltip) {
-		addListener();
+	public CheckBox(String text, String tooltip, boolean listen) {
+		super(text);
+		init(text, tooltip, listen);
+	}
+
+	private void init(String text, boolean listen) {
+		init(text, (String) null, listen);
+	}
+
+	private void init(String text, String tooltip, boolean listen) {
+		addListener(listen);
 		if (tooltip != null) {
 			setToolTipText(tooltip);
 		} else {
@@ -82,4 +86,33 @@ public class CheckBox extends JCheckBox {
 		this.modified = modified;
 	}
 
+	public boolean isSilent() {
+		return true;
+	}
+
+	public void setSilent(boolean silent) {
+	}
+
+	public boolean isListeningEnabled() {
+		return listeningEnabled;
+	}
+
+	public void setListeningEnabled(boolean listeningEnabled) {
+		this.listeningEnabled = listeningEnabled;
+	}
+
+	@Override
+	public double value() {
+		boolean selected = isSelected();
+		return selected ? 1 : 0;
+	}
+
+	@Override
+	public void setValue(double value) {
+		if (Math.abs(1 - value) < 0.5) {
+			setSelected(true);
+		} else {
+			setSelected(false);
+		}
+	}
 }

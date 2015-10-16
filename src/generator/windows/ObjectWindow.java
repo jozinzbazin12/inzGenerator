@@ -25,14 +25,14 @@ import generator.models.generation.ModelInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.utils.CheckBox;
+import generator.utils.Component;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.Label;
 import generator.utils.PropertiesKeys;
-import generator.utils.Spinner;
 
 public class ObjectWindow extends JFrame implements ActionListener {
-	Map<String, Spinner> arguments = new HashMap<>();
+	private Map<String, Component> arguments = new HashMap<>();
 	private static final long serialVersionUID = 5328377975510513084L;
 	private JButton cancel;
 	private JButton ok;
@@ -61,7 +61,7 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		modelPanel.add(models);
 		panel.add(modelPanel);
 		relative = new CheckBox(Mediator.getMessage(PropertiesKeys.RELATIVE),
-				Mediator.getMessage(PropertiesKeys.RELATIVE_TOOLTIP));
+				Mediator.getMessage(PropertiesKeys.RELATIVE_TOOLTIP), true);
 		panel.add(relative);
 
 		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.X,
@@ -152,47 +152,47 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		}
 	}
 
-	public Map<String, Spinner> getArguments() {
+	public Map<String, Component> getArguments() {
 		return arguments;
 	}
 
 	private BasicModelData getData(BasicModelData data) {
-		Spinner x = arguments.get(Consts.X);
-		Spinner y = arguments.get(Consts.Y);
-		Spinner z = arguments.get(Consts.Z);
-		Spinner sx = arguments.get(Consts.SX);
-		Spinner sy = arguments.get(Consts.SY);
-		Spinner sz = arguments.get(Consts.SZ);
-		Spinner rx = arguments.get(Consts.RX);
-		Spinner ry = arguments.get(Consts.RY);
-		Spinner rz = arguments.get(Consts.RZ);
+		Component x = arguments.get(Consts.X);
+		Component y = arguments.get(Consts.Y);
+		Component z = arguments.get(Consts.Z);
+		Component sx = arguments.get(Consts.SX);
+		Component sy = arguments.get(Consts.SY);
+		Component sz = arguments.get(Consts.SZ);
+		Component rx = arguments.get(Consts.RX);
+		Component ry = arguments.get(Consts.RY);
+		Component rz = arguments.get(Consts.RZ);
 
 		if (x.isModified()) {
-			data.setX((double) x.getValue());
+			data.setX((double) x.value());
 		}
 		if (y.isModified()) {
-			data.setY((double) y.getValue());
+			data.setY((double) y.value());
 		}
 		if (z.isModified()) {
-			data.setZ((double) z.getValue());
+			data.setZ((double) z.value());
 		}
 		if (sx.isModified()) {
-			data.setSx((double) sx.getValue());
+			data.setSx((double) sx.value());
 		}
 		if (sy.isModified()) {
-			data.setSy((double) sy.getValue());
+			data.setSy((double) sy.value());
 		}
 		if (sz.isModified()) {
-			data.setSz((double) sz.getValue());
+			data.setSz((double) sz.value());
 		}
 		if (rx.isModified()) {
-			data.setRx((double) rx.getValue());
+			data.setRx((double) rx.value());
 		}
 		if (ry.isModified()) {
-			data.setRy((double) ry.getValue());
+			data.setRy((double) ry.value());
 		}
 		if (rz.isModified()) {
-			data.setRz((double) rz.getValue());
+			data.setRz((double) rz.value());
 		}
 
 		if (relative.isModified()) {

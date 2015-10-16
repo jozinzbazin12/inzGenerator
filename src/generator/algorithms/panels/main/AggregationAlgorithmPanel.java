@@ -1,7 +1,5 @@
 package generator.algorithms.panels.main;
 
-import java.awt.GridLayout;
-
 import javax.swing.JSeparator;
 
 import generator.Mediator;
@@ -14,7 +12,6 @@ public class AggregationAlgorithmPanel extends AlgorithmMainPanel {
 	private static final long serialVersionUID = 6273497875161411624L;
 
 	public AggregationAlgorithmPanel() {
-		setLayout(new GridLayout(13, 3, 5, 5));
 		add(ComponentUtil.createDoubleLegendPanel());
 		add(ComponentUtil.createSpinner(0, 100, Consts.AGGREGATION_CHANCE, Mediator.getMessage(PropertiesKeys.AGGREGATION_CHANCE),
 				arguments, Mediator.getMessage(PropertiesKeys.AGGREGATION_CHANCE_TOOLTIP)));

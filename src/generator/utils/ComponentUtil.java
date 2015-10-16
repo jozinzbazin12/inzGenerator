@@ -44,7 +44,7 @@ public final class ComponentUtil {
 	}
 
 	public static JPanel createSpinner(double min, double max, String key, String description, double defValue,
-			Map<String, Spinner> arguments, String tooltip, boolean listen) {
+			Map<String, Component> arguments, String tooltip, boolean listen) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 2));
 		Label attributelabel = new Label(description, tooltip);
@@ -57,7 +57,7 @@ public final class ComponentUtil {
 	}
 
 	public static JPanel createSpinner(double min, double max, String key1, String key2, String description,
-			Map<String, Spinner> arguments, String tooltip, boolean listen) {
+			Map<String, Component> arguments, String tooltip, boolean listen) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 3));
 		Label attributelabel = new Label(description, tooltip);
@@ -69,8 +69,8 @@ public final class ComponentUtil {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				Number low = (Number) minSpinner.getValue();
-				Number high = (Number) maxSpinner.getValue();
+				Number low = (Number) minSpinner.value();
+				Number high = (Number) maxSpinner.value();
 				if (high.floatValue() < low.floatValue() && !minSpinner.isSilent()) {
 					maxSpinner.setValue(low);
 					if (maxSpinner.isListeningEnabled()) {
@@ -83,8 +83,8 @@ public final class ComponentUtil {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				Number low = (Number) minSpinner.getValue();
-				Number high = (Number) maxSpinner.getValue();
+				Number low = (Number) minSpinner.value();
+				Number high = (Number) maxSpinner.value();
 				if (low.floatValue() > high.floatValue() && !maxSpinner.isSilent()) {
 					minSpinner.setValue(high);
 					if (maxSpinner.isListeningEnabled()) {
@@ -102,51 +102,51 @@ public final class ComponentUtil {
 	}
 
 	public static JPanel createSpinner(double min, double max, String key1, String key2, String description,
-			Map<String, Spinner> arguments) {
+			Map<String, Component> arguments) {
 		return createSpinner(min, max, key1, key2, description, arguments, null, false);
 	}
 
-	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Spinner> arguments) {
+	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Component> arguments) {
 		return createSpinner(min, max, key, description, 0.0, arguments);
 	}
 
-	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Spinner> arguments,
+	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Component> arguments,
 			boolean listen) {
 		return createSpinner(min, max, key, description, 0.0, arguments, null, listen);
 	}
 
 	public static JPanel createSpinner(double min, double max, String key, String description, double defValue,
-			Map<String, Spinner> arguments) {
+			Map<String, Component> arguments) {
 		return createSpinner(min, max, key, description, defValue, arguments, null, false);
 	}
 
 	public static JPanel createSpinner(double min, double max, String key1, String key2, String description,
-			Map<String, Spinner> arguments, String tooltip) {
+			Map<String, Component> arguments, String tooltip) {
 		return createSpinner(min, max, key1, key2, description, arguments, tooltip, false);
 	}
 
-	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Spinner> arguments,
+	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Component> arguments,
 			String tooltip, boolean listen) {
 		return createSpinner(min, max, key, description, 0.0, arguments, tooltip, listen);
 	}
 
-	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Spinner> arguments,
+	public static JPanel createSpinner(double min, double max, String key, String description, Map<String, Component> arguments,
 			String tooltip) {
 		return createSpinner(min, max, key, description, 0.0, arguments, tooltip, false);
 	}
 
 	public static JPanel createSpinner(double min, double max, String key, String description, double defValue,
-			Map<String, Spinner> arguments, String tooltip) {
+			Map<String, Component> arguments, String tooltip) {
 		return createSpinner(min, max, key, description, defValue, arguments, tooltip, false);
 	}
 
 	public static JPanel createSpinner(int min, int max, String minCount, String maxCount, String message,
-			Map<String, Spinner> arguments, boolean listen) {
+			Map<String, Component> arguments, boolean listen) {
 		return createSpinner(min, max, minCount, maxCount, message, arguments, null, listen);
 	}
 
 	public static JPanel createLightSpinners(double min, double max, String keyR, String keyG, String keyB, String keyA,
-			String description, String tooltip, double defValue, Map<String, Spinner> arguments) {
+			String description, String tooltip, double defValue, Map<String, Component> arguments) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 5));
 		Label attributelabel = new Label(description, tooltip);
@@ -168,7 +168,7 @@ public final class ComponentUtil {
 	}
 
 	public static JPanel createMaterialSpinners(double min, double max, String keyR, String keyG, String keyB, String description,
-			String tooltip, double defValue, Map<String, Spinner> arguments) {
+			String tooltip, double defValue, Map<String, Component> arguments) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 4));
 		Label attributelabel = new Label(description, tooltip);

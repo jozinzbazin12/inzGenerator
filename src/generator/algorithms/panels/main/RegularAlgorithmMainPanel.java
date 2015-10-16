@@ -1,6 +1,5 @@
 package generator.algorithms.panels.main;
 
-import java.awt.GridLayout;
 import java.text.MessageFormat;
 
 import generator.Mediator;
@@ -13,7 +12,6 @@ public class RegularAlgorithmMainPanel extends AlgorithmMainPanel {
 	private static final long serialVersionUID = 3564236471602804053L;
 
 	public RegularAlgorithmMainPanel() {
-		setLayout(new GridLayout(12, 1, 5, 5));
 		add(ComponentUtil.createAtrributeLegendPanel());
 		add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.MIN_X, Consts.MAX_X,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments));
