@@ -34,6 +34,7 @@ public class FullRandomAlgorithm extends Algorithm {
 					obj.setPosition(randomizeDouble(pos.getMinX(), pos.getMaxX()), randomizeDouble(pos.getMinY(), pos.getMaxY()),
 							randomizeDouble(pos.getMinZ(), pos.getMaxZ()));
 				}
+
 				obj.setRelative(pos.isRelative());
 
 				setRotation(objInfo, obj);

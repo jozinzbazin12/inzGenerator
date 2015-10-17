@@ -12,6 +12,7 @@ public class CheckBox extends JCheckBox implements Component {
 
 	private static final long serialVersionUID = 2049556437007670432L;
 	private boolean modified = false;
+	private boolean silent = false;
 	private boolean listeningEnabled;
 
 	@Override
@@ -30,7 +31,9 @@ public class CheckBox extends JCheckBox implements Component {
 
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					modified = true;
+					if (!silent) {
+						modified = true;
+					}
 				}
 			});
 		}
@@ -87,10 +90,11 @@ public class CheckBox extends JCheckBox implements Component {
 	}
 
 	public boolean isSilent() {
-		return true;
+		return silent;
 	}
 
 	public void setSilent(boolean silent) {
+		this.silent = silent;
 	}
 
 	public boolean isListeningEnabled() {

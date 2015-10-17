@@ -131,6 +131,7 @@ public class ObjectWindow extends JFrame implements ActionListener {
 			arguments.get(Consts.SX).setValue(basic.getSx());
 			arguments.get(Consts.SY).setValue(basic.getSy());
 			arguments.get(Consts.SZ).setValue(basic.getSz());
+			relative.setSilent(true);
 			relative.setSelected(basic.isRelative());
 			models.setSelectedItem(generatedObject.getModel());
 		} else {
@@ -149,6 +150,7 @@ public class ObjectWindow extends JFrame implements ActionListener {
 				relative.setSelected(basic.isRelative());
 			}
 			models.setSelectedIndex(-1);
+			relative.setSilent(false);
 		}
 	}
 

@@ -257,7 +257,9 @@ public class ModelWindow extends JFrame implements ActionListener {
 	}
 
 	private void setEqualScale(boolean b) {
+		equalScale.setSilent(true);
 		equalScale.setSelected(b);
+		equalScale.setSilent(false);
 		showScaleSpinners(!b);
 	}
 
@@ -296,7 +298,9 @@ public class ModelWindow extends JFrame implements ActionListener {
 			arguments.get(Consts.MAX_SX).setValue(scaleSettings.getMaxX());
 			arguments.get(Consts.MAX_SY).setValue(scaleSettings.getMaxY());
 			arguments.get(Consts.MAX_SZ).setValue(scaleSettings.getMaxZ());
+			relative.setSilent(true);
 			relative.setSelected(positionSettings.isRelative());
+
 			setEqualScale(scaleSettings.isEqual());
 			setSilent(false);
 			additionalPanel.setArgs(objectInfo.getArgs());
@@ -333,6 +337,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 			if (!diff) {
 				relative.setSelected(objects.get(0).getPositionSettings().isRelative());
 			}
+			relative.setSilent(false);
 		}
 	}
 
