@@ -92,7 +92,7 @@ public class ImageListener extends MouseAdapter {
 							* (1 + panel.getZoom()) + panel.getCurrentPoint().x;
 					double z = ((mapHeight / 2 - (i.getBasic().getZ() * (mapHeight / Mediator.getMapHeight())))
 							* (1 + panel.getZoom()) + panel.getCurrentPoint().y);
-					if (absolute(e.getX(), x) <= 5 && absolute(e.getY(), z) <= 5) {
+					if (Math.abs(e.getX() - x) <= 5 && Math.abs(e.getY() - z) <= 5) {
 						if (currentObject == i) {
 							return;
 						}
@@ -105,15 +105,5 @@ public class ImageListener extends MouseAdapter {
 		}
 		currentObject = null;
 		Mediator.unHighlight();
-	}
-
-	private double absolute(double a, double b) {
-		if (a < 0) {
-			a *= -1;
-		}
-		if (b < 0) {
-			b *= -1;
-		}
-		return a - b > 0 ? a - b : b - a;
 	}
 }

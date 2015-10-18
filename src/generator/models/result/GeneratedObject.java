@@ -104,11 +104,11 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 				&& (Math.abs(basic.getZ() - basic2.getZ()) * 2 > (basic.getSz() + basic2.getSz()));
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof GeneratedObject)) {
-			return false;
-		}
-		return overlap((GeneratedObject) obj);
-	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (!(obj instanceof GeneratedObject)) {
+//			return false;
+//		}
+//		return overlap((GeneratedObject) obj);
+//	}
 }
