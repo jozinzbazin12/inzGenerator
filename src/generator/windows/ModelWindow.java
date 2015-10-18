@@ -269,6 +269,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 	}
 
 	private void fillValues() {
+		relative.setSilent(true);
 		if (objects.size() == 1) {
 			ModelInfo objectInfo = objects.get(0);
 			setSilent(true);
@@ -298,7 +299,6 @@ public class ModelWindow extends JFrame implements ActionListener {
 			arguments.get(Consts.MAX_SX).setValue(scaleSettings.getMaxX());
 			arguments.get(Consts.MAX_SY).setValue(scaleSettings.getMaxY());
 			arguments.get(Consts.MAX_SZ).setValue(scaleSettings.getMaxZ());
-			relative.setSilent(true);
 			relative.setSelected(positionSettings.isRelative());
 
 			setEqualScale(scaleSettings.isEqual());
