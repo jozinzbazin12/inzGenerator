@@ -80,7 +80,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 					list = new ArrayList<>();
 					heights.put(y, list);
 				}
-				double x = (i - width / 2) * dx;
+				double x = (width / 2 - i) * dx;
 				double z = (height / 2 - j) * dz;
 				list.add(new HeightInfo(x, y, z));
 			}
@@ -197,7 +197,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 			for (int j = 0; j < height; j++) {
 				double y = PreviewPanel.getColor(mask, i, j);
 				if (y >= 128) {
-					double x = (i - width / 2) * xr;
+					double x = (width / 2 - i) * xr;
 					double z = (height / 2 - j) * zr;
 					list.add(new HeightInfo(x, y, z));
 				}

@@ -54,7 +54,7 @@ public class ImageListener extends MouseAdapter {
 			int mapHeight = Mediator.getMapDimensions().height;
 			currentObject.getBasic()
 					.setX((Mediator.getMapWidth() * (-2 * e.getX() + panel.getZoom() * mapWidth + 2 * currentPoint.x + mapWidth))
-							/ (-2 * mapWidth * (panel.getZoom() + 1)));
+							/ (2 * mapWidth * (panel.getZoom() + 1)));
 			currentObject.getBasic()
 					.setZ((Mediator.getMapHeight()
 							* (-2 * e.getY() + panel.getZoom() * mapHeight + 2 * currentPoint.y + mapHeight))
@@ -88,7 +88,7 @@ public class ImageListener extends MouseAdapter {
 				for (GeneratedObject i : panel.getGeneratedObjects()) {
 					int mapWidth = Mediator.getMapDimensions().width;
 					int mapHeight = Mediator.getMapDimensions().height;
-					double x = ((i.getBasic().getX() * (mapWidth / Mediator.getMapWidth())) + mapWidth / 2)
+					double x = (mapWidth / 2 - (i.getBasic().getX() * (mapWidth / Mediator.getMapWidth())))
 							* (1 + panel.getZoom()) + panel.getCurrentPoint().x;
 					double z = ((mapHeight / 2 - (i.getBasic().getZ() * (mapHeight / Mediator.getMapHeight())))
 							* (1 + panel.getZoom()) + panel.getCurrentPoint().y);

@@ -25,14 +25,14 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 			if (generatedObjects != null) {
 				for (GeneratedObject i : generatedObjects) {
 					g.setColor(i.getColor());
-					g.fillRect(getObjectX(i), getObjectY(i), 4, 4);
+					g.fillRect(getObjectX(i), getObjectZ(i), 4, 4);
 				}
 			}
 			drawPosition(g);
 		}
 	}
 
-	private int getObjectY(GeneratedObject i) {
+	private int getObjectZ(GeneratedObject i) {
 		int mapHeight = image.getHeight();
 		return (int) ((mapHeight / 2 - (i.getBasic().getZ() * (mapHeight / Mediator.getMapHeight()))) * (1 + zoom)
 				+ currentPoint.y);
@@ -40,7 +40,7 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 
 	private int getObjectX(GeneratedObject i) {
 		int mapWidth = image.getWidth();
-		return (int) (((i.getBasic().getX() * (mapWidth / Mediator.getMapWidth())) + mapWidth / 2) * (1 + zoom) + currentPoint.x);
+		return (int) ((  mapWidth / 2-(i.getBasic().getX() * (mapWidth / Mediator.getMapWidth()))) * (1 + zoom) + currentPoint.x);
 	}
 
 	public ObjectsPreviewPanel(BufferedImage image) throws IOException {
