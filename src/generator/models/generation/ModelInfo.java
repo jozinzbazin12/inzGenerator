@@ -18,87 +18,36 @@ import generator.utils.Consts;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ModelInfo implements Comparable<ModelInfo> {
 	@XmlTransient
-	private GenerationModel model;
+	private Map<String, Double> args = new HashMap<>();
 	@XmlTransient
 	private BufferedImage mask;
 	@XmlTransient
 	private String maskFile;
-	@XmlTransient
-	private Map<String, Double> args = new HashMap<>();
-
-	@XmlAttribute(name = "minCount")
-	private int minCount;
 	@XmlAttribute(name = "maxCount")
 	private int maxCount;
 
+	@XmlAttribute(name = "minCount")
+	private int minCount;
+	@XmlTransient
+	private GenerationModel model;
+
 	@XmlElement(name = "Position")
 	private PositionSettings positionSettings;
-	@XmlElement(name = "Scale")
-	private ScaleSettings scaleSettings;
 	@XmlElement(name = "Rotation")
 	private RotationSettings rotationSettings;
+	@XmlElement(name = "Scale")
+	private ScaleSettings scaleSettings;
 
-	@XmlElement(name = "Args")
-	public Map<String, Double> getArgs() {
-		return args;
+	public ModelInfo() {
+
 	}
 
-	public void setArgs(Map<String, Double> args) {
-		this.args = args;
+	public ModelInfo(GenerationModel model) {
+		this.model = model;
+		positionSettings = new PositionSettings();
+		scaleSettings = new ScaleSettings();
+		rotationSettings = new RotationSettings();
 		fillArgs();
-	}
-
-	@XmlAttribute(name = "maskFile")
-	public String getMaskFile() {
-		return maskFile;
-	}
-
-	public void setMaskFile(String maskFile) {
-		this.maskFile = maskFile;
-		if (maskFile != null) {
-			try {
-				this.mask = ImageIO.read(new File(maskFile));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	@XmlAttribute(name = "path")
-	private String getPath() {
-		return model.getPath();
-	}
-
-	@SuppressWarnings("unused")
-	private void setPath(String path) {
-		model = new GenerationModel(path);
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder str = new StringBuilder();
-		str.append(model.getName());
-		str.append(" (");
-		str.append(model.getPath());
-		str.append("), ");
-		str.append("<");
-		str.append(minCount);
-		str.append(", ");
-		str.append(maxCount);
-		str.append(">");
-		return str.toString();
-	}
-
-	public PositionSettings getPositionSettings() {
-		return positionSettings;
-	}
-
-	public ScaleSettings getScaleSettings() {
-		return scaleSettings;
-	}
-
-	public RotationSettings getRotationSettings() {
-		return rotationSettings;
 	}
 
 	public ModelInfo(PositionSettings pos, RotationSettings rot, ScaleSettings scale, GenerationModel model) {
@@ -108,12 +57,15 @@ public class ModelInfo implements Comparable<ModelInfo> {
 		this.model = model;
 	}
 
-	public ModelInfo(GenerationModel model) {
-		this.model = model;
-		positionSettings = new PositionSettings();
-		scaleSettings = new ScaleSettings();
-		rotationSettings = new RotationSettings();
-		fillArgs();
+	@Override
+	public int compareTo(ModelInfo o) {
+		if (model == null) {
+			return -1;
+		}
+		if (!(o instanceof ModelInfo) || o.getModel() == null) {
+			return -1;
+		}
+		return model.compareTo(o.getModel());
 	}
 
 	private void fillArgs() {
@@ -131,64 +83,112 @@ public class ModelInfo implements Comparable<ModelInfo> {
 		setArg(Consts.RATE, 0D);
 	}
 
-	private void setArg(String key, Double value) {
-		if (!args.containsKey(key)) {
-			args.put(key, value);
-		}
-	}
-
-	public ModelInfo() {
-
-	}
-
-	public GenerationModel getModel() {
-		return model;
-	}
-
-	@Override
-	public int compareTo(ModelInfo o) {
-		if (model == null) {
-			return -1;
-		}
-		if (!(o instanceof ModelInfo) || o.getModel() == null) {
-			return -1;
-		}
-		return model.compareTo(o.getModel());
-	}
-
-	public void setPositionSettings(PositionSettings positionSettings) {
-		this.positionSettings = positionSettings;
-	}
-
-	public void setScaleSettings(ScaleSettings scaleSettings) {
-		this.scaleSettings = scaleSettings;
-	}
-
-	public void setRotationSettings(RotationSettings rotationSettings) {
-		this.rotationSettings = rotationSettings;
-	}
-
-	public int getMinCount() {
-		return minCount;
-	}
-
-	public void setMinCount(int minCount) {
-		this.minCount = minCount;
-	}
-
-	public int getMaxCount() {
-		return maxCount;
-	}
-
-	public void setMaxCount(int maxCount) {
-		this.maxCount = maxCount;
+	@XmlElement(name = "Args")
+	public Map<String, Double> getArgs() {
+		return args;
 	}
 
 	public BufferedImage getMask() {
 		return mask;
 	}
 
+	@XmlAttribute(name = "maskFile")
+	public String getMaskFile() {
+		return maskFile;
+	}
+
+	public int getMaxCount() {
+		return maxCount;
+	}
+
+	public int getMinCount() {
+		return minCount;
+	}
+
+	public GenerationModel getModel() {
+		return model;
+	}
+
+	@XmlAttribute(name = "path")
+	private String getPath() {
+		return model.getPath();
+	}
+
+	public PositionSettings getPositionSettings() {
+		return positionSettings;
+	}
+
+	public RotationSettings getRotationSettings() {
+		return rotationSettings;
+	}
+
+	public ScaleSettings getScaleSettings() {
+		return scaleSettings;
+	}
+
+	private void setArg(String key, Double value) {
+		if (!args.containsKey(key)) {
+			args.put(key, value);
+		}
+	}
+
+	public void setArgs(Map<String, Double> args) {
+		this.args = args;
+		fillArgs();
+	}
+
 	public void setMask(BufferedImage mask) {
 		this.mask = mask;
+	}
+
+	public void setMaskFile(String maskFile) {
+		this.maskFile = maskFile;
+		if (maskFile != null) {
+			try {
+				this.mask = ImageIO.read(new File(maskFile));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void setMaxCount(int maxCount) {
+		this.maxCount = maxCount;
+	}
+
+	public void setMinCount(int minCount) {
+		this.minCount = minCount;
+	}
+
+	@SuppressWarnings("unused")
+	private void setPath(String path) {
+		model = new GenerationModel(path);
+	}
+
+	public void setPositionSettings(PositionSettings positionSettings) {
+		this.positionSettings = positionSettings;
+	}
+
+	public void setRotationSettings(RotationSettings rotationSettings) {
+		this.rotationSettings = rotationSettings;
+	}
+
+	public void setScaleSettings(ScaleSettings scaleSettings) {
+		this.scaleSettings = scaleSettings;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder();
+		str.append(model.getName());
+		str.append(" (");
+		str.append(model.getPath());
+		str.append("), ");
+		str.append("<");
+		str.append(minCount);
+		str.append(", ");
+		str.append(maxCount);
+		str.append(">");
+		return str.toString();
 	}
 }

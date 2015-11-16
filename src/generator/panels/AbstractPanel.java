@@ -9,9 +9,13 @@ import generator.utils.Component;
 import generator.utils.Spinner;
 
 public abstract class AbstractPanel extends JPanel {
-	private static final long serialVersionUID = -4327845537212042650L;
 	protected static final int MAX_POSITION = 10000;
+	private static final long serialVersionUID = -4327845537212042650L;
 	protected Map<String, Component> arguments = new HashMap<>();
+
+	public Map<String, Double> getArgs() {
+		return getArgs(new HashMap<>(), false);
+	}
 
 	public Map<String, Double> getArgs(Map<String, Double> args, boolean checkModified) {
 		for (Map.Entry<String, Component> e : arguments.entrySet()) {
@@ -24,8 +28,8 @@ public abstract class AbstractPanel extends JPanel {
 		return args;
 	}
 
-	public Map<String, Double> getArgs() {
-		return getArgs(new HashMap<>(), false);
+	protected double getValue(String key) {
+		return (double) arguments.get(key).value();
 	}
 
 	public void setArgs(Map<String, Double> args) {
@@ -38,10 +42,6 @@ public abstract class AbstractPanel extends JPanel {
 				spinner.setSilent(false);
 			}
 		}
-	}
-
-	protected double getValue(String key) {
-		return (double) arguments.get(key).value();
 	}
 
 	protected Map<String, Double> transform(Map<String, Spinner> map) {

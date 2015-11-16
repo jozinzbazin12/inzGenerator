@@ -6,8 +6,13 @@ import javax.swing.filechooser.FileFilter;
 
 public abstract class AbstractFileFilter extends FileFilter {
 
-	protected String[] extensionList;
 	protected String description;
+	protected String[] extensionList;
+
+	public AbstractFileFilter(String[] extensionList, String description) {
+		this.extensionList = extensionList;
+		this.description = description;
+	}
 
 	@Override
 	public boolean accept(File f) {
@@ -20,11 +25,6 @@ public abstract class AbstractFileFilter extends FileFilter {
 			}
 		}
 		return false;
-	}
-
-	public AbstractFileFilter(String[] extensionList, String description) {
-		this.extensionList = extensionList;
-		this.description = description;
 	}
 
 	@Override

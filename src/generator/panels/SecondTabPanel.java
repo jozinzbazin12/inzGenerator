@@ -46,6 +46,12 @@ import generator.windows.ModelWindow;
 
 public class SecondTabPanel extends AbstractPanel implements MouseListener {
 
+	private static final String DELETE_ACTION = "deleteAction";
+
+	private static final String EDIT_ACTION = "editAction";
+	private static final String NEW_ACTION = "newAction";
+	private static final long serialVersionUID = -2087487239161953473L;
+	private JComboBox<Algorithm> algorithmList;
 	private final Action deleteAction = new Action(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT)) {
 		private static final long serialVersionUID = 8236759084604074679L;
 
@@ -60,7 +66,6 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 			updateModels(models.values());
 		}
 	};
-
 	private final Action editAction = new Action(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT)) {
 		private static final long serialVersionUID = -1373378695620341768L;
 
@@ -72,6 +77,8 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 			}
 		}
 	};
+	private JPopupMenu menu;
+	private List<ModelInfo> modelsInfo = new ArrayList<>();
 	private final LoadModelAction newAction = new LoadModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT)) {
 		private static final long serialVersionUID = 5761150114867749004L;
 
@@ -82,20 +89,16 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		}
 
 	};
-	private static final String DELETE_ACTION = "deleteAction";
-	private static final String EDIT_ACTION = "editAction";
-	private static final String NEW_ACTION = "newAction";
-	private static final long serialVersionUID = -2087487239161953473L;
-	private JComboBox<Algorithm> algorithmList;
-	private JPopupMenu menu;
+	private JPanel options;
+
 	private JPopupMenu rowMenu;
 	private Table table;
 
-	private List<ModelInfo> modelsInfo = new ArrayList<>();
-	private JPanel options;
-
-	public Algorithm getAlgorithm() {
-		return (Algorithm) algorithmList.getSelectedItem();
+	public SecondTabPanel() {
+		setLayout(new GridLayout(0, 2));
+		createModelsPanel();
+		createAlgotithmsPanel();
+		Mediator.registerSecondTabPanel(this);
 	}
 
 	private void createAlgotithmsPanel() {
@@ -217,45 +220,18 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		return table;
 	}
 
-	public SecondTabPanel() {
-		setLayout(new GridLayout(0, 2));
-		createModelsPanel();
-		createAlgotithmsPanel();
-		Mediator.registerSecondTabPanel(this);
+	public Algorithm getAlgorithm() {
+		return (Algorithm) algorithmList.getSelectedItem();
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON3) {
-			menu.setInvoker(this);
-			menu.show(e.getComponent(), e.getX(), e.getY());
-		}
-		repaint();
+	public Map<String, Double> getArgs() {
+		return getArgs(new HashMap<>(), false);
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
-
-	public void updateModels(Collection<ModelInfo> collection) {
-		List<ModelInfo> modelsList = new ArrayList<>(collection);
-		Collections.sort(modelsList);
-		modelsInfo.clear();
-		modelsInfo.addAll(modelsList);
-		TableModel model = table.getModel();
-		((DefaultTableModel) model).addRow(modelsList.toArray(new ModelInfo[0]));
+	public Map<String, Double> getArgs(Map<String, Double> args, boolean checkModified) {
+		return AlgorithmMainPanel.getArgs(args);
 	}
 
 	public List<ModelInfo> getSelectedRows() {
@@ -268,18 +244,42 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 	}
 
 	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			menu.setInvoker(this);
+			menu.show(e.getComponent(), e.getX(), e.getY());
+		}
+		repaint();
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	@Override
 	public void setArgs(Map<String, Double> args) {
 		AlgorithmMainPanel.setArgs(args);
 	}
 
-	@Override
-	public Map<String, Double> getArgs() {
-		return getArgs(new HashMap<>(), false);
-	}
-
-	@Override
-	public Map<String, Double> getArgs(Map<String, Double> args, boolean checkModified) {
-		return AlgorithmMainPanel.getArgs(args);
+	public void updateModels(Collection<ModelInfo> collection) {
+		List<ModelInfo> modelsList = new ArrayList<>(collection);
+		Collections.sort(modelsList);
+		modelsInfo.clear();
+		modelsInfo.addAll(modelsList);
+		TableModel model = table.getModel();
+		((DefaultTableModel) model).addRow(modelsList.toArray(new ModelInfo[0]));
 	}
 
 }

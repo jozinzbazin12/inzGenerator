@@ -8,8 +8,8 @@ public abstract class Action extends AbstractAction {
 
 	private static final long serialVersionUID = -4143674573355824164L;
 
-	protected void additionalAction() {
-		// Override me
+	public Action(String name) {
+		super(name);
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public abstract class Action extends AbstractAction {
 		additionalAction();
 	}
 
-	public Action(String name) {
-		super(name);
+	protected void additionalAction() {
+		// Override me
 	}
 }

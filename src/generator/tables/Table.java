@@ -8,8 +8,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 public class Table extends JTable {
-	private int highlighted = -1;
 	private static final long serialVersionUID = -8433216818192512700L;
+	private int highlighted = -1;
 
 	public Table(DefaultTableModel model, TableColumnModel columnModel, boolean multiselect) {
 		super(model, columnModel);

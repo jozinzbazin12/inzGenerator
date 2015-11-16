@@ -12,6 +12,10 @@ public class GenerateObjectsAction extends AbstractAction {
 
 	private static final long serialVersionUID = -2015637726992639128L;
 
+	public GenerateObjectsAction(String name) {
+		super(name);
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		GenerationInfo info = new GenerationInfo();
@@ -19,9 +23,5 @@ public class GenerateObjectsAction extends AbstractAction {
 		info.setArgs(Mediator.getAlgorithmArgs());
 		Mediator.getResultObject().setGeneratedObjects(Mediator.getAlgorithm().generate(info));
 		Mediator.updateObjects();
-	}
-
-	public GenerateObjectsAction(String name) {
-		super(name);
 	}
 }

@@ -30,14 +30,14 @@ import generator.panels.PreviewPanel;
 import generator.utils.PropertiesKeys;
 
 public abstract class Algorithm implements Comparable<Algorithm> {
-	private Random rnd = new Random();
+	private static final Map<Algorithm, AlgorithmAdditionalPanel> ADDITIONAL_PANELS;
+	private static final Map<Algorithm, AlgorithmMainPanel> MAIN_PANELS;
 	private final String helpKey;
 	private String name;
+	private Random rnd = new Random();
 	protected double xRatio;
-	protected double zRatio;
 	protected double yRatio;
-	private static final Map<Algorithm, AlgorithmMainPanel> MAIN_PANELS;
-	private static final Map<Algorithm, AlgorithmAdditionalPanel> ADDITIONAL_PANELS;
+	protected double zRatio;
 
 	static {
 		EmptyPanel emptyPanel = new EmptyPanel();
@@ -68,119 +68,17 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 
 	}
 
-	protected List<List<HeightInfo>> findHeights(BufferedImage img, double dx, double dz) {
-		Map<Double, List<HeightInfo>> heights = new HashMap<>();
-		int width = img.getWidth();
-		int height = img.getHeight();
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				double y = PreviewPanel.getColor(img, i, j);
-				List<HeightInfo> list = heights.get(y);
-				if (list == null) {
-					list = new ArrayList<>();
-					heights.put(y, list);
-				}
-				double x = (width / 2 - i) * dx;
-				double z = (height / 2 - j) * dz;
-				list.add(new HeightInfo(x, y, z));
-			}
-		}
-		List<List<HeightInfo>> points = new ArrayList<>(heights.values());
-		points.sort(new Comparator<List<HeightInfo>>() {
-
-			@Override
-			public int compare(List<HeightInfo> o1, List<HeightInfo> o2) {
-				return o1.get(0).compareTo(o2.get(0));
-			}
-		});
-		return points;
-	}
-
-	protected List<List<HeightInfo>> findHeights() {
-		return findHeights(Mediator.getMapImage(), xRatio, zRatio);
-	}
-
-	protected double getLength(double x, double z, double x2, double z2) {
-		return Math.sqrt(Math.pow((x - x2), 2) + Math.pow((z - z2), 2));
-	}
-
-	protected void correctPosition(BasicModelData obj, PositionSettings pos) {
-		if (obj.getX() > pos.getMaxX()) {
-			obj.setX(pos.getMaxX() - randomizeDouble(0, xRatio));
-		}
-		if (obj.getX() < pos.getMinX()) {
-			obj.setX(pos.getMinX() + randomizeDouble(0, xRatio));
-		}
-		if (obj.getZ() > pos.getMaxZ()) {
-			obj.setZ(pos.getMaxZ() - randomizeDouble(0, zRatio));
-		}
-		if (obj.getZ() < pos.getMinZ()) {
-			obj.setZ(pos.getMinZ() + randomizeDouble(0, zRatio));
-		}
-	}
-
-	protected int getCount(ModelInfo obj) {
-		int count = 0;
-		int max = obj.getMaxCount();
-		int min = obj.getMinCount();
-		if (max > 0) {
-			if (max == min) {
-				count = max;
-			} else {
-				count = rnd.nextInt(max - min) + min + 1;
-			}
-		}
-		return count;
-	}
-
-	protected void setRotation(ModelInfo objInfo, BasicModelData obj) {
-		obj.setRotation(randomizeDouble(objInfo.getRotationSettings().getMinX(), objInfo.getRotationSettings().getMaxX()),
-				randomizeDouble(objInfo.getRotationSettings().getMinY(), objInfo.getRotationSettings().getMaxY()),
-				randomizeDouble(objInfo.getRotationSettings().getMinZ(), objInfo.getRotationSettings().getMaxZ()));
-	}
-
-	protected void setScale(ModelInfo objInfo, BasicModelData obj) {
-		double scaleX = randomizeDouble(objInfo.getScaleSettings().getMinX(), objInfo.getScaleSettings().getMaxX());
-		if (objInfo.getScaleSettings().isEqual()) {
-			obj.setScale(scaleX, scaleX, scaleX);
-		} else {
-			obj.setScale(scaleX, randomizeDouble(objInfo.getScaleSettings().getMinY(), objInfo.getScaleSettings().getMaxY()),
-					randomizeDouble(objInfo.getScaleSettings().getMinZ(), objInfo.getScaleSettings().getMaxZ()));
-		}
-	}
-
 	public Algorithm(String name, String key) {
 		this.name = name;
 		helpKey = key;
 	}
 
-	@Override
-	public String toString() {
-		return name;
+	public static Map<Algorithm, AlgorithmAdditionalPanel> getAdditionalPanels() {
+		return ADDITIONAL_PANELS;
 	}
 
-	protected double randomizeDouble(double min, double max) {
-		if (min == max) {
-			return max;
-		}
-		return min + (max - min) * rnd.nextDouble();
-	}
-
-	protected double randomizeRange(double min, double max) {
-		double min2 = min;
-		double max2 = max;
-		if (rnd.nextBoolean()) {
-			min2 *= -1;
-			max2 *= -1;
-		}
-		return randomizeDouble(min2, max2);
-	}
-
-	protected int randomizeInt(int min, int max) {
-		if (min == max) {
-			return min;
-		}
-		return rnd.nextInt(Math.abs(max - min)) + min;
+	public static Map<Algorithm, AlgorithmMainPanel> getMainPanels() {
+		return MAIN_PANELS;
 	}
 
 	protected List<HeightInfo> availableSpace(ModelInfo info) {
@@ -206,16 +104,9 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		return list;
 	}
 
-	protected abstract List<GeneratedObject> generationMethod(GenerationInfo info);
-
-	public List<GeneratedObject> generate(GenerationInfo info) {
-		xRatio = Mediator.getMapWidth() / Mediator.getMapDimensions().width;
-		zRatio = Mediator.getMapHeight() / Mediator.getMapDimensions().height;
-		yRatio = Mediator.getMapMaxYSetting() / Mediator.getMapMaxY();
-		HeightInfo.setThreshold((xRatio + zRatio) / 2);
-		List<GeneratedObject> result = generationMethod(info);
-		Mediator.updateModels(result);
-		return result;
+	@Override
+	public int compareTo(Algorithm o) {
+		return name.compareTo(o.name);
 	}
 
 	protected void correctPosition(BasicModelData obj, ModelInfo info, List<HeightInfo> positions) {
@@ -244,16 +135,109 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		correctPosition(obj, pos);
 	}
 
+	protected void correctPosition(BasicModelData obj, PositionSettings pos) {
+		if (obj.getX() > pos.getMaxX()) {
+			obj.setX(pos.getMaxX() - randomizeDouble(0, xRatio));
+		}
+		if (obj.getX() < pos.getMinX()) {
+			obj.setX(pos.getMinX() + randomizeDouble(0, xRatio));
+		}
+		if (obj.getZ() > pos.getMaxZ()) {
+			obj.setZ(pos.getMaxZ() - randomizeDouble(0, zRatio));
+		}
+		if (obj.getZ() < pos.getMinZ()) {
+			obj.setZ(pos.getMinZ() + randomizeDouble(0, zRatio));
+		}
+	}
+
+	protected List<List<HeightInfo>> findHeights() {
+		return findHeights(Mediator.getMapImage(), xRatio, zRatio);
+	}
+
+	protected List<List<HeightInfo>> findHeights(BufferedImage img, double dx, double dz) {
+		Map<Double, List<HeightInfo>> heights = new HashMap<>();
+		int width = img.getWidth();
+		int height = img.getHeight();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				double y = PreviewPanel.getColor(img, i, j);
+				List<HeightInfo> list = heights.get(y);
+				if (list == null) {
+					list = new ArrayList<>();
+					heights.put(y, list);
+				}
+				double x = (width / 2 - i) * dx;
+				double z = (height / 2 - j) * dz;
+				list.add(new HeightInfo(x, y, z));
+			}
+		}
+		List<List<HeightInfo>> points = new ArrayList<>(heights.values());
+		points.sort(new Comparator<List<HeightInfo>>() {
+
+			@Override
+			public int compare(List<HeightInfo> o1, List<HeightInfo> o2) {
+				return o1.get(0).compareTo(o2.get(0));
+			}
+		});
+		return points;
+	}
+
+	public List<GeneratedObject> generate(GenerationInfo info) {
+		xRatio = Mediator.getMapWidth() / Mediator.getMapDimensions().width;
+		zRatio = Mediator.getMapHeight() / Mediator.getMapDimensions().height;
+		yRatio = Mediator.getMapMaxYSetting() / Mediator.getMapMaxY();
+		HeightInfo.setThreshold((xRatio + zRatio) / 2);
+		List<GeneratedObject> result = generationMethod(info);
+		Mediator.updateModels(result);
+		return result;
+	}
+
+	protected abstract List<GeneratedObject> generationMethod(GenerationInfo info);
+
+	protected int getCount(ModelInfo obj) {
+		int count = 0;
+		int max = obj.getMaxCount();
+		int min = obj.getMinCount();
+		if (max > 0) {
+			if (max == min) {
+				count = max;
+			} else {
+				count = rnd.nextInt(max - min) + min + 1;
+			}
+		}
+		return count;
+	}
+
 	public String getHelp() {
 		return Mediator.getMessage(helpKey);
 	}
 
-	public static Map<Algorithm, AlgorithmMainPanel> getMainPanels() {
-		return MAIN_PANELS;
+	protected double getLength(double x, double z, double x2, double z2) {
+		return Math.sqrt(Math.pow((x - x2), 2) + Math.pow((z - z2), 2));
 	}
 
-	public static Map<Algorithm, AlgorithmAdditionalPanel> getAdditionalPanels() {
-		return ADDITIONAL_PANELS;
+	protected double randomizeDouble(double min, double max) {
+		if (min == max) {
+			return max;
+		}
+		return min + (max - min) * rnd.nextDouble();
+	}
+
+	protected int randomizeInt(int min, int max) {
+		if (min == max) {
+			return min;
+		}
+		return rnd.nextInt(Math.abs(max - min)) + min;
+	}
+
+	protected double randomizeRange(double min, double max) {
+		double min2 = min;
+		double max2 = max;
+		if (rnd.nextBoolean()) {
+			min2 *= -1;
+			max2 *= -1;
+		}
+		return randomizeDouble(min2, max2);
 	}
 
 	protected void setPosition(PositionSettings pos, List<HeightInfo> heights, BasicModelData obj, int heightPos) {
@@ -263,8 +247,24 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		correctPosition(obj, pos);
 	}
 
+	protected void setRotation(ModelInfo objInfo, BasicModelData obj) {
+		obj.setRotation(randomizeDouble(objInfo.getRotationSettings().getMinX(), objInfo.getRotationSettings().getMaxX()),
+				randomizeDouble(objInfo.getRotationSettings().getMinY(), objInfo.getRotationSettings().getMaxY()),
+				randomizeDouble(objInfo.getRotationSettings().getMinZ(), objInfo.getRotationSettings().getMaxZ()));
+	}
+
+	protected void setScale(ModelInfo objInfo, BasicModelData obj) {
+		double scaleX = randomizeDouble(objInfo.getScaleSettings().getMinX(), objInfo.getScaleSettings().getMaxX());
+		if (objInfo.getScaleSettings().isEqual()) {
+			obj.setScale(scaleX, scaleX, scaleX);
+		} else {
+			obj.setScale(scaleX, randomizeDouble(objInfo.getScaleSettings().getMinY(), objInfo.getScaleSettings().getMaxY()),
+					randomizeDouble(objInfo.getScaleSettings().getMinZ(), objInfo.getScaleSettings().getMaxZ()));
+		}
+	}
+
 	@Override
-	public int compareTo(Algorithm o) {
-		return name.compareTo(o.name);
+	public String toString() {
+		return name;
 	}
 }

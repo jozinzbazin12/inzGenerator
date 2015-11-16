@@ -10,6 +10,14 @@ public class RGBA extends RGB {
 	@XmlAttribute(name = "a")
 	private double a;
 
+	public RGBA(double r, double g, double b, double a) {
+		super(r, g, b);
+		this.a = a;
+	}
+
+	public RGBA() {
+	}
+
 	public double getA() {
 		return a;
 	}
@@ -18,11 +26,4 @@ public class RGBA extends RGB {
 		this.a = a;
 	}
 
-	public RGBA(double r, double g, double b, double a) {
-		super(r, g, b);
-		this.a = a;
-	}
-
-	public RGBA() {
-	}
 }

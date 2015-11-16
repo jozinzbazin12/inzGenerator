@@ -16,11 +16,28 @@ import generator.utils.PropertiesKeys;
 
 public class MaskAlgorithm extends Algorithm {
 
-	private List<List<HeightInfo>> heights;
 	private static final int TAB_SIZE = 256;
+	private List<List<HeightInfo>> heights;
 
 	public MaskAlgorithm(String name) {
 		super(name, PropertiesKeys.MASK_ALGORITHM_HELP);
+	}
+
+	private Cumulative findPosition(Cumulative[] cumulative, double value) {
+		int i = 0;
+		for (; i < TAB_SIZE - 1; i++) {
+			if (cumulative[i].getValue() <= value && cumulative[i + 1].getValue() > value) {
+				break;
+			}
+		}
+		if (cumulative[i].getPoints() == null) {
+			for (; i < TAB_SIZE; i++) {
+				if (cumulative[i].getPoints() != null) {
+					break;
+				}
+			}
+		}
+		return cumulative[i];
 	}
 
 	@Override
@@ -52,23 +69,6 @@ public class MaskAlgorithm extends Algorithm {
 			}
 		}
 		return list;
-	}
-
-	private Cumulative findPosition(Cumulative[] cumulative, double value) {
-		int i = 0;
-		for (; i < TAB_SIZE - 1; i++) {
-			if (cumulative[i].getValue() <= value && cumulative[i + 1].getValue() > value) {
-				break;
-			}
-		}
-		if (cumulative[i].getPoints() == null) {
-			for (; i < TAB_SIZE; i++) {
-				if (cumulative[i].getPoints() != null) {
-					break;
-				}
-			}
-		}
-		return cumulative[i];
 	}
 
 	private Cumulative[] getCumulative(ModelInfo info) {

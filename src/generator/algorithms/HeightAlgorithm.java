@@ -21,47 +21,6 @@ public class HeightAlgorithm extends Algorithm {
 		super(name, PropertiesKeys.HEIGHT_ALGORITHM_HELP);
 	}
 
-	private List<HeightInfo> getHeights(ModelInfo info) {
-		double min = info.getArgs().get(Consts.MIN_Y_HEIGHT);
-		double max = info.getArgs().get(Consts.MAX_Y_HEIGHT);
-		int minPos = find(min / yRatio);
-		int maxPos = find(max / yRatio);
-		if (maxPos < includedPoints.size() - 1) {
-			maxPos++;
-		} else if (minPos > 1) {
-			minPos--;
-		}
-
-		List<List<HeightInfo>> list = includedPoints.subList(minPos, maxPos);
-		List<HeightInfo> result = new ArrayList<>();
-		for (List<HeightInfo> i : list) {
-			result.addAll(i);
-		}
-		if (info.getMask() != null) {
-			List<HeightInfo> availableSpace = availableSpace(info);
-			List<HeightInfo> result2 = new LinkedList<>();
-			if (!availableSpace.isEmpty()) {
-				for (HeightInfo i : result) {
-					if (availableSpace.contains(i)) {
-						result2.add(i);
-					}
-				}
-				result = result2;
-			}
-		} else {
-			PositionSettings positionSettings = info.getPositionSettings();
-			List<HeightInfo> result2 = new ArrayList<>();
-			for (HeightInfo i : result) {
-				if (i.getX() <= positionSettings.getMaxX() && i.getX() >= positionSettings.getMinX()
-						&& i.getZ() <= positionSettings.getMaxZ() && i.getZ() >= positionSettings.getMinZ()) {
-					result2.add(i);
-				}
-			}
-			result = result2;
-		}
-		return result;
-	}
-
 	private int find(double v) {
 		int size = includedPoints.size();
 		int pos = size / 2;
@@ -115,6 +74,47 @@ public class HeightAlgorithm extends Algorithm {
 			}
 		}
 		return list;
+	}
+
+	private List<HeightInfo> getHeights(ModelInfo info) {
+		double min = info.getArgs().get(Consts.MIN_Y_HEIGHT);
+		double max = info.getArgs().get(Consts.MAX_Y_HEIGHT);
+		int minPos = find(min / yRatio);
+		int maxPos = find(max / yRatio);
+		if (maxPos < includedPoints.size() - 1) {
+			maxPos++;
+		} else if (minPos > 1) {
+			minPos--;
+		}
+
+		List<List<HeightInfo>> list = includedPoints.subList(minPos, maxPos);
+		List<HeightInfo> result = new ArrayList<>();
+		for (List<HeightInfo> i : list) {
+			result.addAll(i);
+		}
+		if (info.getMask() != null) {
+			List<HeightInfo> availableSpace = availableSpace(info);
+			List<HeightInfo> result2 = new LinkedList<>();
+			if (!availableSpace.isEmpty()) {
+				for (HeightInfo i : result) {
+					if (availableSpace.contains(i)) {
+						result2.add(i);
+					}
+				}
+				result = result2;
+			}
+		} else {
+			PositionSettings positionSettings = info.getPositionSettings();
+			List<HeightInfo> result2 = new ArrayList<>();
+			for (HeightInfo i : result) {
+				if (i.getX() <= positionSettings.getMaxX() && i.getX() >= positionSettings.getMinX()
+						&& i.getZ() <= positionSettings.getMaxZ() && i.getZ() >= positionSettings.getMinZ()) {
+					result2.add(i);
+				}
+			}
+			result = result2;
+		}
+		return result;
 	}
 
 }

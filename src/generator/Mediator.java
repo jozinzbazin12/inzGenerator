@@ -42,49 +42,22 @@ import generator.windows.ModelWindow;
 import generator.windows.ObjectWindow;
 
 public class Mediator {
-	private static final String GENERATOR_MODELS_RESULT = "generator.models.result";
-	private static final String XML = ".xml";
-	private static final String PROPERTIES_FILE = "config.properties";
-	private static final String LANGUAGE_KEY = "language";
-	private static MainWindow mainWindow;
-	private static SecondTabPanel secondTabPanel;
-	private static ThirdTabPanel thirdTabPanel;
-	private static ResourceBundle messages;
 	private static FirstTabPanel firstTabPanel;
-	private static ResultObject resultObject = new ResultObject();
-	private static Properties properties;
+	private static final String GENERATOR_MODELS_RESULT = "generator.models.result";
+	private static final String LANGUAGE_KEY = "language";
+	private static String lastPath = System.getProperty("user.home") + "/Desktop";
 	private static Locale locale;
-	private static ObjectWindow objectWindow;
+	private static MainWindow mainWindow;
+	private static ResourceBundle messages;
 	private static Map<String, ModelInfo> models = new HashMap<>();
 	private static ModelWindow modelWindow;
-	private static String lastPath = System.getProperty("user.home") + "/Desktop";
-
-	public static void main(String[] args) throws IOException {
-		properties = new Properties();
-		InputStream input;
-		try {
-			input = new FileInputStream(PROPERTIES_FILE);
-			properties.load(input);
-			locale = new Locale(properties.getProperty(LANGUAGE_KEY));
-		} catch (IOException e) {
-			createProperties();
-		}
-
-		messages = ResourceBundle.getBundle(PropertiesKeys.PROPERTIES_FILE, locale);
-		MainWindow mainWindow = new MainWindow(messages.getString(PropertiesKeys.WINDOW_NAME));
-		Mediator.register(mainWindow);
-		mainWindow.createWindow();
-	}
-
-	private static void createProperties() throws IOException {
-		properties.setProperty(LANGUAGE_KEY, "pl");
-		saveProperties();
-	}
-
-	private static void saveProperties() throws FileNotFoundException, IOException {
-		OutputStream output = new FileOutputStream(PROPERTIES_FILE);
-		properties.store(output, null);
-	}
+	private static ObjectWindow objectWindow;
+	private static Properties properties;
+	private static final String PROPERTIES_FILE = "config.properties";
+	private static ResultObject resultObject = new ResultObject();
+	private static SecondTabPanel secondTabPanel;
+	private static ThirdTabPanel thirdTabPanel;
+	private static final String XML = ".xml";
 
 	public static void changeLocale(Locale locale) {
 		properties.setProperty(LANGUAGE_KEY, locale.getLanguage());
@@ -100,59 +73,107 @@ public class Mediator {
 		}
 	}
 
-	public static void register(MainWindow mw) {
-		mainWindow = mw;
+	public static void changeModelFileName(String path) {
+		modelWindow.changeFile(path);
 	}
 
-	public static Dimension setMapFile(String imgName) {
+	private static void createProperties() throws IOException {
+		properties.setProperty(LANGUAGE_KEY, "pl");
+		saveProperties();
+	}
+
+	public static int find(int[] tab, int index) {
+		for (int i : tab) {
+			if (i == index) {
+				return index;
+			}
+		}
+		return -1;
+	}
+
+	public static Algorithm getAlgorithm() {
+		return secondTabPanel.getAlgorithm();
+	}
+
+	public static Map<String, Double> getAlgorithmArgs() {
+		return secondTabPanel.getArgs();
+	}
+
+	public static double getGeneratedObjectArguments(String key) {
+		return (double) objectWindow.getArguments().get(key).value();
+	}
+
+	public static List<GeneratedObject> getGeneratedObjects() {
+		return thirdTabPanel.getSelectedRows();
+	}
+
+	public static double getGenerationInfoArguments(String key) {
+		return (double) firstTabPanel.getArguments().get(key).value();
+	}
+
+	public static String getLastPath() {
+		return lastPath;
+	}
+
+	public static Locale getLocale() {
+		return locale;
+	}
+
+	public static Dimension getMapDimensions() {
+		return thirdTabPanel.getImageSize();
+	}
+
+	public static double getMapHeight() {
+		return firstTabPanel.getMapSettings().getLengthZ();
+	}
+
+	public static double getMapHeightAt(int x, int y) {
+		return thirdTabPanel.getMapHeight(x, y);
+	}
+
+	public static BufferedImage getMapImage() {
+		return thirdTabPanel.getMap();
+	}
+
+	public static double getMapMaxY() {
+		return thirdTabPanel.getMapMaxY();
+	}
+
+	public static double getMapMaxYSetting() {
+		return firstTabPanel.getMapSettings().getLengthY();
+	}
+
+	public static double getMapWidth() {
+		return firstTabPanel.getMapSettings().getLengthX();
+	}
+
+	public static String getMessage(String message) {
+		String result;
 		try {
-			String path = thirdTabPanel.addPreview(imgName).getAbsolutePath();
-			resultObject.getMapObject().setMapFileName(path);
-			mainWindow.getContentPane().revalidate();
-		} catch (IOException e) {
-			WindowUtil.displayError(PropertiesKeys.FILE_NOT_IMAGE);
+			result = messages.getString(message);
+		} catch (MissingResourceException e) {
+			result = "???" + message;
 		}
-		Dimension imageSize = thirdTabPanel.getImageSize();
-		return imageSize;
+		return result;
 	}
 
-	public static void setTextureFile(String path) {
-		MapObject mapObject = resultObject.getMapObject();
-		Material material = mapObject.getMaterial();
-		if (material == null) {
-			material = new Material();
-			mapObject.setMaterial(material);
-		}
-		Texture texture = material.getTexture();
-		if (texture == null) {
-			texture = new Texture();
-			mapObject.getMaterial().setTexture(texture);
-		}
-
-		texture.setPath(path);
-
-		mainWindow.getContentPane().revalidate();
+	public static Map<String, ModelInfo> getModels() {
+		return models;
 	}
 
-	public static void saveXMLFile(String name) {
-		JAXBContext context;
-		MapObject mapObject = resultObject.getMapObject();
-		mapObject.setBasic(firstTabPanel.getMapSettings());
-		mapObject.setLightData(firstTabPanel.getLightSettings());
-		mapObject.setMaterial(firstTabPanel.getMaterial());
-		resultObject.getGenerationInfo().setModels(new ArrayList<>(models.values()));
-		resultObject.getGenerationInfo().setArgs(secondTabPanel.getArgs());
-		try {
-			context = JAXBContext.newInstance(GENERATOR_MODELS_RESULT);
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			FileOutputStream os = new FileOutputStream(new File(name.endsWith(XML) ? name : name + XML));
-			marshaller.marshal(resultObject, os);
-			os.close();
-			WindowUtil.displayInfo(PropertiesKeys.SAVE_XML_SUCCESS);
-		} catch (JAXBException | IOException e) {
-			WindowUtil.displayError(PropertiesKeys.SAVE_XML_ERROR);
-			e.printStackTrace();
+	public static ResultObject getResultObject() {
+		return resultObject;
+	}
+
+	public static void highlight(GeneratedObject obj) {
+		thirdTabPanel.highlight(obj);
+	}
+
+	public static void loadModel(String path) {
+		if (models.get(path) == null) {
+			GenerationModel model = new GenerationModel(path);
+			ModelInfo obj = new ModelInfo(model);
+			models.put(path, obj);
 		}
 	}
 
@@ -210,6 +231,44 @@ public class Mediator {
 		thirdTabPanel.updateObjects(resultObject.getGeneratedObjects());
 	}
 
+	public static void main(String[] args) throws IOException {
+		properties = new Properties();
+		InputStream input;
+		try {
+			input = new FileInputStream(PROPERTIES_FILE);
+			properties.load(input);
+			locale = new Locale(properties.getProperty(LANGUAGE_KEY));
+		} catch (IOException e) {
+			createProperties();
+		}
+
+		messages = ResourceBundle.getBundle(PropertiesKeys.PROPERTIES_FILE, locale);
+		MainWindow mainWindow = new MainWindow(messages.getString(PropertiesKeys.WINDOW_NAME));
+		Mediator.register(mainWindow);
+		mainWindow.createWindow();
+	}
+
+	public static void refreshPreview() {
+		thirdTabPanel.updateObjects(resultObject.getGeneratedObjects());
+		thirdTabPanel.refreshPreview();
+	}
+
+	public static void register(MainWindow mw) {
+		mainWindow = mw;
+	}
+
+	public static void registerFirstTabPanel(FirstTabPanel panel) {
+		firstTabPanel = panel;
+	}
+
+	public static void registerModelWindow(ModelWindow mw) {
+		modelWindow = mw;
+	}
+
+	public static void registerObjectWindow(ObjectWindow window) {
+		objectWindow = window;
+	}
+
 	public static void registerSecondTabPanel(SecondTabPanel secondPanel) {
 		secondTabPanel = secondPanel;
 	}
@@ -218,148 +277,89 @@ public class Mediator {
 		thirdTabPanel = thridPanel;
 	}
 
-	public static String getMessage(String message) {
-		String result;
+	private static void saveProperties() throws FileNotFoundException, IOException {
+		OutputStream output = new FileOutputStream(PROPERTIES_FILE);
+		properties.store(output, null);
+	}
+
+	public static void saveXMLFile(String name) {
+		JAXBContext context;
+		MapObject mapObject = resultObject.getMapObject();
+		mapObject.setBasic(firstTabPanel.getMapSettings());
+		mapObject.setLightData(firstTabPanel.getLightSettings());
+		mapObject.setMaterial(firstTabPanel.getMaterial());
+		resultObject.getGenerationInfo().setModels(new ArrayList<>(models.values()));
+		resultObject.getGenerationInfo().setArgs(secondTabPanel.getArgs());
 		try {
-			result = messages.getString(message);
-		} catch (MissingResourceException e) {
-			result = "???" + message;
+			context = JAXBContext.newInstance(GENERATOR_MODELS_RESULT);
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			FileOutputStream os = new FileOutputStream(new File(name.endsWith(XML) ? name : name + XML));
+			marshaller.marshal(resultObject, os);
+			os.close();
+			WindowUtil.displayInfo(PropertiesKeys.SAVE_XML_SUCCESS);
+		} catch (JAXBException | IOException e) {
+			WindowUtil.displayError(PropertiesKeys.SAVE_XML_ERROR);
+			e.printStackTrace();
 		}
-		return result;
-	}
-
-	public static void registerFirstTabPanel(FirstTabPanel panel) {
-		firstTabPanel = panel;
-	}
-
-	public static Algorithm getAlgorithm() {
-		return secondTabPanel.getAlgorithm();
-	}
-
-	public static ResultObject getResultObject() {
-		return resultObject;
-	}
-
-	public static void setResultObject(ResultObject resultObject) {
-		Mediator.resultObject = resultObject;
-	}
-
-	public static double getGenerationInfoArguments(String key) {
-		return (double) firstTabPanel.getArguments().get(key).value();
-	}
-
-	public static double getGeneratedObjectArguments(String key) {
-		return (double) objectWindow.getArguments().get(key).value();
-	}
-
-	public static Locale getLocale() {
-		return locale;
-	}
-
-	public static void updateModels(List<GeneratedObject> objects) {
-		thirdTabPanel.updateObjects(objects);
-	}
-
-	public static void registerObjectWindow(ObjectWindow window) {
-		objectWindow = window;
-	}
-
-	public static void unregisterObjectWindow() {
-		objectWindow = null;
-	}
-
-	public static List<GeneratedObject> getGeneratedObjects() {
-		return thirdTabPanel.getSelectedRows();
 	}
 
 	public static void setClicked(GeneratedObject obj) {
 		thirdTabPanel.click(obj);
 	}
 
-	public static void highlight(GeneratedObject obj) {
-		thirdTabPanel.highlight(obj);
+	public static void setLastPath(String lastPath) {
+		Mediator.lastPath = lastPath;
+	}
+
+	public static Dimension setMapFile(String imgName) {
+		try {
+			String path = thirdTabPanel.addPreview(imgName).getAbsolutePath();
+			resultObject.getMapObject().setMapFileName(path);
+			mainWindow.getContentPane().revalidate();
+		} catch (IOException e) {
+			WindowUtil.displayError(PropertiesKeys.FILE_NOT_IMAGE);
+		}
+		Dimension imageSize = thirdTabPanel.getImageSize();
+		return imageSize;
+	}
+
+	public static void setMask(String path) {
+		modelWindow.setMask(path);
+	}
+
+	public static void setResultObject(ResultObject resultObject) {
+		Mediator.resultObject = resultObject;
+	}
+
+	public static void setTextureFile(String path) {
+		MapObject mapObject = resultObject.getMapObject();
+		Material material = mapObject.getMaterial();
+		if (material == null) {
+			material = new Material();
+			mapObject.setMaterial(material);
+		}
+		Texture texture = material.getTexture();
+		if (texture == null) {
+			texture = new Texture();
+			mapObject.getMaterial().setTexture(texture);
+		}
+
+		texture.setPath(path);
+
+		mainWindow.getContentPane().revalidate();
 	}
 
 	public static void unHighlight() {
 		thirdTabPanel.unHighlight();
 	}
 
-	public static void refreshPreview() {
-		thirdTabPanel.updateObjects(resultObject.getGeneratedObjects());
-		thirdTabPanel.refreshPreview();
+	public static void unregisterObjectWindow() {
+		objectWindow = null;
 	}
 
-	public static Dimension getMapDimensions() {
-		return thirdTabPanel.getImageSize();
-	}
-
-	public static void loadModel(String path) {
-		if (models.get(path) == null) {
-			GenerationModel model = new GenerationModel(path);
-			ModelInfo obj = new ModelInfo(model);
-			models.put(path, obj);
-		}
-	}
-
-	public static Map<String, ModelInfo> getModels() {
-		return models;
-	}
-
-	public static void changeModelFileName(String path) {
-		modelWindow.changeFile(path);
-	}
-
-	public static void registerModelWindow(ModelWindow mw) {
-		modelWindow = mw;
-	}
-
-	public static String getLastPath() {
-		return lastPath;
-	}
-
-	public static void setLastPath(String lastPath) {
-		Mediator.lastPath = lastPath;
-	}
-
-	public static double getMapWidth() {
-		return firstTabPanel.getMapSettings().getLengthX();
-	}
-
-	public static double getMapHeight() {
-		return firstTabPanel.getMapSettings().getLengthZ();
-	}
-
-	public static double getMapMaxYSetting() {
-		return firstTabPanel.getMapSettings().getLengthY();
-	}
-
-	public static Map<String, Double> getAlgorithmArgs() {
-		return secondTabPanel.getArgs();
-	}
-
-	public static int find(int[] tab, int index) {
-		for (int i : tab) {
-			if (i == index) {
-				return index;
-			}
-		}
-		return -1;
-	}
-
-	public static double getMapHeightAt(int x, int y) {
-		return thirdTabPanel.getMapHeight(x, y);
-	}
-
-	public static double getMapMaxY() {
-		return thirdTabPanel.getMapMaxY();
-	}
-
-	public static BufferedImage getMapImage() {
-		return thirdTabPanel.getMap();
-	}
-
-	public static void setMask(String path) {
-		modelWindow.setMask(path);
+	public static void updateModels(List<GeneratedObject> objects) {
+		thirdTabPanel.updateObjects(objects);
 	}
 
 	public static void updateObjects() {
@@ -374,3 +374,4 @@ public class Mediator {
 // TODO sprawdzic niekwadratowe mapy
 // TODO algorytm regularny- obliczyc ilosc na prostokacie
 // TODO nie uzywac mediatora w akcjach
+//TODO losowy wspolczynnik na koniec

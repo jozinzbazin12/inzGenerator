@@ -15,6 +15,10 @@ public abstract class LoadModelAction extends AbstractLoadAction {
 	private static final long serialVersionUID = 7702791072284728221L;
 	private File[] files;
 
+	public LoadModelAction(String name) {
+		super(name, new ObjChooser(true));
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		int rVal = chooser.showOpenDialog(new JFrame());
@@ -32,10 +36,6 @@ public abstract class LoadModelAction extends AbstractLoadAction {
 		} else {
 			onFail();
 		}
-	}
-
-	public LoadModelAction(String name) {
-		super(name, new ObjChooser(true));
 	}
 
 	@Override

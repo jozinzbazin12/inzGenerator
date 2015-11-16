@@ -12,8 +12,8 @@ import javax.swing.JSlider;
 public class MaskPreviewPanel extends PreviewPanel {
 
 	private static final long serialVersionUID = 2455148254602790811L;
-	private BufferedImage originalMask;
 	private boolean bnw;
+	private BufferedImage originalMask;
 	private JSlider transparency;
 
 	public MaskPreviewPanel() {
@@ -27,6 +27,15 @@ public class MaskPreviewPanel extends PreviewPanel {
 		transparency.setOpaque(false);
 		transparency.setEnabled(false);
 		add(transparency, BorderLayout.WEST);
+	}
+
+	public void deleteMask() {
+		originalMask = null;
+		transparency.setEnabled(false);
+	}
+
+	public BufferedImage getMask() {
+		return originalMask;
 	}
 
 	@Override
@@ -58,14 +67,5 @@ public class MaskPreviewPanel extends PreviewPanel {
 	public void setMask(BufferedImage img) {
 		originalMask = img;
 		transparency.setEnabled(true);
-	}
-
-	public void deleteMask() {
-		originalMask = null;
-		transparency.setEnabled(false);
-	}
-
-	public BufferedImage getMask() {
-		return originalMask;
 	}
 }

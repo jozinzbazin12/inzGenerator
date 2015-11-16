@@ -4,8 +4,8 @@ import javax.swing.JLabel;
 
 public class Label extends JLabel {
 
-	private boolean lockedTooltip = false;
 	private static final long serialVersionUID = 3634769322724243951L;
+	private boolean lockedTooltip = false;
 
 	public Label() {
 	}
@@ -20,21 +20,26 @@ public class Label extends JLabel {
 		setToolTipText(txt);
 	}
 
-	@Override
-	public void setText(String text) {
-		super.setText(text);
-		if (!lockedTooltip) {
-			setToolTipText(text);
-		}
+	public Label(String text, String tooltip) {
+		super(text);
+		setTooltip(text, tooltip);
+	}
+
+	public Label(String message, String tooltip, int center) {
+		this(message, center);
+		setTooltip(message, tooltip);
 	}
 
 	private void init(String txt) {
 		setToolTipText(txt);
 	}
 
-	public Label(String text, String tooltip) {
-		super(text);
-		setTooltip(text, tooltip);
+	@Override
+	public void setText(String text) {
+		super.setText(text);
+		if (!lockedTooltip) {
+			setToolTipText(text);
+		}
 	}
 
 	private void setTooltip(String text, String tooltip) {
@@ -44,10 +49,5 @@ public class Label extends JLabel {
 			setToolTipText(tooltip);
 		}
 		lockedTooltip = true;
-	}
-
-	public Label(String message, String tooltip, int center) {
-		this(message, center);
-		setTooltip(message, tooltip);
 	}
 }

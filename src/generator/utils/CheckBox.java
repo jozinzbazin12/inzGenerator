@@ -11,17 +11,37 @@ import javax.swing.JCheckBox;
 public class CheckBox extends JCheckBox implements Component {
 
 	private static final long serialVersionUID = 2049556437007670432L;
+	private boolean listeningEnabled;
 	private boolean modified = false;
 	private boolean silent = false;
-	private boolean listeningEnabled;
 
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		if (modified) {
-			g.setColor(Color.red);
-			g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
-		}
+	public CheckBox() {
+		super();
+	}
+
+	public CheckBox(Action a, String tooltip) {
+		super(a);
+		setToolTipText(tooltip);
+	}
+
+	public CheckBox(String text) {
+		super(text);
+		init(text, false);
+	}
+
+	public CheckBox(String text, boolean listen) {
+		super(text);
+		init(text, false);
+	}
+
+	public CheckBox(String text, String tooltip) {
+		super(text);
+		init(text, tooltip, false);
+	}
+
+	public CheckBox(String text, String tooltip, boolean listen) {
+		super(text);
+		init(text, tooltip, listen);
 	}
 
 	private void addListener(boolean enableListening) {
@@ -39,35 +59,6 @@ public class CheckBox extends JCheckBox implements Component {
 		}
 	}
 
-	public CheckBox() {
-		super();
-	}
-
-	public CheckBox(String text, boolean listen) {
-		super(text);
-		init(text, false);
-	}
-
-	public CheckBox(String text) {
-		super(text);
-		init(text, false);
-	}
-
-	public CheckBox(String text, String tooltip) {
-		super(text);
-		init(text, tooltip, false);
-	}
-
-	public CheckBox(Action a, String tooltip) {
-		super(a);
-		setToolTipText(tooltip);
-	}
-
-	public CheckBox(String text, String tooltip, boolean listen) {
-		super(text);
-		init(text, tooltip, listen);
-	}
-
 	private void init(String text, boolean listen) {
 		init(text, (String) null, listen);
 	}
@@ -81,34 +72,37 @@ public class CheckBox extends JCheckBox implements Component {
 		}
 	}
 
-	public boolean isModified() {
-		return modified;
+	public boolean isListeningEnabled() {
+		return listeningEnabled;
 	}
 
-	public void setModified(boolean modified) {
-		this.modified = modified;
+	public boolean isModified() {
+		return modified;
 	}
 
 	public boolean isSilent() {
 		return silent;
 	}
 
-	public void setSilent(boolean silent) {
-		this.silent = silent;
-	}
-
-	public boolean isListeningEnabled() {
-		return listeningEnabled;
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		if (modified) {
+			g.setColor(Color.red);
+			g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+		}
 	}
 
 	public void setListeningEnabled(boolean listeningEnabled) {
 		this.listeningEnabled = listeningEnabled;
 	}
 
-	@Override
-	public double value() {
-		boolean selected = isSelected();
-		return selected ? 1 : 0;
+	public void setModified(boolean modified) {
+		this.modified = modified;
+	}
+
+	public void setSilent(boolean silent) {
+		this.silent = silent;
 	}
 
 	@Override
@@ -118,5 +112,11 @@ public class CheckBox extends JCheckBox implements Component {
 		} else {
 			setSelected(false);
 		}
+	}
+
+	@Override
+	public double value() {
+		boolean selected = isSelected();
+		return selected ? 1 : 0;
 	}
 }

@@ -16,10 +16,27 @@ import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
 
 public class AlgorithmMainPanel extends JPanel {
-	private static final long serialVersionUID = 3043925881010825869L;
 	protected static Map<String, Component> arguments = new HashMap<>();
-	protected static final int MAX_POSITION = 10000;
 	private static double collisionEnabled;
+	protected static final int MAX_POSITION = 10000;
+	private static final long serialVersionUID = 3043925881010825869L;
+
+	public AlgorithmMainPanel() {
+		setLayout(new GridLayout(13, 3, 5, 5));
+		setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_MAIN_ARGUMENTS)));
+		Action a = new Action(Mediator.getMessage(PropertiesKeys.PREVENT_COLLISIONS)) {
+			private static final long serialVersionUID = -2843015922845460404L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				collisionEnabled = ((CheckBox) e.getSource()).value();
+			}
+		};
+		CheckBox collisions = new CheckBox(a, Mediator.getMessage(PropertiesKeys.PREVENT_COLLISIONS_TOOLTIP));
+
+		collisions.setAction(a);
+		add(collisions);
+	}
 
 	public static Map<String, Double> getArgs(Map<String, Double> args) {
 		for (Map.Entry<String, Component> e : arguments.entrySet()) {
@@ -38,22 +55,5 @@ public class AlgorithmMainPanel extends JPanel {
 				i.getValue().setValue(value);
 			}
 		}
-	}
-
-	public AlgorithmMainPanel() {
-		setLayout(new GridLayout(13, 3, 5, 5));
-		setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_MAIN_ARGUMENTS)));
-		Action a = new Action(Mediator.getMessage(PropertiesKeys.PREVENT_COLLISIONS)) {
-			private static final long serialVersionUID = -2843015922845460404L;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				collisionEnabled = ((CheckBox) e.getSource()).value();
-			}
-		};
-		CheckBox collisions = new CheckBox(a, Mediator.getMessage(PropertiesKeys.PREVENT_COLLISIONS_TOOLTIP));
-
-		collisions.setAction(a);
-		add(collisions);
 	}
 }

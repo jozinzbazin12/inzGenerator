@@ -37,27 +37,35 @@ import generator.utils.WindowUtil;
 public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	private static final long serialVersionUID = -2087487239161953473L;
 
+	private Label mapHeightLabel;
 	private Label mapLabel;
 	private Label mapWidthLabel;
-	private Label mapHeightLabel;
 	private JPopupMenu menu;
-	private Label texturePath;
 	private JPanel texture;
+	private Label texturePath;
 
-	public String getMapName() {
-		return mapLabel.getText();
+	public FirstTabPanel() {
+		arguments = new HashMap<>();
+		setLayout(new GridLayout(0, 3));
+		createMapOptionsPanel();
+		createTextureOptionsPanel();
+		createTextureOptionsPanel2();
+		Mediator.registerFirstTabPanel(this);
 	}
 
-	public void setMapFileName(String name) {
-		mapLabel.setText(name);
+	private void addRGBLegend(JPanel lightLegend) {
+		lightLegend.add(new Label());
+		lightLegend.add(new Label("R", Mediator.getMessage(PropertiesKeys.COLOR_RED_TOOLTIP), SwingConstants.CENTER));
+		lightLegend.add(new Label("G", Mediator.getMessage(PropertiesKeys.COLOR_GREEN_TOOLTIP), SwingConstants.CENTER));
+		lightLegend.add(new Label("B", Mediator.getMessage(PropertiesKeys.COLOR_BLUE_TOOLTIP), SwingConstants.CENTER));
 	}
 
-	public void setMapHeight(String name) {
-		mapHeightLabel.setText(name);
-	}
-
-	public void setMapWidth(String name) {
-		mapWidthLabel.setText(name);
+	private JPanel createLightSettingsTitle() {
+		JPanel lightLegend = new JPanel();
+		lightLegend.setLayout(new GridLayout(0, 5));
+		addRGBLegend(lightLegend);
+		lightLegend.add(new Label("A", Mediator.getMessage(PropertiesKeys.COLOR_ALPHA_TOOLTIP), SwingConstants.CENTER));
+		return lightLegend;
 	}
 
 	private void createMapOptionsPanel() {
@@ -129,26 +137,11 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		add(options);
 	}
 
-	private JPanel createLightSettingsTitle() {
-		JPanel lightLegend = new JPanel();
-		lightLegend.setLayout(new GridLayout(0, 5));
-		addRGBLegend(lightLegend);
-		lightLegend.add(new Label("A", Mediator.getMessage(PropertiesKeys.COLOR_ALPHA_TOOLTIP), SwingConstants.CENTER));
-		return lightLegend;
-	}
-
 	private JPanel createMaterialsSettingsTitle() {
 		JPanel lightLegend = new JPanel();
 		lightLegend.setLayout(new GridLayout(0, 4));
 		addRGBLegend(lightLegend);
 		return lightLegend;
-	}
-
-	private void addRGBLegend(JPanel lightLegend) {
-		lightLegend.add(new Label());
-		lightLegend.add(new Label("R", Mediator.getMessage(PropertiesKeys.COLOR_RED_TOOLTIP), SwingConstants.CENTER));
-		lightLegend.add(new Label("G", Mediator.getMessage(PropertiesKeys.COLOR_GREEN_TOOLTIP), SwingConstants.CENTER));
-		lightLegend.add(new Label("B", Mediator.getMessage(PropertiesKeys.COLOR_BLUE_TOOLTIP), SwingConstants.CENTER));
 	}
 
 	private void createTextureOptionsPanel() {
@@ -212,48 +205,8 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		add(texturePanel);
 	}
 
-	public FirstTabPanel() {
-		arguments = new HashMap<>();
-		setLayout(new GridLayout(0, 3));
-		createMapOptionsPanel();
-		createTextureOptionsPanel();
-		createTextureOptionsPanel2();
-		Mediator.registerFirstTabPanel(this);
-	}
-
 	public Map<String, Component> getArguments() {
 		return arguments;
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON3) {
-			menu.setInvoker(this);
-			menu.show(e.getComponent(), e.getX(), e.getY());
-		}
-		repaint();
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
-
-	public BasicMapData getMapSettings() {
-		BasicMapData data = new BasicMapData();
-		data.setLength(getValue(Consts.X), getValue(Consts.Y), getValue(Consts.Z));
-		return data;
 	}
 
 	public LightData getLightSettings() {
@@ -268,6 +221,16 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		light.setPosition(getValue(Consts.LIGHT_POSITION_X), getValue(Consts.LIGHT_POSITION_Y), getValue(Consts.LIGHT_POSITION_Z),
 				getValue(Consts.LIGHT_POSITION_MODE));
 		return light;
+	}
+
+	public String getMapName() {
+		return mapLabel.getText();
+	}
+
+	public BasicMapData getMapSettings() {
+		BasicMapData data = new BasicMapData();
+		data.setLength(getValue(Consts.X), getValue(Consts.Y), getValue(Consts.Z));
+		return data;
 	}
 
 	public Material getMaterial() {
@@ -285,6 +248,39 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		mtl.setNs(getValue(Consts.MATERIAL_NS));
 		mtl.setTexture(new Texture(texturePath.getText(), getValue(Consts.SCALE)));
 		return mtl;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			menu.setInvoker(this);
+			menu.show(e.getComponent(), e.getX(), e.getY());
+		}
+		repaint();
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	public void setMapFileName(String name) {
+		mapLabel.setText(name);
+	}
+
+	public void setMapHeight(String name) {
+		mapHeightLabel.setText(name);
 	}
 
 	public void setMapObject(MapObject data) {
@@ -358,6 +354,16 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		}
 	}
 
+	public void setMapProperties(String path, Dimension imageSize) {
+		setMapFileName(path);
+		setMapHeight(String.valueOf(imageSize.height) + " px");
+		setMapWidth(String.valueOf(imageSize.width) + " px");
+	}
+
+	public void setMapWidth(String name) {
+		mapWidthLabel.setText(name);
+	}
+
 	public void setTexturePath(String path) {
 		texture.removeAll();
 		BufferedImage pic;
@@ -370,12 +376,6 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 			e.printStackTrace();
 		}
 
-	}
-
-	public void setMapProperties(String path, Dimension imageSize) {
-		setMapFileName(path);
-		setMapHeight(String.valueOf(imageSize.height) + " px");
-		setMapWidth(String.valueOf(imageSize.width) + " px");
 	}
 
 	public void setTextureScale(double scale) {

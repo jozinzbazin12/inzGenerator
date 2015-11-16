@@ -13,6 +13,30 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 	private static final long serialVersionUID = -9061500843600921283L;
 	private List<GeneratedObject> generatedObjects;
 
+	public ObjectsPreviewPanel() {
+		super();
+	}
+
+	public ObjectsPreviewPanel(BufferedImage image) throws IOException {
+		super(image);
+		findMinMax();
+	}
+
+	public List<GeneratedObject> getGeneratedObjects() {
+		return generatedObjects;
+	}
+
+	private int getObjectX(GeneratedObject i) {
+		int mapWidth = image.getWidth();
+		return (int) ((  mapWidth / 2-(i.getBasic().getX() * (mapWidth / Mediator.getMapWidth()))) * (1 + zoom) + currentPoint.x);
+	}
+
+	private int getObjectZ(GeneratedObject i) {
+		int mapHeight = image.getHeight();
+		return (int) ((mapHeight / 2 - (i.getBasic().getZ() * (mapHeight / Mediator.getMapHeight()))) * (1 + zoom)
+				+ currentPoint.y);
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -32,32 +56,8 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 		}
 	}
 
-	private int getObjectZ(GeneratedObject i) {
-		int mapHeight = image.getHeight();
-		return (int) ((mapHeight / 2 - (i.getBasic().getZ() * (mapHeight / Mediator.getMapHeight()))) * (1 + zoom)
-				+ currentPoint.y);
-	}
-
-	private int getObjectX(GeneratedObject i) {
-		int mapWidth = image.getWidth();
-		return (int) ((  mapWidth / 2-(i.getBasic().getX() * (mapWidth / Mediator.getMapWidth()))) * (1 + zoom) + currentPoint.x);
-	}
-
-	public ObjectsPreviewPanel(BufferedImage image) throws IOException {
-		super(image);
-		findMinMax();
-	}
-
-	public ObjectsPreviewPanel() {
-		super();
-	}
-
 	public void setResultObject(List<GeneratedObject> list) {
 		generatedObjects = list;
-	}
-
-	public List<GeneratedObject> getGeneratedObjects() {
-		return generatedObjects;
 	}
 
 }

@@ -29,17 +29,31 @@ import generator.panels.ThirdTabPanel;
 import generator.utils.PropertiesKeys;
 
 public class MainWindow extends JFrame {
-	private static final String WINDOWS_LOOK = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
 	private static final long serialVersionUID = 2924752215725936696L;
+	private static final String WINDOWS_LOOK = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
 	private JTabbedPane tab;
 
-	public void createWindow() {
-		createMenu();
-		JPanel first = new FirstTabPanel();
-		JPanel second = new SecondTabPanel();
-		JPanel third = new ThirdTabPanel();
-		preparePanels(first, second, third);
-		revalidate();
+	public MainWindow(String name) {
+		super(name);
+		try {
+			UIManager.setLookAndFeel(WINDOWS_LOOK);
+			JFrame.setDefaultLookAndFeelDecorated(true);
+		} catch (Exception e) {
+		}
+
+		setVisible(true);
+		setSize(1200, 600);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	private JRadioButtonMenuItem createLanguage(ButtonGroup group, Locale locale, String name) {
+		LangugeOption languageOption = new LangugeOption(name, locale);
+		group.add(languageOption);
+		languageOption.addActionListener(new ChangeLanguageListener());
+		if (languageOption.getLocale().equals(Mediator.getLocale())) {
+			languageOption.setSelected(true);
+		}
+		return languageOption;
 	}
 
 	private void createMenu() {
@@ -93,14 +107,13 @@ public class MainWindow extends JFrame {
 		menuBar.add(optionsMenu);
 	}
 
-	private JRadioButtonMenuItem createLanguage(ButtonGroup group, Locale locale, String name) {
-		LangugeOption languageOption = new LangugeOption(name, locale);
-		group.add(languageOption);
-		languageOption.addActionListener(new ChangeLanguageListener());
-		if (languageOption.getLocale().equals(Mediator.getLocale())) {
-			languageOption.setSelected(true);
-		}
-		return languageOption;
+	public void createWindow() {
+		createMenu();
+		JPanel first = new FirstTabPanel();
+		JPanel second = new SecondTabPanel();
+		JPanel third = new ThirdTabPanel();
+		preparePanels(first, second, third);
+		revalidate();
 	}
 
 	private void preparePanels(JPanel first, JPanel second, JPanel third) {
@@ -110,18 +123,5 @@ public class MainWindow extends JFrame {
 		tab.addTab(Mediator.getMessage(PropertiesKeys.THIRD_TAB_NAME), third);
 
 		add(tab);
-	}
-
-	public MainWindow(String name) {
-		super(name);
-		try {
-			UIManager.setLookAndFeel(WINDOWS_LOOK);
-			JFrame.setDefaultLookAndFeelDecorated(true);
-		} catch (Exception e) {
-		}
-
-		setVisible(true);
-		setSize(1200, 600);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

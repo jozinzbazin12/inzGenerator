@@ -14,26 +14,44 @@ import generator.listeners.ImageListener;
 public class PreviewPanel extends JPanel {
 
 	private static final long serialVersionUID = 5712708696866492460L;
-	protected BufferedImage image;
 	protected Point currentPoint;
-	protected Point previousPoint = new Point();
-	protected double zoom = 0;
-	protected int width;
 	protected int height;
-	protected boolean positionEnabled = false;
-	protected double posX, posY, posZ;
+	protected BufferedImage image;
 	protected int maxY;
 	protected int minY;
+	protected boolean positionEnabled = false;
+	protected double posX, posY, posZ;
+	protected Point previousPoint = new Point();
+	protected int width;
+	protected double zoom = 0;
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		if (image != null) {
-			drawImage(g);
+	public PreviewPanel() {
+		super();
+	}
+
+	public PreviewPanel(BufferedImage image) {
+		this(image, false);
+	}
+
+	public PreviewPanel(BufferedImage image, boolean showPosition) {
+		this.image = image;
+		this.positionEnabled = showPosition;
+		ImageListener listener = new ImageListener(this);
+		addMouseMotionListener(listener);
+		addMouseListener(listener);
+		addMouseWheelListener(listener);
+		if (showPosition) {
+			findMinMax();
 		}
-		if (positionEnabled) {
-			drawPosition(g);
-		}
+		revalidate();
+	}
+
+	public static int getColor(BufferedImage img, int x, int y) {
+		int rgb = img.getRGB(x, y);
+		int r = (rgb >> 16) & 0x000000FF;
+		int g = (rgb >> 8) & 0x000000FF;
+		int b = (rgb) & 0x000000FF;
+		return (r + g + b) / 3;
 	}
 
 	protected void drawImage(Graphics g) {
@@ -52,38 +70,6 @@ public class PreviewPanel extends JPanel {
 		g.drawImage(scaledInstance, (int) currentPoint.getX(), (int) currentPoint.getY(), null);
 	}
 
-	protected int getResizedHeight() {
-		return (int) (image.getHeight() + image.getHeight() * zoom);
-	}
-
-	protected int getResizedWidth() {
-		return (int) (image.getWidth() + image.getWidth() * zoom);
-	}
-
-	public void setDefaultZoom() {
-		double dw = image.getWidth() - getWidth();
-		double dh = image.getHeight() - getHeight();
-		zoom = -Math.max(dw / image.getWidth(), dh / image.getHeight());
-		currentPoint = new Point((getWidth() - getResizedWidth()) / 2, (getHeight() - getResizedHeight()) / 2);
-	}
-
-	public PreviewPanel(BufferedImage image, boolean showPosition) {
-		this.image = image;
-		this.positionEnabled = showPosition;
-		ImageListener listener = new ImageListener(this);
-		addMouseMotionListener(listener);
-		addMouseListener(listener);
-		addMouseWheelListener(listener);
-		if (showPosition) {
-			findMinMax();
-		}
-		revalidate();
-	}
-
-	public PreviewPanel(BufferedImage image) {
-		this(image, false);
-	}
-
 	protected void drawPosition(Graphics g) {
 		g.setColor(Color.BLACK);
 		int y = getHeight() - 10;
@@ -91,34 +77,6 @@ public class PreviewPanel extends JPanel {
 		g.drawString("X: " + posX, 5, y);
 		g.drawString("Y: " + posY, (int) (getWidth() * 0.45 - 20), y);
 		g.drawString("Z: " + posZ, (int) (getWidth() * 0.75 + 20), y);
-	}
-
-	public void setPoint(Point p) {
-		posX = getPointXAt(p);
-		posZ = getPointZAt(p);
-
-		int x = (int)- (posX / (Mediator.getMapWidth() / image.getWidth())) + image.getWidth() / 2;
-		int y = (int) -(posZ / (Mediator.getMapHeight() / image.getHeight())) + image.getHeight() / 2;
-		if (x >= 0 && x < image.getWidth() && y >= 0 && y < image.getHeight()) {
-			posY = getColor(x, y) * Mediator.getMapMaxYSetting() / maxY;
-		}
-		repaint();
-	}
-
-	public double getPointXAt(Point p) {
-		int mapWidth = image.getWidth();
-		return (Mediator.getMapWidth() * (-2 * p.getX() + zoom * mapWidth + 2 * currentPoint.x + mapWidth))
-				/ (2 * mapWidth * (zoom + 1));
-	}
-
-	public double getPointZAt(Point p) {
-		int mapHeight = image.getHeight();
-		return (Mediator.getMapHeight() * (-2 * p.getY() + zoom * mapHeight + 2 * currentPoint.y + mapHeight))
-				/ (2 * mapHeight * (zoom + 1));
-	}
-
-	public int getColor(int x, int y) {
-		return getColor(image, x, y);
 	}
 
 	protected void findMinMax() {
@@ -139,40 +97,12 @@ public class PreviewPanel extends JPanel {
 		}
 	}
 
-	public static int getColor(BufferedImage img, int x, int y) {
-		int rgb = img.getRGB(x, y);
-		int r = (rgb >> 16) & 0x000000FF;
-		int g = (rgb >> 8) & 0x000000FF;
-		int b = (rgb) & 0x000000FF;
-		return (r + g + b) / 3;
-	}
-
-	public PreviewPanel() {
-		super();
+	public int getColor(int x, int y) {
+		return getColor(image, x, y);
 	}
 
 	public Point getCurrentPoint() {
 		return currentPoint;
-	}
-
-	public void setCurrentPoint(Point currentPoint) {
-		this.currentPoint = currentPoint;
-	}
-
-	public Point getPreviousPoint() {
-		return previousPoint;
-	}
-
-	public void setPreviousPoint(Point previousPoint) {
-		this.previousPoint = previousPoint;
-	}
-
-	public double getZoom() {
-		return zoom;
-	}
-
-	public void setZoom(double zoom) {
-		this.zoom = zoom;
 	}
 
 	public BufferedImage getImage() {
@@ -185,5 +115,75 @@ public class PreviewPanel extends JPanel {
 
 	public int getMinY() {
 		return minY;
+	}
+
+	public double getPointXAt(Point p) {
+		int mapWidth = image.getWidth();
+		return (Mediator.getMapWidth() * (-2 * p.getX() + zoom * mapWidth + 2 * currentPoint.x + mapWidth))
+				/ (2 * mapWidth * (zoom + 1));
+	}
+
+	public double getPointZAt(Point p) {
+		int mapHeight = image.getHeight();
+		return (Mediator.getMapHeight() * (-2 * p.getY() + zoom * mapHeight + 2 * currentPoint.y + mapHeight))
+				/ (2 * mapHeight * (zoom + 1));
+	}
+
+	public Point getPreviousPoint() {
+		return previousPoint;
+	}
+
+	protected int getResizedHeight() {
+		return (int) (image.getHeight() + image.getHeight() * zoom);
+	}
+
+	protected int getResizedWidth() {
+		return (int) (image.getWidth() + image.getWidth() * zoom);
+	}
+
+	public double getZoom() {
+		return zoom;
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (image != null) {
+			drawImage(g);
+		}
+		if (positionEnabled) {
+			drawPosition(g);
+		}
+	}
+
+	public void setCurrentPoint(Point currentPoint) {
+		this.currentPoint = currentPoint;
+	}
+
+	public void setDefaultZoom() {
+		double dw = image.getWidth() - getWidth();
+		double dh = image.getHeight() - getHeight();
+		zoom = -Math.max(dw / image.getWidth(), dh / image.getHeight());
+		currentPoint = new Point((getWidth() - getResizedWidth()) / 2, (getHeight() - getResizedHeight()) / 2);
+	}
+
+	public void setPoint(Point p) {
+		posX = getPointXAt(p);
+		posZ = getPointZAt(p);
+
+		int x = (int)- (posX / (Mediator.getMapWidth() / image.getWidth())) + image.getWidth() / 2;
+		int y = (int) -(posZ / (Mediator.getMapHeight() / image.getHeight())) + image.getHeight() / 2;
+		if (x >= 0 && x < image.getWidth() && y >= 0 && y < image.getHeight()) {
+			posY = getColor(x, y) * Mediator.getMapMaxYSetting() / maxY;
+		}
+		repaint();
+	}
+
+	public void setPreviousPoint(Point previousPoint) {
+		this.previousPoint = previousPoint;
+	}
+
+	public void setZoom(double zoom) {
+		this.zoom = zoom;
 	}
 }

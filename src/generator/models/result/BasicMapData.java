@@ -15,28 +15,7 @@ public class BasicMapData {
 	@XmlElement(name = "lengthZ", required = true)
 	private double lengthZ;
 
-	public double getLengthX() {
-		return lengthX;
-	}
-
-	public void setLengthX(double lengthX) {
-		this.lengthX = lengthX;
-	}
-
-	public double getLengthY() {
-		return lengthY;
-	}
-
-	public void setLengthY(double lengthY) {
-		this.lengthY = lengthY;
-	}
-
-	public double getLengthZ() {
-		return lengthZ;
-	}
-
-	public void setLengthZ(double lengthZ) {
-		this.lengthZ = lengthZ;
+	public BasicMapData() {
 	}
 
 	public BasicMapData(double lengthX, double lengthY, double lengthZ) {
@@ -45,12 +24,33 @@ public class BasicMapData {
 		this.lengthZ = lengthZ;
 	}
 
-	public BasicMapData() {
+	public double getLengthX() {
+		return lengthX;
+	}
+
+	public double getLengthY() {
+		return lengthY;
+	}
+
+	public double getLengthZ() {
+		return lengthZ;
 	}
 
 	public void setLength(double lengthX, double lengthY, double lengthZ) {
 		this.lengthX = lengthX;
 		this.lengthY = lengthY;
+		this.lengthZ = lengthZ;
+	}
+
+	public void setLengthX(double lengthX) {
+		this.lengthX = lengthX;
+	}
+
+	public void setLengthY(double lengthY) {
+		this.lengthY = lengthY;
+	}
+
+	public void setLengthZ(double lengthZ) {
 		this.lengthZ = lengthZ;
 	}
 

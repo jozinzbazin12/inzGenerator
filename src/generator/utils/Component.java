@@ -4,9 +4,7 @@ import javax.swing.event.ChangeListener;
 
 public interface Component {
 
-	double value();
-
-	void setValue(double value);
+	void addChangeListener(ChangeListener changeListener);
 
 	boolean isListeningEnabled();
 
@@ -18,5 +16,7 @@ public interface Component {
 
 	void setSilent(boolean silent);
 
-	void addChangeListener(ChangeListener changeListener);
+	void setValue(double value);
+
+	double value();
 }

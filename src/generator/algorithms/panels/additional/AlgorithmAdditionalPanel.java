@@ -10,13 +10,13 @@ import generator.utils.PropertiesKeys;
 public abstract class AlgorithmAdditionalPanel extends AbstractPanel {
 	private static final long serialVersionUID = -2004798707516089550L;
 
-	protected abstract AlgorithmAdditionalPanel getInstance();
+	public AlgorithmAdditionalPanel() {
+		setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_ADDITIONAL_ARGUMENTS)));
+	}
 
 	public void delete(Algorithm a) {
 		Algorithm.getAdditionalPanels().put(a, getInstance());
 	}
 
-	public AlgorithmAdditionalPanel() {
-		setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_ADDITIONAL_ARGUMENTS)));
-	}
+	protected abstract AlgorithmAdditionalPanel getInstance();
 }

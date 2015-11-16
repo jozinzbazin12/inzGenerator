@@ -13,20 +13,7 @@ public class Texture {
 	@XmlAttribute(name = "scale", required = true)
 	private double scale;
 
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public double getScale() {
-		return scale;
-	}
-
-	public void setScale(double scale) {
-		this.scale = scale;
+	public Texture() {
 	}
 
 	public Texture(String path, double scale) {
@@ -35,6 +22,19 @@ public class Texture {
 		this.scale = scale;
 	}
 
-	public Texture() {
+	public String getPath() {
+		return path;
+	}
+
+	public double getScale() {
+		return scale;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public void setScale(double scale) {
+		this.scale = scale;
 	}
 }

@@ -45,27 +45,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	private static final String DELETE_ACTION = "deleteAction";
 	private static final String EDIT_ACTION = "editAction";
 	private static final String NEW_ACTION = "newAction";
-	private final Action editAction = new Action(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT)) {
-		private static final long serialVersionUID = -3567790752381825146L;
-
-		@Override
-		protected void additionalAction() {
-			List<GeneratedObject> generatedObjects = Mediator.getGeneratedObjects();
-			if (!generatedObjects.isEmpty()) {
-				String objectName = generatedObjects.size() > 1 ? "" : generatedObjects.get(0).getObjectName();
-				new ObjectWindow(MessageFormat.format(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), objectName),
-						generatedObjects);
-			}
-		}
-	};
-	private final Action newAction = new Action(Mediator.getMessage(PropertiesKeys.NEW_OBJECT)) {
-		private static final long serialVersionUID = 298336929138538316L;
-
-		@Override
-		protected void additionalAction() {
-			new ObjectWindow(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
-		};
-	};
+	private static final long serialVersionUID = -2087487239161953473L;
 	private final Action deleteAction = new Action(Mediator.getMessage(PropertiesKeys.DELETE_OBJECT)) {
 		private static final long serialVersionUID = -3567790752381825146L;
 
@@ -80,42 +60,50 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 			}
 		};
 	};
+	private final Action editAction = new Action(Mediator.getMessage(PropertiesKeys.MODIFY_OBJECT)) {
+		private static final long serialVersionUID = -3567790752381825146L;
 
-	private static final long serialVersionUID = -2087487239161953473L;
-	private JPopupMenu menu;
-	private JPopupMenu rowMenu;
-	private ObjectsPreviewPanel previewPanel;
+		@Override
+		protected void additionalAction() {
+			List<GeneratedObject> generatedObjects = Mediator.getGeneratedObjects();
+			if (!generatedObjects.isEmpty()) {
+				String objectName = generatedObjects.size() > 1 ? "" : generatedObjects.get(0).getObjectName();
+				new ObjectWindow(MessageFormat.format(Mediator.getMessage(PropertiesKeys.EDIT_OBJECT), objectName),
+						generatedObjects);
+			}
+		}
+	};
+
 	private Dimension imageSize;
+	private GeneratedObject last;
+	private JPopupMenu menu;
+	private final Action newAction = new Action(Mediator.getMessage(PropertiesKeys.NEW_OBJECT)) {
+		private static final long serialVersionUID = 298336929138538316L;
 
-	private JPanel objectsPanel;
-	private Table table;
+		@Override
+		protected void additionalAction() {
+			new ObjectWindow(Mediator.getMessage(PropertiesKeys.NEW_OBJECT));
+		};
+	};
 	private List<GeneratedObject> objects = new ArrayList<>();
 
-	private GeneratedObject last;
+	private JPanel objectsPanel;
+	private ObjectsPreviewPanel previewPanel;
+	private JPopupMenu rowMenu;
 
-	public void unHighlight() {
-		if (last != null) {
-			last.swapColors();
-			refreshPreview();
-			repaint();
-			last = null;
-		}
-		table.setHighlighted(-1);
-	}
+	private Table table;
 
-	public void highlight(GeneratedObject obj) {
-		int index = objects.indexOf(obj);
-		if (last != null) {
-			last.swapColors();
-		}
-		if (index >= 0) {
-			obj.swapColors();
-			last = obj;
-			table.setHighlighted(index);
-		}
-
-		refreshPreview();
-		repaint();
+	public ThirdTabPanel() {
+		setLayout(new GridLayout(0, 2));
+		objectsPanel = new JPanel();
+		objectsPanel.setLayout(new GridLayout(0, 1));
+		objectsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.GENERATED_OBJECTS)));
+		objectsPanel.add(createObjectListPanel());
+		add(objectsPanel);
+		previewPanel = new ObjectsPreviewPanel();
+		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
+		add(previewPanel);
+		Mediator.registerThirdTabPanel(this);
 	}
 
 	public File addPreview(String imgName) throws IOException {
@@ -132,22 +120,12 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		return file;
 	}
 
-	private void printOnPreview() {
-		previewPanel.setResultObject(objects);
-		previewPanel.repaint();
-	}
-
-	public ThirdTabPanel() {
-		setLayout(new GridLayout(0, 2));
-		objectsPanel = new JPanel();
-		objectsPanel.setLayout(new GridLayout(0, 1));
-		objectsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.GENERATED_OBJECTS)));
-		objectsPanel.add(createObjectListPanel());
-		add(objectsPanel);
-		previewPanel = new ObjectsPreviewPanel();
-		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
-		add(previewPanel);
-		Mediator.registerThirdTabPanel(this);
+	public void click(GeneratedObject obj) {
+		int index = objects.indexOf(obj);
+		table.setRowSelectionInterval(index, index);
+		if (index != table.getHighlighted()) {
+			unHighlight();
+		}
 	}
 
 	public JScrollPane createObjectListPanel() {
@@ -234,44 +212,16 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		return imageSize;
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON3) {
-			menu.setInvoker(this);
-			menu.show(e.getComponent(), e.getX(), e.getY());
-		}
-		repaint();
+	public BufferedImage getMap() {
+		return previewPanel.getImage();
 	}
 
-	@Override
-	public void mousePressed(MouseEvent e) {
+	public double getMapHeight(int x, int y) {
+		return previewPanel.getColor(x, y);
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
-
-	public void refreshPreview() {
-		previewPanel.repaint();
-	}
-
-	public void updateObjects(Collection<GeneratedObject> collection) {
-		List<GeneratedObject> objectsList = new ArrayList<>(collection);
-		Collections.sort(objectsList);
-		objects.clear();
-		objects.addAll(objectsList);
-		TableModel model = table.getModel();
-		((DefaultTableModel) model).addRow(objectsList.toArray(new GeneratedObject[0]));
-		revalidate();
-		printOnPreview();
+	public double getMapMaxY() {
+		return previewPanel.getMaxY();
 	}
 
 	public List<GeneratedObject> getSelectedRows() {
@@ -283,23 +233,73 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		return rows;
 	}
 
-	public void click(GeneratedObject obj) {
+	public void highlight(GeneratedObject obj) {
 		int index = objects.indexOf(obj);
-		table.setRowSelectionInterval(index, index);
-		if (index != table.getHighlighted()) {
-			unHighlight();
+		if (last != null) {
+			last.swapColors();
 		}
+		if (index >= 0) {
+			obj.swapColors();
+			last = obj;
+			table.setHighlighted(index);
+		}
+
+		refreshPreview();
+		repaint();
 	}
 
-	public double getMapHeight(int x, int y) {
-		return previewPanel.getColor(x, y);
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			menu.setInvoker(this);
+			menu.show(e.getComponent(), e.getX(), e.getY());
+		}
+		repaint();
 	}
 
-	public double getMapMaxY() {
-		return previewPanel.getMaxY();
+	@Override
+	public void mouseEntered(MouseEvent e) {
 	}
 
-	public BufferedImage getMap() {
-		return previewPanel.getImage();
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	private void printOnPreview() {
+		previewPanel.setResultObject(objects);
+		previewPanel.repaint();
+	}
+
+	public void refreshPreview() {
+		previewPanel.repaint();
+	}
+
+	public void unHighlight() {
+		if (last != null) {
+			last.swapColors();
+			refreshPreview();
+			repaint();
+			last = null;
+		}
+		table.setHighlighted(-1);
+	}
+
+	public void updateObjects(Collection<GeneratedObject> collection) {
+		List<GeneratedObject> objectsList = new ArrayList<>(collection);
+		Collections.sort(objectsList);
+		objects.clear();
+		objects.addAll(objectsList);
+		TableModel model = table.getModel();
+		((DefaultTableModel) model).addRow(objectsList.toArray(new GeneratedObject[0]));
+		revalidate();
+		printOnPreview();
 	}
 }

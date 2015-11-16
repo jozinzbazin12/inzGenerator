@@ -14,24 +14,14 @@ import generator.panels.ObjectsPreviewPanel;
 import generator.panels.PreviewPanel;
 
 public class ImageListener extends MouseAdapter {
-	private PreviewPanel panel;
 	private GeneratedObject currentObject;
 	private boolean objectsPanel = false;
+	private PreviewPanel panel;
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		if (SwingUtilities.isRightMouseButton(e)) {
-			Point previousPoint = panel.getPreviousPoint();
-			previousPoint.x = e.getX();
-			previousPoint.y = e.getY();
-		}
-		if (SwingUtilities.isMiddleMouseButton(e)) {
-			panel.setDefaultZoom();
-			((JComponent) e.getSource()).repaint();
-		}
-		if (currentObject != null && SwingUtilities.isLeftMouseButton(e)) {
-			Mediator.setClicked(currentObject);
-			panel.repaint();
+	public ImageListener(PreviewPanel previewPanel) {
+		this.panel = previewPanel;
+		if (previewPanel instanceof ObjectsPreviewPanel) {
+			objectsPanel = true;
 		}
 	}
 
@@ -65,21 +55,6 @@ public class ImageListener extends MouseAdapter {
 	}
 
 	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		panel.setZoom(panel.getZoom() - e.getUnitsToScroll() / 50d);
-		if (e.getSource() instanceof JComponent) {
-			((JComponent) e.getSource()).repaint();
-		}
-	}
-
-	public ImageListener(PreviewPanel previewPanel) {
-		this.panel = previewPanel;
-		if (previewPanel instanceof ObjectsPreviewPanel) {
-			objectsPanel = true;
-		}
-	}
-
-	@Override
 	public void mouseMoved(MouseEvent e) {
 		panel.setPoint(e.getPoint());
 		if (objectsPanel) {
@@ -105,5 +80,30 @@ public class ImageListener extends MouseAdapter {
 		}
 		currentObject = null;
 		Mediator.unHighlight();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if (SwingUtilities.isRightMouseButton(e)) {
+			Point previousPoint = panel.getPreviousPoint();
+			previousPoint.x = e.getX();
+			previousPoint.y = e.getY();
+		}
+		if (SwingUtilities.isMiddleMouseButton(e)) {
+			panel.setDefaultZoom();
+			((JComponent) e.getSource()).repaint();
+		}
+		if (currentObject != null && SwingUtilities.isLeftMouseButton(e)) {
+			Mediator.setClicked(currentObject);
+			panel.repaint();
+		}
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		panel.setZoom(panel.getZoom() - e.getUnitsToScroll() / 50d);
+		if (e.getSource() instanceof JComponent) {
+			((JComponent) e.getSource()).repaint();
+		}
 	}
 }

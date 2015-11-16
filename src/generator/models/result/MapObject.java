@@ -8,29 +8,17 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MapObject {
 
-	@XmlAttribute(name = "mapFile", required = true)
-	private String mapFileName;
-
 	@XmlElement(name = "Settings", required = true)
 	private BasicMapData basic;
 
 	@XmlElement(name = "Light", required = true)
 	private LightData lightData;
 
+	@XmlAttribute(name = "mapFile", required = true)
+	private String mapFileName;
+
 	@XmlElement(name = "Material", required = true)
 	private Material material;
-
-	public String getMapFileName() {
-		return mapFileName;
-	}
-
-	public void setMapFileName(String mapFileName) {
-		this.mapFileName = mapFileName;
-	}
-
-	public void setBasic(BasicMapData basic) {
-		this.basic = basic;
-	}
 
 	public BasicMapData getBasic() {
 		return basic;
@@ -40,12 +28,24 @@ public class MapObject {
 		return lightData;
 	}
 
-	public void setLightData(LightData lightData) {
-		this.lightData = lightData;
+	public String getMapFileName() {
+		return mapFileName;
 	}
 
 	public Material getMaterial() {
 		return material;
+	}
+
+	public void setBasic(BasicMapData basic) {
+		this.basic = basic;
+	}
+
+	public void setLightData(LightData lightData) {
+		this.lightData = lightData;
+	}
+
+	public void setMapFileName(String mapFileName) {
+		this.mapFileName = mapFileName;
 	}
 
 	public void setMaterial(Material material) {

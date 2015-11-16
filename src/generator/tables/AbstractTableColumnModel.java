@@ -20,15 +20,6 @@ public class AbstractTableColumnModel extends DefaultTableColumnModel {
 		addColumn(color);
 	}
 
-	protected void createRelativeColumn() {
-		TableColumn relative = new TableColumn(index++);
-		relative.setHeaderValue(Mediator.getMessage(PropertiesKeys.RELATIVE));
-		relative.setMinWidth(10);
-		relative.setMaxWidth(50);
-		relative.setCellRenderer(new CheckboxCellRenderer());
-		addColumn(relative);
-	}
-
 	protected void createColumn(String msg, int minWidth, int maxWidth) {
 		createColumn(msg, minWidth, maxWidth, 0);
 	}
@@ -43,5 +34,14 @@ public class AbstractTableColumnModel extends DefaultTableColumnModel {
 		}
 		col.setCellRenderer(new CellRenderer());
 		addColumn(col);
+	}
+
+	protected void createRelativeColumn() {
+		TableColumn relative = new TableColumn(index++);
+		relative.setHeaderValue(Mediator.getMessage(PropertiesKeys.RELATIVE));
+		relative.setMinWidth(10);
+		relative.setMaxWidth(50);
+		relative.setCellRenderer(new CheckboxCellRenderer());
+		addColumn(relative);
 	}
 }

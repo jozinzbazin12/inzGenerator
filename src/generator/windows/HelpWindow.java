@@ -26,6 +26,14 @@ public class HelpWindow extends JFrame implements ActionListener {
 		createWindow();
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == ok) {
+			dispose();
+		}
+
+	}
+
 	private void createWindow() {
 		setSize(600, 300);
 		setLocation(400, 100);
@@ -48,13 +56,5 @@ public class HelpWindow extends JFrame implements ActionListener {
 		bottom.add(ok, BorderLayout.CENTER);
 
 		add(bottom, BorderLayout.PAGE_END);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == ok) {
-			dispose();
-		}
-
 	}
 }

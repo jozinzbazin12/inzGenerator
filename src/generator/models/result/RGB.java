@@ -16,6 +16,15 @@ public class RGB {
 	@XmlAttribute(name = "b")
 	protected double b;
 
+	public RGB(double r, double g, double b) {
+		this.r = r;
+		this.g = g;
+		this.b = b;
+	}
+
+	public RGB() {
+	}
+
 	public double getR() {
 		return r;
 	}
@@ -40,12 +49,4 @@ public class RGB {
 		this.b = b;
 	}
 
-	public RGB(double r, double g, double b) {
-		this.r = r;
-		this.g = g;
-		this.b = b;
-	}
-
-	public RGB() {
-	}
 }

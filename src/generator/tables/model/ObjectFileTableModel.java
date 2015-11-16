@@ -17,8 +17,13 @@ public class ObjectFileTableModel extends DefaultTableModel {
 
 	private static final long serialVersionUID = 4537045252888015583L;
 
-	private List<ModelInfo> data;
 	private Class<?>[] classes;
+	private List<ModelInfo> data;
+
+	public ObjectFileTableModel(Class<?>[] classes) {
+		data = new ArrayList<>();
+		this.classes = classes;
+	}
 
 	@Override
 	public void addRow(Object[] rowData) {
@@ -31,17 +36,8 @@ public class ObjectFileTableModel extends DefaultTableModel {
 		fireTableRowsInserted(0, data.size());
 	}
 
-	@Override
-	public boolean isCellEditable(int row, int column) {
-		return false;
-	}
-
-	@Override
-	public int getRowCount() {
-		if (data == null) {
-			return 0;
-		}
-		return data.size();
+	private String createCellValue(double x, double y, double z) {
+		return MessageFormat.format("X: {0}, Y: {1}, Z: {2}", x, y, z);
 	}
 
 	@Override
@@ -50,12 +46,11 @@ public class ObjectFileTableModel extends DefaultTableModel {
 	}
 
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		return getValue(rowIndex, columnIndex);
-	}
-
-	private String createCellValue(double x, double y, double z) {
-		return MessageFormat.format("X: {0}, Y: {1}, Z: {2}", x, y, z);
+	public int getRowCount() {
+		if (data == null) {
+			return 0;
+		}
+		return data.size();
 	}
 
 	private Object getValue(int row, int index) {
@@ -95,9 +90,14 @@ public class ObjectFileTableModel extends DefaultTableModel {
 		}
 	}
 
-	public ObjectFileTableModel(Class<?>[] classes) {
-		data = new ArrayList<>();
-		this.classes = classes;
+	@Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		return getValue(rowIndex, columnIndex);
+	}
+
+	@Override
+	public boolean isCellEditable(int row, int column) {
+		return false;
 	}
 
 }

@@ -9,10 +9,6 @@ public class ScaleSettings extends AbstractMinMax {
 	@XmlAttribute(name = "equal")
 	private boolean equal;
 
-	public ScaleSettings(double minx, double maxx, double miny, double maxy, double minz, double maxz) {
-		super(minx, maxx, miny, maxy, minz, maxz);
-	}
-
 	public ScaleSettings() {
 		equal = true;
 		minX = 1;
@@ -21,6 +17,10 @@ public class ScaleSettings extends AbstractMinMax {
 		maxY = 1;
 		minZ = 1;
 		maxZ = 1;
+	}
+
+	public ScaleSettings(double minx, double maxx, double miny, double maxy, double minz, double maxz) {
+		super(minx, maxx, miny, maxy, minz, maxz);
 	}
 
 	public boolean isEqual() {

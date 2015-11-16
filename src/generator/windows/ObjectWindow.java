@@ -32,14 +32,54 @@ import generator.utils.Label;
 import generator.utils.PropertiesKeys;
 
 public class ObjectWindow extends JFrame implements ActionListener {
-	private Map<String, Component> arguments = new HashMap<>();
 	private static final long serialVersionUID = 5328377975510513084L;
+	private Map<String, Component> arguments = new HashMap<>();
 	private JButton cancel;
-	private JButton ok;
 	private boolean edit;
-	private List<GeneratedObject> objects;
 	private JComboBox<GenerationModel> models;
+	private List<GeneratedObject> objects;
+	private JButton ok;
 	private CheckBox relative;
+
+	public ObjectWindow(String name) {
+		super(name);
+		createWindow();
+		objects = new ArrayList<>();
+		objects.add(new GeneratedObject());
+		edit = false;
+	}
+
+	public ObjectWindow(String name, List<GeneratedObject> obj) {
+		super(name);
+		this.objects = obj;
+		createWindow();
+		edit = true;
+		fillValues();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(ok)) {
+			if (edit) {
+				for (GeneratedObject i : objects) {
+					i.setBasic(getData(i.getBasic()));
+					if (models.getSelectedIndex() != -1) {
+						i.setModel((GenerationModel) models.getSelectedItem());
+					}
+				}
+			} else {
+				objects.get(0).setBasic(getData(new BasicModelData()));
+				objects.get(0).setModel((GenerationModel) models.getSelectedItem());
+				List<GeneratedObject> generatedObjects = Mediator.getResultObject().getGeneratedObjects();
+				generatedObjects.add(objects.get(0));
+			}
+			Mediator.refreshPreview();
+			dispose();
+		}
+		if (e.getSource().equals(cancel)) {
+			dispose();
+		}
+	}
 
 	private void createWindow() {
 		setSize(600, 600);
@@ -98,22 +138,6 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		bottom.add(cancel);
 		add(bottom, BorderLayout.PAGE_END);
 		Mediator.registerObjectWindow(this);
-	}
-
-	public ObjectWindow(String name) {
-		super(name);
-		createWindow();
-		objects = new ArrayList<>();
-		objects.add(new GeneratedObject());
-		edit = false;
-	}
-
-	public ObjectWindow(String name, List<GeneratedObject> obj) {
-		super(name);
-		this.objects = obj;
-		createWindow();
-		edit = true;
-		fillValues();
 	}
 
 	private void fillValues() {
@@ -201,29 +225,5 @@ public class ObjectWindow extends JFrame implements ActionListener {
 			data.setRelative(relative.isSelected());
 		}
 		return data;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(ok)) {
-			if (edit) {
-				for (GeneratedObject i : objects) {
-					i.setBasic(getData(i.getBasic()));
-					if (models.getSelectedIndex() != -1) {
-						i.setModel((GenerationModel) models.getSelectedItem());
-					}
-				}
-			} else {
-				objects.get(0).setBasic(getData(new BasicModelData()));
-				objects.get(0).setModel((GenerationModel) models.getSelectedItem());
-				List<GeneratedObject> generatedObjects = Mediator.getResultObject().getGeneratedObjects();
-				generatedObjects.add(objects.get(0));
-			}
-			Mediator.refreshPreview();
-			dispose();
-		}
-		if (e.getSource().equals(cancel)) {
-			dispose();
-		}
 	}
 }

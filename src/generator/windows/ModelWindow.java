@@ -41,49 +41,76 @@ import generator.utils.Label;
 import generator.utils.PropertiesKeys;
 
 public class ModelWindow extends JFrame implements ActionListener {
-	private Map<String, Component> arguments = new HashMap<>();
 	private static final long serialVersionUID = 5328377975510513084L;
-	private JButton cancel;
-	private JButton ok;
-	private List<ModelInfo> objects;
-	private Label fileName;
-	private JTextField pathField;
-	private CheckBox equalScale;
-	private JPanel spinnersSZ;
-	private JPanel spinnersSY;
-	private CheckBox relative;
 	private AlgorithmAdditionalPanel additionalPanel;
-	private MaskPreviewPanel preview;
-	private Label maskName;
+	private Algorithm algorithm;
+	private Map<String, Component> arguments = new HashMap<>();
+	private JButton cancel;
+	private JButton delete;
+	private CheckBox equalScale;
+	private Label fileName;
 	private boolean maskChanged;
+	private Label maskName;
+	private List<ModelInfo> objects;
+	private JButton ok;
+	private JTextField pathField;
+	private MaskPreviewPanel preview;
+	private CheckBox relative;
+	private JPanel spinnersSY;
+	private JPanel spinnersSZ;
 	private JPanel spinnersX;
 	private JPanel spinnersZ;
-	private JButton delete;
-	private Algorithm algorithm;
 
-	private void createWindow() {
-		setSize(1000, 600);
-		setLocation(100, 100);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	public ModelWindow(String name, List<ModelInfo> generationModel) {
+		super(name);
+		algorithm = Mediator.getAlgorithm();
+		additionalPanel = Algorithm.getAdditionalPanels().get(algorithm);
+		objects = generationModel;
+		createWindow();
+		fillValues();
+		maskChanged = false;
+	}
 
-		JPanel container = new JPanel(new GridLayout(1, 0));
-		JPanel basic = createBasicSettingsPanel();
-		JPanel additional = createAdditionalPanel();
-		setVisible(true);
-		container.add(basic);
-		container.add(additional);
-		add(container, BorderLayout.CENTER);
-		JPanel bottom = new JPanel();
-		bottom.setLayout(new GridLayout(0, 2, 20, 20));
-		ok = new JButton(Mediator.getMessage(PropertiesKeys.OK));
-		ok.addActionListener(this);
-		bottom.add(ok);
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(ok)) {
+			for (ModelInfo i : objects) {
+				i.setPositionSettings(getPosition(i.getPositionSettings()));
+				i.setRotationSettings(getRotation(i.getRotationSettings()));
+				i.setScaleSettings(getScale(i.getScaleSettings()));
+				Component minC = arguments.get(Consts.MIN_COUNT);
+				Component maxC = arguments.get(Consts.MAX_COUNT);
+				if (minC.isModified()) {
+					i.setMinCount(getIntValue(minC.value()));
+				}
+				if (maxC.isModified()) {
+					i.setMaxCount(getIntValue(maxC.value()));
+				}
+				additionalPanel.getArgs(i.getArgs(), true);
 
-		cancel = new JButton(Mediator.getMessage(PropertiesKeys.CANCEL));
-		cancel.addActionListener(this);
-		bottom.add(cancel);
-		add(bottom, BorderLayout.PAGE_END);
-		Mediator.registerModelWindow(this);
+				if (maskChanged) {
+					i.setMask(preview.getMask());
+					i.setMaskFile(maskName.getText());
+				}
+			}
+			dispose();
+		} else if (e.getSource().equals(cancel)) {
+			dispose();
+		} else if (e.getSource().equals(equalScale)) {
+			if (equalScale.isSelected()) {
+				showScaleSpinners(false);
+			} else {
+				showScaleSpinners(true);
+			}
+		}
+		additionalPanel.delete(Mediator.getAlgorithm());
+	}
+
+	public void changeFile(String path) {
+		GenerationModel model = objects.get(0).getModel();
+		model.setPath(path);
+		fileName.setText(model.getName());
+		pathField.setText(path);
 	}
 
 	private JPanel createAdditionalPanel() {
@@ -94,17 +121,6 @@ public class ModelWindow extends JFrame implements ActionListener {
 		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
 		panel.add(additionalPanel);
 		return panel;
-	}
-
-	private void openMask(String path) {
-		maskName.setText(path);
-		try {
-			preview.setMask(ImageIO.read(new File(path)));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		preview.repaint();
-		maskChanged = true;
 	}
 
 	private JPanel createBasicSettingsPanel() {
@@ -164,6 +180,36 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 	}
 
+	private JPanel createFileOptionsPanel() {
+		JPanel fileOptions = new JPanel();
+		fileOptions.setLayout(new GridLayout(0, 3, 5, 5));
+		// fileOptions.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.FILE_MENU)));
+		if (objects.size() == 1) {
+			fileName = new Label(objects.get(0).getModel().getName());
+			pathField = new JTextField(objects.get(0).getModel().getPath());
+		} else {
+			StringBuilder str = new StringBuilder();
+			for (ModelInfo i : objects) {
+				str.append(i.getModel().getName());
+				str.append(", ");
+			}
+			str.deleteCharAt(str.length() - 2);
+			fileName = new Label(str.toString());
+			pathField = new JTextField();
+			pathField.setEnabled(false);
+		}
+		fileName.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_NAME)));
+		fileOptions.add(fileName);
+		fileOptions.add(pathField);
+
+		JButton openFile = new JButton(new LoadSingleModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT)));
+		fileOptions.add(openFile);
+		if (objects.size() > 1) {
+			openFile.setEnabled(false);
+		}
+		return fileOptions;
+	}
+
 	private JPanel createMaskOptionsPanel() {
 		JPanel maskOptions = new JPanel();
 		maskName = new Label();
@@ -216,56 +262,29 @@ public class ModelWindow extends JFrame implements ActionListener {
 		return maskOptions;
 	}
 
-	private JPanel createFileOptionsPanel() {
-		JPanel fileOptions = new JPanel();
-		fileOptions.setLayout(new GridLayout(0, 3, 5, 5));
-		// fileOptions.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.FILE_MENU)));
-		if (objects.size() == 1) {
-			fileName = new Label(objects.get(0).getModel().getName());
-			pathField = new JTextField(objects.get(0).getModel().getPath());
-		} else {
-			StringBuilder str = new StringBuilder();
-			for (ModelInfo i : objects) {
-				str.append(i.getModel().getName());
-				str.append(", ");
-			}
-			str.deleteCharAt(str.length() - 2);
-			fileName = new Label(str.toString());
-			pathField = new JTextField();
-			pathField.setEnabled(false);
-		}
-		fileName.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.OBJECT_FILE_NAME)));
-		fileOptions.add(fileName);
-		fileOptions.add(pathField);
+	private void createWindow() {
+		setSize(1000, 600);
+		setLocation(100, 100);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		JButton openFile = new JButton(new LoadSingleModelAction(Mediator.getMessage(PropertiesKeys.LOAD_OBJECT)));
-		fileOptions.add(openFile);
-		if (objects.size() > 1) {
-			openFile.setEnabled(false);
-		}
-		return fileOptions;
-	}
+		JPanel container = new JPanel(new GridLayout(1, 0));
+		JPanel basic = createBasicSettingsPanel();
+		JPanel additional = createAdditionalPanel();
+		setVisible(true);
+		container.add(basic);
+		container.add(additional);
+		add(container, BorderLayout.CENTER);
+		JPanel bottom = new JPanel();
+		bottom.setLayout(new GridLayout(0, 2, 20, 20));
+		ok = new JButton(Mediator.getMessage(PropertiesKeys.OK));
+		ok.addActionListener(this);
+		bottom.add(ok);
 
-	public ModelWindow(String name, List<ModelInfo> generationModel) {
-		super(name);
-		algorithm = Mediator.getAlgorithm();
-		additionalPanel = Algorithm.getAdditionalPanels().get(algorithm);
-		objects = generationModel;
-		createWindow();
-		fillValues();
-		maskChanged = false;
-	}
-
-	private void setEqualScale(boolean b) {
-		equalScale.setSilent(true);
-		equalScale.setSelected(b);
-		equalScale.setSilent(false);
-		showScaleSpinners(!b);
-	}
-
-	private void showScaleSpinners(boolean b) {
-		spinnersSY.setVisible(b);
-		spinnersSZ.setVisible(b);
+		cancel = new JButton(Mediator.getMessage(PropertiesKeys.CANCEL));
+		cancel.addActionListener(this);
+		bottom.add(cancel);
+		add(bottom, BorderLayout.PAGE_END);
+		Mediator.registerModelWindow(this);
 	}
 
 	private void fillValues() {
@@ -341,24 +360,18 @@ public class ModelWindow extends JFrame implements ActionListener {
 		}
 	}
 
-	private void setMask(ModelInfo objectInfo, BufferedImage mask) {
-		String maskFile = objectInfo.getMaskFile();
-		if (mask != null) {
-			preview.setMask(mask);
-			maskName.setText(maskFile);
-		} else if (maskFile != null) {
-			openMask(maskFile);
-		}
-	}
-
-	private void setSilent(boolean value) {
-		for (Map.Entry<String, Component> i : arguments.entrySet()) {
-			i.getValue().setSilent(value);
-		}
-	}
-
 	public Map<String, Component> getArguments() {
 		return arguments;
+	}
+
+	private int getIntValue(Object value) {
+		if (value instanceof Double) {
+			return ((Double) value).intValue();
+		}
+		if (value instanceof Integer) {
+			return (Integer) value;
+		}
+		throw new IllegalArgumentException("Argument not a number");
 	}
 
 	private PositionSettings getPosition(PositionSettings data) {
@@ -460,59 +473,46 @@ public class ModelWindow extends JFrame implements ActionListener {
 		return data;
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(ok)) {
-			for (ModelInfo i : objects) {
-				i.setPositionSettings(getPosition(i.getPositionSettings()));
-				i.setRotationSettings(getRotation(i.getRotationSettings()));
-				i.setScaleSettings(getScale(i.getScaleSettings()));
-				Component minC = arguments.get(Consts.MIN_COUNT);
-				Component maxC = arguments.get(Consts.MAX_COUNT);
-				if (minC.isModified()) {
-					i.setMinCount(getIntValue(minC.value()));
-				}
-				if (maxC.isModified()) {
-					i.setMaxCount(getIntValue(maxC.value()));
-				}
-				additionalPanel.getArgs(i.getArgs(), true);
-
-				if (maskChanged) {
-					i.setMask(preview.getMask());
-					i.setMaskFile(maskName.getText());
-				}
-			}
-			dispose();
-		} else if (e.getSource().equals(cancel)) {
-			dispose();
-		} else if (e.getSource().equals(equalScale)) {
-			if (equalScale.isSelected()) {
-				showScaleSpinners(false);
-			} else {
-				showScaleSpinners(true);
-			}
+	private void openMask(String path) {
+		maskName.setText(path);
+		try {
+			preview.setMask(ImageIO.read(new File(path)));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		additionalPanel.delete(Mediator.getAlgorithm());
+		preview.repaint();
+		maskChanged = true;
 	}
 
-	private int getIntValue(Object value) {
-		if (value instanceof Double) {
-			return ((Double) value).intValue();
-		}
-		if (value instanceof Integer) {
-			return (Integer) value;
-		}
-		throw new IllegalArgumentException("Argument not a number");
+	private void setEqualScale(boolean b) {
+		equalScale.setSilent(true);
+		equalScale.setSelected(b);
+		equalScale.setSilent(false);
+		showScaleSpinners(!b);
 	}
 
-	public void changeFile(String path) {
-		GenerationModel model = objects.get(0).getModel();
-		model.setPath(path);
-		fileName.setText(model.getName());
-		pathField.setText(path);
+	private void setMask(ModelInfo objectInfo, BufferedImage mask) {
+		String maskFile = objectInfo.getMaskFile();
+		if (mask != null) {
+			preview.setMask(mask);
+			maskName.setText(maskFile);
+		} else if (maskFile != null) {
+			openMask(maskFile);
+		}
 	}
 
 	public void setMask(String path) {
 		openMask(path);
+	}
+
+	private void setSilent(boolean value) {
+		for (Map.Entry<String, Component> i : arguments.entrySet()) {
+			i.getValue().setSilent(value);
+		}
+	}
+
+	private void showScaleSpinners(boolean b) {
+		spinnersSY.setVisible(b);
+		spinnersSZ.setVisible(b);
 	}
 }

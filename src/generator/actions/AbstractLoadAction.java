@@ -13,10 +13,9 @@ public abstract class AbstractLoadAction extends Action {
 
 	protected JFileChooser chooser;
 
-	protected abstract void onSucess(String path);
-
-	protected void onFail() {
-		// Override me
+	public AbstractLoadAction(String name, JFileChooser chooser) {
+		super(name);
+		this.chooser = chooser;
 	}
 
 	@Override
@@ -38,9 +37,10 @@ public abstract class AbstractLoadAction extends Action {
 		super.actionPerformed(e);
 	}
 
-	public AbstractLoadAction(String name, JFileChooser chooser) {
-		super(name);
-		this.chooser = chooser;
+	protected void onFail() {
+		// Override me
 	}
+
+	protected abstract void onSucess(String path);
 
 }

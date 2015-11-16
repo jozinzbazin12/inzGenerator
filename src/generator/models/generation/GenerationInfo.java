@@ -10,26 +10,26 @@ import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GenerationInfo {
-	@XmlElement(name = "Model")
-	private List<ModelInfo> models;
-
 	@XmlElement(name = "Args")
 	private Map<String, Double> args = new HashMap<>();
 
-	public List<ModelInfo> getModels() {
-		return models;
-	}
-
-	public void setModels(List<ModelInfo> models) {
-		this.models = models;
-	}
+	@XmlElement(name = "Model")
+	private List<ModelInfo> models;
 
 	public Map<String, Double> getArgs() {
 		return args;
 	}
 
+	public List<ModelInfo> getModels() {
+		return models;
+	}
+
 	public void setArgs(Map<String, Double> args) {
 		this.args = args;
+	}
+
+	public void setModels(List<ModelInfo> models) {
+		this.models = models;
 	}
 
 }

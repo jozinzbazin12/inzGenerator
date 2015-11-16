@@ -13,6 +13,10 @@ public abstract class SaveXMLAction extends AbstractLoadAction {
 	private static final long serialVersionUID = 7702791072284728221L;
 	private String fileName = null;
 
+	public SaveXMLAction(String name) {
+		super(name, new XMLChooser());
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		int rVal = chooser.showSaveDialog(new JFrame());
@@ -29,9 +33,5 @@ public abstract class SaveXMLAction extends AbstractLoadAction {
 			onFail();
 		}
 		additionalAction();
-	}
-
-	public SaveXMLAction(String name) {
-		super(name, new XMLChooser());
 	}
 }

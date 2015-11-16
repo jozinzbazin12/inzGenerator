@@ -24,6 +24,8 @@ public final class PropertiesKeys {
 	public static final String COLOR_ALPHA_TOOLTIP = "settings.color.alpha.tooltip";
 	public static final String COLOR_BLUE_TOOLTIP = "settings.color.blue.tooltip";
 	public static final String COLOR_GREEN_TOOLTIP = "settings.color.green.tooltip";
+	public static final String COLOR_RATE = "algorithm.settings.mask.color.rate";
+	public static final String COLOR_RATE_TOOLTIP = "algorithm.settings.mask.color.rate.tooltip";
 	public static final String COLOR_RED_TOOLTIP = "settings.color.red.tooltip";
 	public static final String COORDINATE = "settings.coordinate";
 	public static final String COORDINATES = "settings.coordinates";
@@ -69,6 +71,8 @@ public final class PropertiesKeys {
 	public static final String LOAD_XML_OPTION = "load.xml.option";
 	public static final String MAP_BORDER = "map.border";
 	public static final String MAP_OPTIONS_BORDER = "map.options.border";
+	public static final String MASK_ALGORITHM = "algorithm.mask";
+	public static final String MASK_ALGORITHM_HELP = "algorithm.mask.help";
 	public static final String MASK_FILE_NAME = "mask.file.name";
 	public static final String MATERIAL = "material";
 	public static final String MATERIAL_AMBIENT_TOOLTIP = "material.ambient.tooltip";
@@ -104,7 +108,11 @@ public final class PropertiesKeys {
 	public static final String OPTIONS_BORDER = "options.border";
 	public static final String OPTIONS_MENU = "menu.options";
 	public static final String PNG_FILES = "files.png";
+	public static final String PREVENT_COLLISIONS = "algorithm.settings.prevent.collisions";
+	public static final String PREVENT_COLLISIONS_TOOLTIP = "algorithm.settings.prevent.collisions.tooltip";
 	public static final String PREVIEW_BORDER = "preview.border";
+	public static final String PROPAGATION = "algorithm.settings.spread.propagation";
+	public static final String PROPAGATION_TOOLTIP = "algorithm.settings.spread.propagation.tooltip";
 	public static final String PROPERTIES_FILE = "generator.resources.messages";
 	public static final String REGULAR_ALGORITHM = "algorithm.regular";
 	public static final String REGULAR_ALGORITHM_HELP = "algorithm.regular.help";
@@ -126,6 +134,10 @@ public final class PropertiesKeys {
 	public static final String SPECULAR_TOOLTIP = "light.specular.tooltip";
 	public static final String SPREAD_ALGORITHM = "algorithm.spread";
 	public static final String SPREAD_ALGORITHM_HELP = "algorithm.spread.help";
+	public static final String START_X_POSITION = "algorithm.settings.spread.start.x";
+	public static final String START_X_POSITION_TOOLTIP = "algorithm.settings.spread.start.x.tooltip";
+	public static final String START_Z_POSITION = "algorithm.settings.spread.start.z";
+	public static final String START_Z_POSITION_TOOLTIP = "algorithm.settings.spread.start.z.tooltip";
 	public static final String TEXTURE = "texture";
 	public static final String TEXTURE_OPTIONS = "texture.options";
 	public static final String TEXTURE_PATH = "texture.path";
@@ -138,16 +150,4 @@ public final class PropertiesKeys {
 	public static final String WIDTH = "settings.width";
 	public static final String WINDOW_NAME = "window.name";
 	public static final String XML_FILES = "files.xml";
-	public static final String START_X_POSITION = "algorithm.settings.spread.start.x";
-	public static final String START_X_POSITION_TOOLTIP = "algorithm.settings.spread.start.x.tooltip";
-	public static final String START_Z_POSITION = "algorithm.settings.spread.start.z";
-	public static final String START_Z_POSITION_TOOLTIP = "algorithm.settings.spread.start.z.tooltip";
-	public static final String PROPAGATION = "algorithm.settings.spread.propagation";
-	public static final String PROPAGATION_TOOLTIP = "algorithm.settings.spread.propagation.tooltip";
-	public static final String MASK_ALGORITHM_HELP = "algorithm.mask.help";
-	public static final String MASK_ALGORITHM = "algorithm.mask";
-	public static final String COLOR_RATE = "algorithm.settings.mask.color.rate";
-	public static final String COLOR_RATE_TOOLTIP = "algorithm.settings.mask.color.rate.tooltip";
-	public static final String PREVENT_COLLISIONS = "algorithm.settings.prevent.collisions";
-	public static final String PREVENT_COLLISIONS_TOOLTIP = "algorithm.settings.prevent.collisions.tooltip";
 }

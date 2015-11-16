@@ -24,13 +24,13 @@ public class XMLChooser extends JFileChooser {
 		addChoosableFileFilter(new FileFilter() {
 
 			@Override
-			public String getDescription() {
-				return Mediator.getMessage(PropertiesKeys.ALL_FILES);
+			public boolean accept(File f) {
+				return true;
 			}
 
 			@Override
-			public boolean accept(File f) {
-				return true;
+			public String getDescription() {
+				return Mediator.getMessage(PropertiesKeys.ALL_FILES);
 			}
 		});
 	}

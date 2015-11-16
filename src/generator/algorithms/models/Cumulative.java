@@ -4,20 +4,17 @@ import java.util.List;
 
 public class Cumulative {
 
-	private double value;
 	private List<HeightInfo> points;
+	private double value;
+
+	public Cumulative(Cumulative c) {
+		this.value = c.value;
+		this.points = c.points;
+	}
 
 	public Cumulative(double value, List<HeightInfo> points) {
 		this.value = value;
 		this.points = points;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public List<HeightInfo> getPoints() {
-		return points;
 	}
 
 	@Override
@@ -28,6 +25,14 @@ public class Cumulative {
 		return ((Cumulative) obj).value == value;
 	}
 
+	public List<HeightInfo> getPoints() {
+		return points;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
 	public void setValue(double value) {
 		this.value = value;
 	}
@@ -35,10 +40,5 @@ public class Cumulative {
 	@Override
 	public String toString() {
 		return String.valueOf(value);
-	}
-
-	public Cumulative(Cumulative c) {
-		this.value = c.value;
-		this.points = c.points;
 	}
 }

@@ -13,12 +13,15 @@ import generator.models.generation.GenerationInfo;
 @XmlRootElement(name = "Objects")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ResultObject {
-	@XmlElement(name = "Map", required = true)
-	private MapObject mapObject = new MapObject();
 	@XmlElement(name = "Object", required = true)
 	private List<GeneratedObject> generatedObjects = new ArrayList<>();
 	@XmlElement(name = "Settings")
 	private GenerationInfo generationInfo = new GenerationInfo();
+	@XmlElement(name = "Map", required = true)
+	private MapObject mapObject = new MapObject();
+
+	public ResultObject() {
+	}
 
 	public ResultObject(List<GeneratedObject> generatedObjects) {
 		this.generatedObjects = generatedObjects;
@@ -28,15 +31,12 @@ public class ResultObject {
 		return generatedObjects;
 	}
 
-	public void setMapObject(MapObject mapObject) {
-		this.mapObject = mapObject;
+	public GenerationInfo getGenerationInfo() {
+		return generationInfo;
 	}
 
 	public MapObject getMapObject() {
 		return mapObject;
-	}
-
-	public ResultObject() {
 	}
 
 	public void setGeneratedObjects(List<GeneratedObject> generatedObjects) {
@@ -44,12 +44,12 @@ public class ResultObject {
 
 	}
 
-	public GenerationInfo getGenerationInfo() {
-		return generationInfo;
-	}
-
 	public void setGenerationInfo(GenerationInfo generationInfo) {
 		this.generationInfo = generationInfo;
+	}
+
+	public void setMapObject(MapObject mapObject) {
+		this.mapObject = mapObject;
 	}
 
 }
