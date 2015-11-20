@@ -41,6 +41,8 @@ public class SpreadAlgorithm extends Algorithm {
 			for (int i = 0; i < count - 1; i++) {
 				double aggregation = randomizeDouble(0, 100);
 				BasicModelData obj = new BasicModelData();
+				setRotation(objInfo, obj);
+				setScale(objInfo, obj);
 				if (i < minPropagation - 1) {
 					setStartPos(objInfo, acutalList);
 					continue;
@@ -61,9 +63,8 @@ public class SpreadAlgorithm extends Algorithm {
 					}
 				}
 				obj.setRelative(pos.isRelative());
-				setRotation(objInfo, obj);
-				setScale(objInfo, obj);
-				acutalList.add(new GeneratedObject(objInfo.getModel(), obj));
+				GeneratedObject object = new GeneratedObject(objInfo.getModel(), obj);
+				acutalList.add(object);
 			}
 		}
 

@@ -13,12 +13,12 @@ import generator.models.generation.GenerationInfo;
 @XmlRootElement(name = "Objects")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ResultObject {
+	@XmlElement(name = "Map", required = true)
+	private MapObject mapObject = new MapObject();
 	@XmlElement(name = "Object", required = true)
 	private List<GeneratedObject> generatedObjects = new ArrayList<>();
 	@XmlElement(name = "Settings")
 	private GenerationInfo generationInfo = new GenerationInfo();
-	@XmlElement(name = "Map", required = true)
-	private MapObject mapObject = new MapObject();
 
 	public ResultObject() {
 	}

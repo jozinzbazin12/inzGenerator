@@ -100,7 +100,7 @@ public final class ComponentUtil {
 		panel.setLayout(new GridLayout(0, 2));
 		Label attributelabel = new Label(description, tooltip);
 		panel.add(attributelabel);
-		Spinner spinner = new Spinner(new SpinnerNumberModel(defValue, min, max, 1), listen);
+		Spinner spinner = new Spinner(new SpinnerNumberModel(defValue >= min ? defValue : min, min, max, 1), listen);
 		panel.add(attributelabel);
 		panel.add(spinner);
 		arguments.put(key, spinner);

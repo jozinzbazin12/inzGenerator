@@ -10,17 +10,17 @@ public class Material {
 	@XmlElement(name = "Ka")
 	private RGB ambient;
 
-	@XmlElement(name = "d")
-	private double d;
-
 	@XmlElement(name = "Kd")
 	private RGB diffuse;
+
+	@XmlElement(name = "Ks")
+	private RGB specular;
 
 	@XmlElement(name = "Ns")
 	private double ns;
 
-	@XmlElement(name = "Ks")
-	private RGB specular;
+	@XmlElement(name = "d")
+	private double d;
 
 	@XmlElement(name = "Texture", required = true)
 	private Texture texture;

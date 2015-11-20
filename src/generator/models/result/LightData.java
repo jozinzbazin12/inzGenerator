@@ -7,19 +7,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class LightData {
-
-	@XmlElement(name = "Ambient")
-	private RGBA ambient;
-
-	@XmlElement(name = "Diffuse")
-	private RGBA diffuse;
-
-	@XmlAttribute(name = "mode")
-	private double mode;
-
-	@XmlElement(name = "Specular")
-	private RGBA specular;
-
 	@XmlAttribute(name = "posX")
 	private double x;
 
@@ -28,6 +15,18 @@ public class LightData {
 
 	@XmlAttribute(name = "posZ")
 	private double z;
+
+	@XmlElement(name = "Ambient")
+	private RGBA ambient;
+
+	@XmlElement(name = "Diffuse")
+	private RGBA diffuse;
+
+	@XmlElement(name = "Specular")
+	private RGBA specular;
+	
+	@XmlAttribute(name = "mode")
+	private double mode;
 
 	public RGBA getAmbient() {
 		return ambient;

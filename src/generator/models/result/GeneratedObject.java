@@ -39,6 +39,10 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 		return model.compareTo(o.getModel());
 	}
 
+	public double getRadius() {
+		return (basic.getSx() + basic.getSz()) / 2;
+	}
+
 	public BasicModelData getBasic() {
 		return basic;
 	}
@@ -104,11 +108,11 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 		return s.toString();
 	}
 
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (!(obj instanceof GeneratedObject)) {
-//			return false;
-//		}
-//		return overlap((GeneratedObject) obj);
-//	}
+	// @Override
+	// public boolean equals(Object obj) {
+	// if (!(obj instanceof GeneratedObject)) {
+	// return false;
+	// }
+	// return overlap((GeneratedObject) obj);
+	// }
 }

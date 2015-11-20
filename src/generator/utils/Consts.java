@@ -84,4 +84,5 @@ public class Consts {
 	public static final String MIN_PROPAGATION = "minPropagation";
 	public static final String RATE = "rate";
 	public static final String COLLISIONS = "collisions";
+	public static final String WEB_SCALE = "wbs";
 }

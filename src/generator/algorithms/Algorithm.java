@@ -12,6 +12,7 @@ import java.util.Random;
 
 import generator.Mediator;
 import generator.algorithms.models.HeightInfo;
+import generator.algorithms.models.TreeNode;
 import generator.algorithms.panels.additional.AlgorithmAdditionalPanel;
 import generator.algorithms.panels.additional.EmptyPanel;
 import generator.algorithms.panels.additional.HeightAlgorithmPanel;
@@ -27,17 +28,21 @@ import generator.models.generation.PositionSettings;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.panels.PreviewPanel;
+import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
 
 public abstract class Algorithm implements Comparable<Algorithm> {
 	private static final Map<Algorithm, AlgorithmAdditionalPanel> ADDITIONAL_PANELS;
 	private static final Map<Algorithm, AlgorithmMainPanel> MAIN_PANELS;
+	protected TreeNode collisionTree;
 	private final String helpKey;
 	private String name;
 	private Random rnd = new Random();
 	protected double xRatio;
 	protected double yRatio;
 	protected double zRatio;
+	protected boolean collisions;
+	protected int webFactor;
 
 	static {
 		EmptyPanel emptyPanel = new EmptyPanel();
@@ -85,6 +90,10 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		List<HeightInfo> list = new LinkedList<>();
 		BufferedImage mask = info.getMask();
 		if (mask == null) {
+			if (collisions) {
+				collisionTree = TreeNode.createTree(Mediator.getMapWidth(), Mediator.getMapHeight(),
+						(short) (Math.log(Mediator.getMapDimensions().getWidth()) / Math.log(2) + webFactor));
+			}
 			return list;
 		}
 		int width = mask.getWidth();
@@ -101,6 +110,10 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 				}
 			}
 		}
+		if (collisions) {
+			collisionTree = TreeNode.createTree(Mediator.getMapWidth(), Mediator.getMapHeight(), list,
+					(short) (Math.log(Mediator.getMapDimensions().getWidth()) / Math.log(2) + webFactor));
+		}
 		return list;
 	}
 
@@ -111,28 +124,48 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 
 	protected void correctPosition(BasicModelData obj, ModelInfo info, List<HeightInfo> positions) {
 		PositionSettings pos = info.getPositionSettings();
-		if (!positions.isEmpty()) {
+		if (!positions.isEmpty() || collisionTree != null) {
+			double xVar = xRatio;
+			double zVar = zRatio;
 			HeightInfo actual = new HeightInfo(obj.getX(), 0, obj.getZ());
-			double minLength = Double.MAX_VALUE;
 			HeightInfo nearest = new HeightInfo(Double.MAX_VALUE, 0, Double.MAX_VALUE);
-			Collections.shuffle(positions);
-			for (HeightInfo i : positions) {
-				if (i.equals(actual)) {
-					return;
-				}
-				double tempLenght = getLength(i.getX(), nearest.getX(), i.getZ(), nearest.getZ());
-				if (minLength < 0.5) {
-					break;
-				}
-				if (tempLenght < minLength) {
-					minLength = tempLenght;
-					nearest = i;
+			if (!positions.isEmpty()) {
+				nearest = findNearest(positions, actual, nearest);
+			}
+			if (collisionTree != null) {
+				actual.setSx(obj.getSx());
+				actual.setSz(obj.getSz());
+				TreeNode findPlace = collisionTree.findPlace(actual);
+				if (findPlace != null) {
+					nearest.setX(findPlace.getMid()[0]);
+					nearest.setZ(findPlace.getMid()[1]);
 				}
 			}
-			obj.setX(nearest.getX() + randomizeDouble(-xRatio, xRatio));
-			obj.setZ(nearest.getZ() + randomizeDouble(-zRatio, zRatio));
+			xVar /= Math.pow(2, webFactor);
+			zVar /= Math.pow(2, webFactor);
+			obj.setX(nearest.getX() + randomizeDouble(-xVar, xVar));
+			obj.setZ(nearest.getZ() + randomizeDouble(-zVar, zVar));
 		}
 		correctPosition(obj, pos);
+	}
+
+	private HeightInfo findNearest(List<HeightInfo> positions, HeightInfo actual, HeightInfo nearest) {
+		double minLength = Double.MAX_VALUE;
+		Collections.shuffle(positions);
+		for (HeightInfo i : positions) {
+			if (i.equals(actual)) {
+				return i;
+			}
+			double tempLenght = getLength(i.getX(), nearest.getX(), i.getZ(), nearest.getZ());
+			if (minLength < 0.5) {
+				break;
+			}
+			if (tempLenght < minLength) {
+				minLength = tempLenght;
+				nearest = i;
+			}
+		}
+		return nearest;
 	}
 
 	protected void correctPosition(BasicModelData obj, PositionSettings pos) {
@@ -183,10 +216,17 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 	}
 
 	public List<GeneratedObject> generate(GenerationInfo info) {
+		int collisionsValue = info.getArgs().get(Consts.COLLISIONS).intValue();
+		collisions = collisionsValue == 1 ? true : false;
+		webFactor = 1;
+		if (collisions) {
+			webFactor = info.getArgs().get(Consts.WEB_SCALE).intValue() - 1;
+		}
 		xRatio = Mediator.getMapWidth() / Mediator.getMapDimensions().width;
 		zRatio = Mediator.getMapHeight() / Mediator.getMapDimensions().height;
 		yRatio = Mediator.getMapMaxYSetting() / Mediator.getMapMaxY();
-		HeightInfo.setThreshold((xRatio + zRatio) / 2);
+		HeightInfo.setThreshold((xRatio + zRatio) / 2.0);
+
 		List<GeneratedObject> result = generationMethod(info);
 		Mediator.updateModels(result);
 		return result;

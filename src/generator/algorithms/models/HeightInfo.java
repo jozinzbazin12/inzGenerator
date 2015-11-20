@@ -5,11 +5,17 @@ public class HeightInfo implements Comparable<HeightInfo> {
 	private double x;
 	private double y;
 	private double z;
+	private double sx;
+	private double sz;
 
 	public HeightInfo(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	public double getRange() {
+		return (sx + sz) / 2.0;
 	}
 
 	public static double getThreshold() {
@@ -62,5 +68,21 @@ public class HeightInfo implements Comparable<HeightInfo> {
 		StringBuilder str = new StringBuilder();
 		str.append("[X: ").append(x).append(", Y: ").append(y).append(", Z: ").append(z).append("]");
 		return str.toString();
+	}
+
+	public void setZ(double z) {
+		this.z = z;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setSx(double sx) {
+		this.sx = sx;
+	}
+
+	public void setSz(double sz) {
+		this.sz = sz;
 	}
 }

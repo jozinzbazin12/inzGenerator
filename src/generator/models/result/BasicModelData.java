@@ -9,6 +9,15 @@ public class BasicModelData {
 	@XmlElement(name = "relative", required = true)
 	private boolean isRelative;
 
+	@XmlElement(name = "posX", required = true)
+	private double x;
+
+	@XmlElement(name = "posY", required = true)
+	private double y;
+
+	@XmlElement(name = "posZ", required = true)
+	private double z;
+
 	@XmlElement(name = "rotationX", required = true)
 	private double rx;
 
@@ -26,15 +35,6 @@ public class BasicModelData {
 
 	@XmlElement(name = "scaleZ", required = true)
 	private double sz;
-
-	@XmlElement(name = "posX", required = true)
-	private double x;
-
-	@XmlElement(name = "posY", required = true)
-	private double y;
-
-	@XmlElement(name = "posZ", required = true)
-	private double z;
 
 	public double getRx() {
 		return rx;
