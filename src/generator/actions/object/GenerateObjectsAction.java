@@ -2,11 +2,13 @@ package generator.actions.object;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 
 import generator.Mediator;
 import generator.models.generation.GenerationInfo;
+import generator.models.generation.ModelInfo;
 
 public class GenerateObjectsAction extends AbstractAction {
 
@@ -19,7 +21,11 @@ public class GenerateObjectsAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		GenerationInfo info = new GenerationInfo();
-		info.setModels(new ArrayList<>(Mediator.getModels().values()));
+		Map<String, ModelInfo> models = Mediator.getModels();
+		if(models.isEmpty()){
+			return;
+		}
+		info.setModels(new ArrayList<>(models.values()));
 		info.setArgs(Mediator.getAlgorithmArgs());
 		Mediator.getResultObject().setGeneratedObjects(Mediator.getAlgorithm().generate(info));
 		Mediator.updateObjects();

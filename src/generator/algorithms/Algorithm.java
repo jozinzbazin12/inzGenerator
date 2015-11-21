@@ -30,6 +30,7 @@ import generator.models.result.GeneratedObject;
 import generator.panels.PreviewPanel;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
+import generator.utils.WindowUtil;
 
 public abstract class Algorithm implements Comparable<Algorithm> {
 	private static final Map<Algorithm, AlgorithmAdditionalPanel> ADDITIONAL_PANELS;
@@ -43,6 +44,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 	protected double zRatio;
 	protected boolean collisions;
 	protected int webFactor;
+	private boolean collisionDetected = false;
 
 	static {
 		EmptyPanel emptyPanel = new EmptyPanel();
@@ -124,28 +126,34 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 
 	protected void correctPosition(BasicModelData obj, ModelInfo info, List<HeightInfo> positions) {
 		PositionSettings pos = info.getPositionSettings();
+		double xVar = xRatio;
+		double zVar = zRatio;
+		double x = obj.getX();
+		double z = obj.getZ();
 		if (!positions.isEmpty() || collisionTree != null) {
-			double xVar = xRatio;
-			double zVar = zRatio;
 			HeightInfo actual = new HeightInfo(obj.getX(), 0, obj.getZ());
 			HeightInfo nearest = new HeightInfo(Double.MAX_VALUE, 0, Double.MAX_VALUE);
 			if (!positions.isEmpty()) {
 				nearest = findNearest(positions, actual, nearest);
+				x = nearest.getX();
+				z = nearest.getZ();
 			}
 			if (collisionTree != null) {
 				actual.setSx(obj.getSx());
 				actual.setSz(obj.getSz());
-				TreeNode findPlace = collisionTree.findPlace(actual);
-				if (findPlace != null) {
-					nearest.setX(findPlace.getMid()[0]);
-					nearest.setZ(findPlace.getMid()[1]);
+				TreeNode place = collisionTree.findPlace(actual);
+				if (place != null) {
+					x = place.getMid()[0];
+					z = place.getMid()[1];
+					xVar = Math.pow(Mediator.getMapWidth(), 1 / (place.getLevel() + 1)) - actual.getRange();
+					zVar = Math.pow(Mediator.getMapHeight(), 1 / (place.getLevel() + 1)) - actual.getRange();
+				} else {
+					collisionDetected = true;
 				}
 			}
-			xVar /= Math.pow(2, webFactor);
-			zVar /= Math.pow(2, webFactor);
-			obj.setX(nearest.getX() + randomizeDouble(-xVar, xVar));
-			obj.setZ(nearest.getZ() + randomizeDouble(-zVar, zVar));
 		}
+		obj.setX(x + randomizeDouble(-xVar, xVar));
+		obj.setZ(z + randomizeDouble(-zVar, zVar));
 		correctPosition(obj, pos);
 	}
 
@@ -229,6 +237,11 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 
 		List<GeneratedObject> result = generationMethod(info);
 		Mediator.updateModels(result);
+		collisionTree = null;
+		if (collisionDetected) {
+			collisionDetected = false;
+			WindowUtil.displayError(PropertiesKeys.COLLISION);
+		}
 		return result;
 	}
 

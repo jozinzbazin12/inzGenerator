@@ -106,11 +106,17 @@ public class ModelWindow extends JFrame implements ActionListener {
 		additionalPanel.delete(Mediator.getAlgorithm());
 	}
 
-	public void changeFile(String path) {
-		GenerationModel model = objects.get(0).getModel();
+	public ModelInfo getCurrentModel() {
+		return objects.get(0);
+	}
+
+	public ModelInfo changeFile(String path) {
+		ModelInfo modelInfo = objects.get(0);
+		GenerationModel model = modelInfo.getModel();
 		model.setPath(path);
 		fileName.setText(model.getName());
 		pathField.setText(path);
+		return modelInfo;
 	}
 
 	private JPanel createAdditionalPanel() {

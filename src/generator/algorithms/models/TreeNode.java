@@ -37,9 +37,12 @@ public class TreeNode {
 	}
 
 	private boolean shouldBeInNextNode(TreeNode node, HeightInfo e) {
-		double d = getLength2D(e.getX(), node.mid[0], e.getZ(), node.mid[1]) + e.getRange();
 		return node != null && node.level < LEVELS && e.getRange() < node.range
-				&& d < node.range;
+				&& getLength2D(e.getX(), node.mid[0], e.getZ(), node.mid[1]) + e.getRange() < node.range;
+	}
+
+	private boolean shouldBeInAnyNode(TreeNode node, HeightInfo e) {
+		return node != null && node.level < LEVELS && e.getRange() < node.range;
 	}
 
 	public static TreeNode createTree(double width, double height, short depth) {
@@ -143,34 +146,64 @@ public class TreeNode {
 		return null;
 	}
 
-	public TreeNode findPlace(HeightInfo e) {
-		TreeNode node = this;
-		while (shouldBeInNextNode(node, e)) {
-			node = node.getChild(e);
+	private TreeNode getChild() {
+		for (int i = 0; i < children.length; i++) {
+			if (children[i] != null) {
+				return children[i];
+			}
 		}
-		if (node == this) {
-			node = findAny(e);
-		}
-		delete(node);
-		return node;
+		return null;
 	}
 
-	private TreeNode findAny(HeightInfo e) {
+	public TreeNode findPlace(HeightInfo e) {
 		TreeNode node = this;
+		TreeNode parent = this;
 		Stack<TreeNode> stack = new Stack<>();
+		stack.push(node);
 		while (shouldBeInNextNode(node, e)) {
+			parent = node;
 			node = node.getChild(e);
 			if (node != null) {
 				stack.push(node);
 			}
 		}
+		if (node == this || node == null) {
+			node = findAny(stack, e);
+		} else {
+			parent.delete(node);
+		}
+		System.out.println("Found " + (node != null ? node.level : null));
+		return node;
+	}
 
+	private TreeNode findFirst(TreeNode parent, HeightInfo e) {
+		TreeNode node = this;
+		TreeNode prev = parent;
+		TreeNode prev2 = parent;
+		while (shouldBeInAnyNode(node, e)) {
+			prev2 = prev;
+			prev = node;
+			node = node.getChild();
+		}
+		if (node == null) {
+			prev2.delete(prev);
+			return prev;
+		}
+		prev.delete(node);
+		return node;
+	}
+
+	private TreeNode findAny(Stack<TreeNode> stack, HeightInfo e) {
+		TreeNode node = null;
 		while (!stack.isEmpty()) {
 			node = stack.pop();
 			for (int i = 0; i < node.children.length; i++) {
 				TreeNode tmp = node.children[i];
 				if (tmp != null) {
-					return tmp.findPlace(e);
+					TreeNode result = tmp.findFirst(node, e);
+					if (result != null && result != this) {
+						return result;
+					}
 				}
 			}
 		}
@@ -181,10 +214,10 @@ public class TreeNode {
 		if (node == null) {
 			return;
 		}
-		for (int i = 0; i < node.children.length; i++) {
-			if (node.children[i].equals(node)) {
-				node.children[i] = null;
-				break;
+		for (int i = 0; i < children.length; i++) {
+			if (node.equals(children[i])) {
+				children[i] = null;
+				return;
 			}
 		}
 	}
@@ -232,4 +265,10 @@ public class TreeNode {
 		return mid;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder();
+		str.append("[X: ").append(mid[0]).append(", Z: ").append(mid[1]).append(", range: ").append(range).append("]");
+		return str.toString();
+	}
 }

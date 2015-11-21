@@ -152,4 +152,5 @@ public final class PropertiesKeys {
 	public static final String XML_FILES = "files.xml";
 	public static final String WEB_SCALE = "algorithm.settings.web.scale";
 	public static final String WEB_SCALE_TOOLTIP = "algorithm.settings.web.scale.tooltip";
+	public static final String COLLISION = "algorithm.collision.detected";
 }

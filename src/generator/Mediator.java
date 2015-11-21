@@ -74,7 +74,8 @@ public class Mediator {
 	}
 
 	public static void changeModelFileName(String path) {
-		modelWindow.changeFile(path);
+		models.remove(modelWindow.getCurrentModel().getModel().getPath());
+		models.put(path, modelWindow.changeFile(path));
 	}
 
 	private static void createProperties() throws IOException {
@@ -374,4 +375,6 @@ public class Mediator {
 // TODO sprawdzic niekwadratowe mapy
 // TODO algorytm regularny- obliczyc ilosc na prostokacie
 // TODO nie uzywac mediatora w akcjach
-//TODO losowy wspolczynnik na koniec
+// TODO losowy wspolczynnik na koniec
+// TODO zmiana modelu
+// TODO wywala sie n pusto
