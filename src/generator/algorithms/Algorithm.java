@@ -92,10 +92,6 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		List<HeightInfo> list = new LinkedList<>();
 		BufferedImage mask = info.getMask();
 		if (mask == null) {
-			if (collisions) {
-				collisionTree = TreeNode.createTree(Mediator.getMapWidth(), Mediator.getMapHeight(),
-						(short) (Math.log(Mediator.getMapDimensions().getWidth()) / Math.log(2) + webFactor));
-			}
 			return list;
 		}
 		int width = mask.getWidth();
@@ -111,10 +107,6 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 					list.add(new HeightInfo(x, y, z));
 				}
 			}
-		}
-		if (collisions) {
-			collisionTree = TreeNode.createTree(Mediator.getMapWidth(), Mediator.getMapHeight(), list,
-					(short) (Math.log(Mediator.getMapDimensions().getWidth()) / Math.log(2) + webFactor));
 		}
 		return list;
 	}
@@ -230,6 +222,8 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		webFactor = 1;
 		if (collisions) {
 			webFactor = info.getArgs().get(Consts.WEB_SCALE).intValue() - 1;
+			collisionTree = TreeNode.createTree(Mediator.getMapWidth(), Mediator.getMapHeight(),
+					(short) (Math.log(Mediator.getMapDimensions().getWidth()) / Math.log(2) + webFactor));
 		}
 		xRatio = Mediator.getMapWidth() / Mediator.getMapDimensions().width;
 		zRatio = Mediator.getMapHeight() / Mediator.getMapDimensions().height;

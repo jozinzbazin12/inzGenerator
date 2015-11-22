@@ -43,6 +43,8 @@ public class AggregationAlgorithm extends Algorithm {
 		for (ModelInfo objInfo : allModels) {
 			double aggregation = randomizeDouble(0, 100);
 			BasicModelData obj = new BasicModelData();
+			setRotation(objInfo, obj);
+			setScale(objInfo, obj);
 			PositionSettings pos = objInfo.getPositionSettings();
 			List<HeightInfo> positions = heights.get(objInfo);
 			if (aggregation <= threshold && !list.isEmpty()) {
@@ -54,13 +56,12 @@ public class AggregationAlgorithm extends Algorithm {
 				if (positions.isEmpty()) {
 					obj.setPosition(randomizeDouble(pos.getMinX(), pos.getMaxX()), randomizeDouble(pos.getMinY(), pos.getMaxY()),
 							randomizeDouble(pos.getMinZ(), pos.getMaxZ()));
+					correctPosition(obj, objInfo, positions);
 				} else {
 					setPosition(pos, positions, obj, randomizeInt(0, positions.size()));
 				}
 			}
 			obj.setRelative(pos.isRelative());
-			setRotation(objInfo, obj);
-			setScale(objInfo, obj);
 			list.add(new GeneratedObject(objInfo.getModel(), obj));
 		}
 		return list;

@@ -58,6 +58,7 @@ public class SpreadAlgorithm extends Algorithm {
 					if (positions.isEmpty()) {
 						obj.setPosition(randomizeDouble(pos.getMinX(), pos.getMaxX()),
 								randomizeDouble(pos.getMinY(), pos.getMaxY()), randomizeDouble(pos.getMinZ(), pos.getMaxZ()));
+						correctPosition(obj, objInfo, positions);
 					} else {
 						setPosition(pos, positions, obj, randomizeInt(0, positions.size()));
 					}

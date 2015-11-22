@@ -55,7 +55,8 @@ public class MaskAlgorithm extends Algorithm {
 			for (int i = 0; i < count; i++) {
 				BasicModelData obj = new BasicModelData();
 				PositionSettings pos = objInfo.getPositionSettings();
-
+				setRotation(objInfo, obj);
+				setScale(objInfo, obj);
 				double rand = randomizeDouble(0, 1);
 				Cumulative position = findPosition(cumulative, rand);
 				List<HeightInfo> points = position.getPoints();
@@ -63,8 +64,6 @@ public class MaskAlgorithm extends Algorithm {
 
 				obj.setRelative(pos.isRelative());
 
-				setRotation(objInfo, obj);
-				setScale(objInfo, obj);
 				list.add(new GeneratedObject(objInfo.getModel(), obj));
 			}
 		}

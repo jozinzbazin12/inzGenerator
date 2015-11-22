@@ -50,25 +50,6 @@ public class TreeNode {
 		return n;
 	}
 
-	public static TreeNode createTree(double width, double height, List<HeightInfo> space, short depth) {
-		TreeNode n = initRoot(width, height, depth);
-		n.fill(space);
-		return n;
-	}
-
-	private void fill(List<HeightInfo> space) {
-		for (HeightInfo h : space) {
-			addSpace(h);
-		}
-	}
-
-	private void addSpace(HeightInfo height) {
-		TreeNode node = this;
-		while (shouldBeInNextNode(node, height)) {
-			node = node.getOrCreateChild(height);
-		}
-	}
-
 	private static TreeNode initRoot(double width, double height, short depth) {
 		LEVELS = depth;
 		TreeNode n = new TreeNode();
@@ -96,33 +77,6 @@ public class TreeNode {
 
 	private static double getLength2D(double[] p1, double[] p2) {
 		return getLength2D(p1[0], p2[0], p1[1], p2[1]);
-	}
-
-	private TreeNode getOrCreateNode(short index) {
-		if (children[index] != null) {
-			children[index] = new TreeNode(this, index);
-		}
-		return children[index];
-	}
-
-	private TreeNode getOrCreateChild(HeightInfo e) {
-		double midX = mid[0];
-		double midZ = mid[1];
-		double x = e.getX();
-		double z = e.getZ();
-		if (x >= midX && z >= midZ) {
-			return getOrCreateNode(NE);
-		}
-		if (x <= midX && z > midZ) {
-			return getOrCreateNode(NW);
-		}
-		if (x > midX && z <= midZ) {
-			return getOrCreateNode(SE);
-		}
-		if (x <= midX && z < midZ) {
-			return getOrCreateNode(SW);
-		}
-		return null;
 	}
 
 	private TreeNode getChild(HeightInfo e) {
@@ -173,7 +127,7 @@ public class TreeNode {
 	}
 
 	private boolean isGoodNode(HeightInfo e, TreeNode n) {
-		return n.getRange() / 2 <= e.getRange() && n.getRange() >= e.getRange();
+		return n != null && n.getRange() / 2 <= e.getRange() && n.getRange() >= e.getRange();
 	}
 
 	private TreeNode findFirst(HeightInfo e) {

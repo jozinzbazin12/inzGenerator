@@ -64,11 +64,11 @@ public class HeightAlgorithm extends Algorithm {
 			if (!heights.isEmpty()) {
 				for (int i = 0; i < count; i++) {
 					BasicModelData obj = new BasicModelData();
+					setRotation(objInfo, obj);
+					setScale(objInfo, obj);
 					int heightPos = randomizeInt(0, heights.size());
 					setPosition(pos, heights, obj, heightPos);
 					obj.setRelative(pos.isRelative());
-					setRotation(objInfo, obj);
-					setScale(objInfo, obj);
 					list.add(new GeneratedObject(objInfo.getModel(), obj));
 				}
 			}

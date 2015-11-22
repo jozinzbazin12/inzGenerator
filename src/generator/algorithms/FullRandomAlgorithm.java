@@ -27,18 +27,18 @@ public class FullRandomAlgorithm extends Algorithm {
 
 			for (int i = 0; i < count; i++) {
 				BasicModelData obj = new BasicModelData();
+				setRotation(objInfo, obj);
+				setScale(objInfo, obj);
 				PositionSettings pos = objInfo.getPositionSettings();
 				if (positions != null && !positions.isEmpty()) {
 					setPosition(pos, positions, obj, randomizeInt(0, positions.size()));
 				} else {
 					obj.setPosition(randomizeDouble(pos.getMinX(), pos.getMaxX()), randomizeDouble(pos.getMinY(), pos.getMaxY()),
 							randomizeDouble(pos.getMinZ(), pos.getMaxZ()));
+					correctPosition(obj, objInfo, positions);
 				}
 
 				obj.setRelative(pos.isRelative());
-
-				setRotation(objInfo, obj);
-				setScale(objInfo, obj);
 				list.add(new GeneratedObject(objInfo.getModel(), obj));
 			}
 		}
