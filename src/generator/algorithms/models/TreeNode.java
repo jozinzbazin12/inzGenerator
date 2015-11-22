@@ -1,22 +1,30 @@
 package generator.algorithms.models;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
 public class TreeNode {
+	public enum State {
+		EMPTY, PARTIAL, FULL
+	}
+
+	private State state = State.EMPTY;
 	private double range;
 	private static final short NE = 0;
 	private static final short NW = 1;
 	private static final short SE = 2;
 	private static final short SW = 3;
-	private double[] mid;
-	private TreeNode[] children;
+	private double[] mid = new double[2];
+	private TreeNode[] children = new TreeNode[4];
+	private TreeNode parent = null;
 	private static short LEVELS;
 	private int level;
-	private double[] ne;
-	private double[] nw;
-	private double[] se;
-	private double[] sw;
+	private double[] ne = new double[2];
+	private double[] nw = new double[2];
+	private double[] se = new double[2];
+	private double[] sw = new double[2];
 
 	private static void setPoint(double[] tab, double x, double z) {
 		tab[0] = x;
@@ -27,22 +35,13 @@ public class TreeNode {
 		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 	}
 
-	private void init() {
-		ne = new double[2];
-		nw = new double[2];
-		se = new double[2];
-		sw = new double[2];
-		mid = new double[2];
-		children = new TreeNode[4];
-	}
-
 	private boolean shouldBeInNextNode(TreeNode node, HeightInfo e) {
-		return node != null && node.level < LEVELS && e.getRange() < node.range
+		return node != null && node.state != State.FULL && node.level < LEVELS && e.getRange() < node.range
 				&& getLength2D(e.getX(), node.mid[0], e.getZ(), node.mid[1]) + e.getRange() < node.range;
 	}
 
 	private boolean shouldBeInAnyNode(TreeNode node, HeightInfo e) {
-		return node != null && node.level < LEVELS && e.getRange() < node.range;
+		return node != null && node.state != State.FULL && node.level < LEVELS && e.getRange() < node.range;
 	}
 
 	public static TreeNode createTree(double width, double height, short depth) {
@@ -146,62 +145,69 @@ public class TreeNode {
 		return null;
 	}
 
-	private TreeNode getChild() {
-		for (int i = 0; i < children.length; i++) {
-			if (children[i] != null) {
-				return children[i];
-			}
-		}
-		return null;
+	private List<TreeNode> getChildren() {
+		List<TreeNode> list = Arrays.asList(children);
+		Collections.shuffle(list);
+		return list;
 	}
 
 	public TreeNode findPlace(HeightInfo e) {
 		TreeNode node = this;
-		TreeNode parent = this;
 		Stack<TreeNode> stack = new Stack<>();
 		stack.push(node);
 		while (shouldBeInNextNode(node, e)) {
-			parent = node;
 			node = node.getChild(e);
-			if (node != null) {
+			if (isOk(node)) {
 				stack.push(node);
 			}
 		}
-		if (node == this || node == null) {
+		if (!isGoodNode(e, node) || !isOk(node)) {
 			node = findAny(stack, e);
-		} else {
-			parent.delete(node);
 		}
 		System.out.println("Found " + (node != null ? node.level : null));
 		return node;
 	}
 
-	private TreeNode findFirst(TreeNode parent, HeightInfo e) {
-		TreeNode node = this;
-		TreeNode prev = parent;
-		TreeNode prev2 = parent;
-		while (shouldBeInAnyNode(node, e)) {
-			prev2 = prev;
-			prev = node;
-			node = node.getChild();
+	private boolean isOk(TreeNode node) {
+		return node != null && node.state != State.FULL;
+	}
+
+	private boolean isGoodNode(HeightInfo e, TreeNode n) {
+		return n.getRange() / 2 <= e.getRange() && n.getRange() >= e.getRange();
+	}
+
+	private TreeNode findFirst(HeightInfo e) {
+		Stack<TreeNode> stack = new Stack<>();
+		stack.push(this);
+		while (!stack.empty()) {
+			TreeNode node = stack.pop();
+			List<TreeNode> nodes = node.getChildren();
+			for (TreeNode n : nodes) {
+				if (!isOk(n)) {
+					continue;
+				}
+				if (isGoodNode(e, n)) {
+					return n;
+				}
+				if (shouldBeInAnyNode(n, e)) {
+					stack.push(n);
+				}
+			}
 		}
-		if (node == null) {
-			prev2.delete(prev);
-			return prev;
-		}
-		prev.delete(node);
-		return node;
+		return null;
+
 	}
 
 	private TreeNode findAny(Stack<TreeNode> stack, HeightInfo e) {
+		Stack<TreeNode> copy = (Stack<TreeNode>) stack.clone();
 		TreeNode node = null;
 		while (!stack.isEmpty()) {
 			node = stack.pop();
-			for (int i = 0; i < node.children.length; i++) {
-				TreeNode tmp = node.children[i];
-				if (tmp != null) {
-					TreeNode result = tmp.findFirst(node, e);
-					if (result != null && result != this) {
+			List<TreeNode> list = node.getChildren();
+			for (TreeNode tmp : list) {
+				if (isOk(tmp)) {
+					TreeNode result = tmp.findFirst(e);
+					if (result != this && isOk(result) && isGoodNode(e, result)) {
 						return result;
 					}
 				}
@@ -210,23 +216,28 @@ public class TreeNode {
 		return null;
 	}
 
-	private void delete(TreeNode node) {
+	public static void mark(TreeNode node) {
 		if (node == null) {
 			return;
 		}
-		for (int i = 0; i < children.length; i++) {
-			if (node.equals(children[i])) {
-				children[i] = null;
-				return;
-			}
+		node.state = State.FULL;
+		node.markParent();
+	}
+
+	private void markParent() {
+		if (parent == null) {
+			return;
 		}
+		parent.state = State.PARTIAL;
+		parent.markParent();
+
 	}
 
 	private TreeNode(TreeNode node, short part) {
-		init();
 		double w = getLength2D(node.ne, node.nw) / 4.0;
 		double h = getLength2D(node.ne, node.se) / 4.0;
 		range = node.range / 2.0;
+		parent = node;
 
 		if (part == NE) {
 			setPoint(mid, node.mid[0] + w, node.mid[1] + h);
@@ -250,7 +261,6 @@ public class TreeNode {
 	}
 
 	private TreeNode() {
-		init();
 	}
 
 	public int getLevel() {
@@ -268,7 +278,12 @@ public class TreeNode {
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-		str.append("[X: ").append(mid[0]).append(", Z: ").append(mid[1]).append(", range: ").append(range).append("]");
+		str.append("[X: ").append(mid[0]).append(", Z: ").append(mid[1]).append(", range: ").append(range).append(", level: ")
+				.append(level).append(", state: ").append(state).append("]");
 		return str.toString();
+	}
+
+	public State getState() {
+		return state;
 	}
 }

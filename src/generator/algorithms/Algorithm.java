@@ -142,11 +142,12 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 				actual.setSx(obj.getSx());
 				actual.setSz(obj.getSz());
 				TreeNode place = collisionTree.findPlace(actual);
-				if (place != null) {
+				if (place != null && place.getState() == TreeNode.State.EMPTY) {
 					x = place.getMid()[0];
 					z = place.getMid()[1];
 					xVar = Math.pow(Mediator.getMapWidth(), 1 / (place.getLevel() + 1)) - actual.getRange();
 					zVar = Math.pow(Mediator.getMapHeight(), 1 / (place.getLevel() + 1)) - actual.getRange();
+					TreeNode.mark(place);
 				} else {
 					collisionDetected = true;
 				}
