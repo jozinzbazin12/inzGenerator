@@ -116,8 +116,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		return name.compareTo(o.name);
 	}
 
-	protected void correctPosition(BasicModelData obj, ModelInfo info, List<HeightInfo> positions) {
-		PositionSettings pos = info.getPositionSettings();
+	protected void correctPosition(BasicModelData obj, PositionSettings pos, List<HeightInfo> positions) {
 		double xVar = xRatio;
 		double zVar = zRatio;
 		double x = obj.getX();
@@ -141,8 +140,8 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 					x = place.getMid()[0];
 					z = place.getMid()[1];
 					double nodeRange = place.getRange();
-					xVar = 0;//nodeRange - actual.getSx();
-					zVar =0;// nodeRange - actual.getSz();
+					xVar = 0;// nodeRange - actual.getSx();
+					zVar = 0;// nodeRange - actual.getSz();
 					TreeNode.mark(place);
 				} else {
 					collisionDetected = true;
@@ -296,7 +295,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		HeightInfo height = heights.get(heightPos);
 		obj.setPosition(height.getX() + randomizeDouble(-xRatio, xRatio), randomizeDouble(pos.getMinY(), pos.getMaxY()),
 				height.getZ() + randomizeDouble(-zRatio, zRatio));
-		correctPosition(obj, pos);
+		correctPosition(obj, pos, heights);
 	}
 
 	protected void setRotation(ModelInfo objInfo, BasicModelData obj) {

@@ -35,7 +35,7 @@ public class FullRandomAlgorithm extends Algorithm {
 				} else {
 					obj.setPosition(randomizeDouble(pos.getMinX(), pos.getMaxX()), randomizeDouble(pos.getMinY(), pos.getMaxY()),
 							randomizeDouble(pos.getMinZ(), pos.getMaxZ()));
-					correctPosition(obj, objInfo, positions);
+					correctPosition(obj, pos, positions);
 				}
 
 				obj.setRelative(pos.isRelative());

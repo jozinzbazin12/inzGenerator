@@ -53,12 +53,12 @@ public class SpreadAlgorithm extends Algorithm {
 					BasicModelData target = acutalList.get(randomizeInt(i - maxpx, i - minPropagation)).getBasic();
 					obj.setPosition(target.getX() + randomizeRange(minRange, maxRange),
 							randomizeDouble(pos.getMinY(), pos.getMaxY()), target.getZ() + randomizeRange(minRange, maxRange));
-					correctPosition(obj, objInfo, positions);
+					correctPosition(obj, pos, positions);
 				} else {
 					if (positions.isEmpty()) {
 						obj.setPosition(randomizeDouble(pos.getMinX(), pos.getMaxX()),
 								randomizeDouble(pos.getMinY(), pos.getMaxY()), randomizeDouble(pos.getMinZ(), pos.getMaxZ()));
-						correctPosition(obj, objInfo, positions);
+						correctPosition(obj, pos, positions);
 					} else {
 						setPosition(pos, positions, obj, randomizeInt(0, positions.size()));
 					}

@@ -51,12 +51,12 @@ public class AggregationAlgorithm extends Algorithm {
 				BasicModelData target = list.get(randomizeInt(0, list.size())).getBasic();
 				obj.setPosition(target.getX() + randomizeRange(minRange, maxRange), randomizeDouble(pos.getMinY(), pos.getMaxY()),
 						target.getZ() + randomizeRange(minRange, maxRange));
-				correctPosition(obj, objInfo, positions);
+				correctPosition(obj, pos, positions);
 			} else {
 				if (positions.isEmpty()) {
 					obj.setPosition(randomizeDouble(pos.getMinX(), pos.getMaxX()), randomizeDouble(pos.getMinY(), pos.getMaxY()),
 							randomizeDouble(pos.getMinZ(), pos.getMaxZ()));
-					correctPosition(obj, objInfo, positions);
+					correctPosition(obj, pos, positions);
 				} else {
 					setPosition(pos, positions, obj, randomizeInt(0, positions.size()));
 				}
