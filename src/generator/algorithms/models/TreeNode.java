@@ -1,5 +1,6 @@
 package generator.algorithms.models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -59,6 +60,11 @@ public class TreeNode {
 
 	private boolean shouldBeInNextNode(TreeNode node, HeightInfo e) {
 		return node != null && node.state != State.FULL && node.level < LEVELS && e.getRange() < node.range;
+	}
+
+	private boolean shouldBeInNextNodeWithPosition(TreeNode node, HeightInfo e) {
+		return node != null && node.state != State.FULL && node.level < LEVELS && e.getRange() < node.range
+				&& getLength2D(e.getX(), node.mid[0], e.getZ(), node.mid[1]) + e.getRange() < node.range;
 	}
 
 	public static TreeNode createTree(double width, double height, short depth) {
@@ -126,68 +132,76 @@ public class TreeNode {
 		TreeNode node = this;
 		Stack<TreeNode> stack = new Stack<>();
 		stack.push(node);
-		while (shouldBeInNextNode(node, e)) {
+		while (shouldBeInNextNodeWithPosition(node, e)) {
 			node = node.getChild(e);
-			if (isOk(node)) {
+			if (isNotFull(node)) {
 				stack.push(node);
 			}
 		}
-		if (!isGoodNode(e, node) || !isOk(node)) {
+		if (!isExcellentNode(e, node)) {
 			node = findAny(stack, e);
-		}
-		if (node == null) {
-			System.out.println("null");
 		}
 		return node;
 	}
 
-	private boolean isOk(TreeNode node) {
+	private static boolean isNotFull(TreeNode node) {
 		return node != null && node.state != State.FULL;
 	}
 
-	private boolean isGoodNode(HeightInfo e, TreeNode n) {
-		return n != null && n.getRange() / 2 <= e.getRange() && n.getRange() >= e.getRange();
+	private static boolean isExcellentNode(HeightInfo e, TreeNode n) {
+		return n != null && n.getRange() / 2 <= e.getRange() && n.getRange() >= e.getRange() && n.state == State.EMPTY;
 	}
 
 	private TreeNode findFirst(HeightInfo e) {
 		Stack<TreeNode> stack = new Stack<>();
 		stack.push(this);
-		while (!stack.empty()) {
+		do {
 			TreeNode node = stack.pop();
+			if (!isNotFull(node)) {
+				continue;
+			}
 			List<TreeNode> nodes = node.getChildren(e);
 			for (TreeNode n : nodes) {
-				if (!isOk(n)) {
+				if (!isNotFull(n)) {
 					continue;
 				}
-				if (isGoodNode(e, n)) {
+				if (isExcellentNode(e, n)) {
 					return n;
 				}
 				if (shouldBeInNextNode(n, e)) {
 					stack.push(n);
 				}
 			}
-		}
-		return null;
+		} while (!stack.empty());
 
+		return null;
 	}
 
-	private TreeNode findAny(Stack<TreeNode> copy, HeightInfo e) {
-		Stack<TreeNode> stack = (Stack<TreeNode>) copy.clone();
+	private TreeNode findAny(Stack<TreeNode> stack, HeightInfo e) {
 		TreeNode node = null;
-		while (!stack.isEmpty()) {
+		List<TreeNode> reserve = new ArrayList<>();
+		do {
 			node = stack.pop();
+			if (!isNotFull(node)) {
+				continue;
+			}
 			List<TreeNode> list = node.getChildren(e);
 			for (TreeNode tmp : list) {
-				if (isOk(tmp)) {
-					if (isGoodNode(e, tmp)) {
-						return tmp;
-					}
-					TreeNode result = tmp.findFirst(e);
-					if (result != this && isOk(result)) {
-						return result;
-					}
+				if (isExcellentNode(e, tmp)) {
+					return tmp;
+				}
+				TreeNode result = tmp.findFirst(e);
+				if (isExcellentNode(e, result)) {
+					return result;
+				} else if (isNotFull(result)) {
+					reserve.add(result);
 				}
 			}
+		} while (!stack.isEmpty());
+		if (!reserve.isEmpty()) {
+			reserve.sort(new TreeNodeComparator(e));
+			System.out.println("reserve");
+			return reserve.get(0);
 		}
 		return null;
 	}
