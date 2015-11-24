@@ -368,13 +368,8 @@ public class Mediator {
 
 	}
 }
-// TODO nienachodzenie obiekow
 // TODO generator na siatce refularnej
 // TODO obsluga sciezek relatywnych
 // TODO sprawdzic wysokosc mapy w generatorze i wyswietlaczu
 // TODO sprawdzic niekwadratowe mapy
-// TODO algorytm regularny- obliczyc ilosc na prostokacie
-// TODO nie uzywac mediatora w akcjach
-// TODO losowy wspolczynnik na koniec
-// TODO zmiana modelu
-// TODO wywala sie n pusto
+// TODO dziwne generacje w kwadracie w skupiskowym

@@ -15,7 +15,7 @@ public class HeightInfo implements Comparable<HeightInfo> {
 	}
 
 	public double getRange() {
-		return (sx + sz) / 2.0;
+		return (getSx() + getSz()) / 2.0;
 	}
 
 	public static double getThreshold() {
@@ -84,5 +84,13 @@ public class HeightInfo implements Comparable<HeightInfo> {
 
 	public void setSz(double sz) {
 		this.sz = sz;
+	}
+
+	public double getSx() {
+		return sx;
+	}
+
+	public double getSz() {
+		return sz;
 	}
 }

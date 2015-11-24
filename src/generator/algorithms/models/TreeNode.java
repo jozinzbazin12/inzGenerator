@@ -1,13 +1,35 @@
 package generator.algorithms.models;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 
 public class TreeNode {
 	public enum State {
 		EMPTY, PARTIAL, FULL
+	}
+
+	private class TreeNodeComparator implements Comparator<TreeNode> {
+
+		private HeightInfo e;
+
+		public TreeNodeComparator(HeightInfo e) {
+			this.e = e;
+		}
+
+		@Override
+		public int compare(TreeNode node, TreeNode node2) {
+			if (node2 == null) {
+				return 1;
+			}
+			if (node == null) {
+				return -1;
+			}
+			double range = getLength2D(e.getX(), node.mid[0], e.getZ(), node.mid[1]) + e.getRange();
+			double range2 = getLength2D(e.getX(), node2.mid[0], e.getZ(), node2.mid[1]) + e.getRange();
+			return Double.compare(range, range2);
+		}
 	}
 
 	private State state = State.EMPTY;
@@ -31,16 +53,11 @@ public class TreeNode {
 		tab[1] = z;
 	}
 
-	private static double getLength2D(double x1, double x2, double y1, double y2) {
+	public static double getLength2D(double x1, double x2, double y1, double y2) {
 		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 	}
 
 	private boolean shouldBeInNextNode(TreeNode node, HeightInfo e) {
-		return node != null && node.state != State.FULL && node.level < LEVELS && e.getRange() < node.range
-				&& getLength2D(e.getX(), node.mid[0], e.getZ(), node.mid[1]) + e.getRange() < node.range;
-	}
-
-	private boolean shouldBeInAnyNode(TreeNode node, HeightInfo e) {
 		return node != null && node.state != State.FULL && node.level < LEVELS && e.getRange() < node.range;
 	}
 
@@ -99,9 +116,9 @@ public class TreeNode {
 		return null;
 	}
 
-	private List<TreeNode> getChildren() {
+	private List<TreeNode> getChildren(HeightInfo e) {
 		List<TreeNode> list = Arrays.asList(children);
-		Collections.shuffle(list);
+		list.sort(new TreeNodeComparator(e));
 		return list;
 	}
 
@@ -118,7 +135,9 @@ public class TreeNode {
 		if (!isGoodNode(e, node) || !isOk(node)) {
 			node = findAny(stack, e);
 		}
-		System.out.println("Found " + (node != null ? node.level : null));
+		if (node == null) {
+			System.out.println("null");
+		}
 		return node;
 	}
 
@@ -135,7 +154,7 @@ public class TreeNode {
 		stack.push(this);
 		while (!stack.empty()) {
 			TreeNode node = stack.pop();
-			List<TreeNode> nodes = node.getChildren();
+			List<TreeNode> nodes = node.getChildren(e);
 			for (TreeNode n : nodes) {
 				if (!isOk(n)) {
 					continue;
@@ -143,7 +162,7 @@ public class TreeNode {
 				if (isGoodNode(e, n)) {
 					return n;
 				}
-				if (shouldBeInAnyNode(n, e)) {
+				if (shouldBeInNextNode(n, e)) {
 					stack.push(n);
 				}
 			}
@@ -152,16 +171,19 @@ public class TreeNode {
 
 	}
 
-	private TreeNode findAny(Stack<TreeNode> stack, HeightInfo e) {
-		Stack<TreeNode> copy = (Stack<TreeNode>) stack.clone();
+	private TreeNode findAny(Stack<TreeNode> copy, HeightInfo e) {
+		Stack<TreeNode> stack = (Stack<TreeNode>) copy.clone();
 		TreeNode node = null;
 		while (!stack.isEmpty()) {
 			node = stack.pop();
-			List<TreeNode> list = node.getChildren();
+			List<TreeNode> list = node.getChildren(e);
 			for (TreeNode tmp : list) {
 				if (isOk(tmp)) {
+					if (isGoodNode(e, tmp)) {
+						return tmp;
+					}
 					TreeNode result = tmp.findFirst(e);
-					if (result != this && isOk(result) && isGoodNode(e, result)) {
+					if (result != this && isOk(result)) {
 						return result;
 					}
 				}
