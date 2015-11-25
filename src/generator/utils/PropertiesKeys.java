@@ -150,7 +150,7 @@ public final class PropertiesKeys {
 	public static final String WIDTH = "settings.width";
 	public static final String WINDOW_NAME = "window.name";
 	public static final String XML_FILES = "files.xml";
-	public static final String WEB_SCALE = "algorithm.settings.web.scale";
-	public static final String WEB_SCALE_TOOLTIP = "algorithm.settings.web.scale.tooltip";
+	public static final String COLLISION_MARGIN = "algorithm.settings.collision.margin";
+	public static final String COLLISION_MARGIN_TOOLTIP = "algorithm.settings.collision.margin.tooltip";
 	public static final String COLLISION = "algorithm.collision.detected";
 }

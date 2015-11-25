@@ -33,8 +33,8 @@ import generator.utils.PropertiesKeys;
 import generator.utils.WindowUtil;
 
 public abstract class Algorithm implements Comparable<Algorithm> {
-	private static final Map<Algorithm, AlgorithmAdditionalPanel> ADDITIONAL_PANELS;
-	private static final Map<Algorithm, AlgorithmMainPanel> MAIN_PANELS;
+	private static Map<Algorithm, AlgorithmAdditionalPanel> ADDITIONAL_PANELS;
+	private static Map<Algorithm, AlgorithmMainPanel> MAIN_PANELS;
 	protected TreeNode collisionTree;
 	private final String helpKey;
 	private String name;
@@ -46,7 +46,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 	protected int webFactor;
 	private boolean collisionDetected = false;
 
-	static {
+	public static void init() {
 		EmptyPanel emptyPanel = new EmptyPanel();
 
 		ADDITIONAL_PANELS = new HashMap<>();
@@ -72,7 +72,6 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		MAIN_PANELS.put(aggregation, new AggregationAlgorithmPanel());
 		MAIN_PANELS.put(spread, emptyMainPanel);
 		MAIN_PANELS.put(mask, emptyMainPanel);
-
 	}
 
 	public Algorithm(String name, String key) {
@@ -134,14 +133,11 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 				actual.setSz(obj.getSz());
 				TreeNode place = collisionTree.findPlace(actual);
 				if (place != null) {
-					if (place.getState() != TreeNode.State.EMPTY) {
-						System.out.println("ss");
-					}
 					x = place.getMid()[0];
 					z = place.getMid()[1];
 					double nodeRange = place.getRange();
-					xVar = 0;// nodeRange - actual.getSx();
-					zVar = 0;// nodeRange - actual.getSz();
+					xVar = nodeRange + webFactor - actual.getSx();
+					zVar = nodeRange + webFactor - actual.getSz();
 					TreeNode.mark(place);
 				} else {
 					collisionDetected = true;
@@ -224,9 +220,9 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		collisions = collisionsValue == 1 ? true : false;
 		webFactor = 1;
 		if (collisions) {
-			webFactor = info.getArgs().get(Consts.WEB_SCALE).intValue() - 1;
+			webFactor = info.getArgs().get(Consts.WEB_SCALE).intValue();
 			collisionTree = TreeNode.createTree(Mediator.getMapWidth(), Mediator.getMapHeight(),
-					(short) (Math.log(Mediator.getMapDimensions().getWidth()) / Math.log(2) + webFactor));
+					(short) (Math.log(Mediator.getMapDimensions().getWidth()) / Math.log(2)));
 		}
 		xRatio = Mediator.getMapWidth() / Mediator.getMapDimensions().width;
 		zRatio = Mediator.getMapHeight() / Mediator.getMapDimensions().height;

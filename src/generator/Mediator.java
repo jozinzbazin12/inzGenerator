@@ -246,6 +246,7 @@ public class Mediator {
 		messages = ResourceBundle.getBundle(PropertiesKeys.PROPERTIES_FILE, locale);
 		MainWindow mainWindow = new MainWindow(messages.getString(PropertiesKeys.WINDOW_NAME));
 		Mediator.register(mainWindow);
+		Algorithm.init();
 		mainWindow.createWindow();
 	}
 

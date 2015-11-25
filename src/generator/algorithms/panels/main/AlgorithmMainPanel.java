@@ -25,6 +25,7 @@ public class AlgorithmMainPanel extends JPanel {
 	private static double collisonScale = 1;
 	protected static final int MAX_POSITION = 10000;
 	private static final long serialVersionUID = 3043925881010825869L;
+	private JPanel collisionScale;
 
 	protected void setEnabled(JPanel p, boolean value) {
 		for (java.awt.Component i : p.getComponents()) {
@@ -32,11 +33,31 @@ public class AlgorithmMainPanel extends JPanel {
 		}
 	}
 
+	private void refresh(ActionEvent e) {
+		if (e != null) {
+			collisionEnabled = ((CheckBox) e.getSource()).value();
+		}
+		if (collisionEnabled == 1) {
+			setEnabled(collisionScale, true);
+		} else {
+			setEnabled(collisionScale, false);
+		}
+	}
+
+	@Override
+	public void repaint() {
+		if (collisionScale != null) {
+			refresh(null);
+		}
+		super.repaint();
+	}
+
 	public AlgorithmMainPanel() {
 		setLayout(new GridLayout(13, 3, 5, 5));
 		setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.ALGORITHM_MAIN_ARGUMENTS)));
-		JPanel collisionScale = ComponentUtil.createSpinner(1, 32, Consts.WEB_SCALE,
-				Mediator.getMessage(PropertiesKeys.WEB_SCALE), arguments, Mediator.getMessage(PropertiesKeys.WEB_SCALE_TOOLTIP));
+		collisionScale = ComponentUtil.createSpinner(0, 1000, Consts.WEB_SCALE,
+				Mediator.getMessage(PropertiesKeys.COLLISION_MARGIN), arguments,
+				Mediator.getMessage(PropertiesKeys.COLLISION_MARGIN_TOOLTIP));
 		addListener(collisionScale);
 		setEnabled(collisionScale, false);
 		Action a = new Action(Mediator.getMessage(PropertiesKeys.PREVENT_COLLISIONS)) {
@@ -44,12 +65,7 @@ public class AlgorithmMainPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				collisionEnabled = ((CheckBox) e.getSource()).value();
-				if (collisionEnabled == 1) {
-					AlgorithmMainPanel.this.setEnabled(collisionScale, true);
-				} else {
-					AlgorithmMainPanel.this.setEnabled(collisionScale, false);
-				}
+				refresh(e);
 			}
 		};
 		CheckBox collisions = new CheckBox(a, Mediator.getMessage(PropertiesKeys.PREVENT_COLLISIONS_TOOLTIP));
