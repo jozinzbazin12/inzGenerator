@@ -369,8 +369,6 @@ public class Mediator {
 
 	}
 }
-// TODO generator na siatce refularnej
 // TODO obsluga sciezek relatywnych
 // TODO sprawdzic wysokosc mapy w generatorze i wyswietlaczu
 // TODO sprawdzic niekwadratowe mapy
-// TODO dziwne generacje w kwadracie w skupiskowym

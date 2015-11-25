@@ -191,9 +191,19 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		Map<Double, List<HeightInfo>> heights = new HashMap<>();
 		int width = img.getWidth();
 		int height = img.getHeight();
+		int max = Integer.MIN_VALUE;
+		double mapMaxYSetting = Mediator.getMapMaxYSetting();
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				double y = PreviewPanel.getColor(img, i, j);
+				int tmp = PreviewPanel.getColor(img, i, j);
+				if (tmp > max) {
+					max = tmp;
+				}
+			}
+		}
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				double y = (Mediator.getMapHeightAt(i, j) - 128) * (mapMaxYSetting / (max - 128));
 				List<HeightInfo> list = heights.get(y);
 				if (list == null) {
 					list = new ArrayList<>();

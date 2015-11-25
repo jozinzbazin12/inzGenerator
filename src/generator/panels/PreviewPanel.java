@@ -118,6 +118,9 @@ public class PreviewPanel extends JPanel {
 	}
 
 	public double getPointXAt(Point p) {
+		if (p == null) {
+			return 0;
+		}
 		int mapWidth = image.getWidth();
 		return (Mediator.getMapWidth() * (-2 * p.getX() + zoom * mapWidth + 2 * currentPoint.x + mapWidth))
 				/ (2 * mapWidth * (zoom + 1));
@@ -171,10 +174,10 @@ public class PreviewPanel extends JPanel {
 		posX = getPointXAt(p);
 		posZ = getPointZAt(p);
 
-		int x = (int)- (posX / (Mediator.getMapWidth() / image.getWidth())) + image.getWidth() / 2;
+		int x = (int) -(posX / (Mediator.getMapWidth() / image.getWidth())) + image.getWidth() / 2;
 		int y = (int) -(posZ / (Mediator.getMapHeight() / image.getHeight())) + image.getHeight() / 2;
 		if (x >= 0 && x < image.getWidth() && y >= 0 && y < image.getHeight()) {
-			posY = getColor(x, y) * Mediator.getMapMaxYSetting() / maxY;
+			posY = (getColor(x, y) - 128) * (Mediator.getMapMaxYSetting() / (maxY - 128));
 		}
 		repaint();
 	}
