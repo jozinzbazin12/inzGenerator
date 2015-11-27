@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 
 import generator.Mediator;
 import generator.actions.LoadImageAction;
+import generator.models.MyFile;
 import generator.models.result.BasicMapData;
 import generator.models.result.LightData;
 import generator.models.result.MapObject;
@@ -92,7 +93,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 
 			@Override
 			protected void onSucess(String path) {
-				Dimension imageSize = Mediator.setMapFile(path);
+				Dimension imageSize = Mediator.setMapFile(new MyFile(path));
 				setMapProperties(path, imageSize);
 			}
 
@@ -246,7 +247,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		mtl.setSpecular(specular);
 		mtl.setD(getValue(Consts.MATERIAL_D));
 		mtl.setNs(getValue(Consts.MATERIAL_NS));
-		mtl.setTexture(new Texture(texturePath.getText(), getValue(Consts.SCALE)));
+		mtl.setTexture(new Texture(new MyFile(texturePath.getText()), getValue(Consts.SCALE)));
 		return mtl;
 	}
 

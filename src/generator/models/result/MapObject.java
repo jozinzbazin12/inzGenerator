@@ -4,6 +4,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import generator.models.MyFile;
+import generator.models.MyFileAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MapObject {
@@ -14,8 +18,9 @@ public class MapObject {
 	@XmlElement(name = "Light", required = true)
 	private LightData lightData;
 
+	@XmlJavaTypeAdapter(MyFileAdapter.class)
 	@XmlAttribute(name = "mapFile", required = true)
-	private String mapFileName;
+	private MyFile mapFileName;
 
 	@XmlElement(name = "Material", required = true)
 	private Material material;
@@ -28,7 +33,7 @@ public class MapObject {
 		return lightData;
 	}
 
-	public String getMapFileName() {
+	public MyFile getMapFileName() {
 		return mapFileName;
 	}
 
@@ -44,8 +49,12 @@ public class MapObject {
 		this.lightData = lightData;
 	}
 
-	public void setMapFileName(String mapFileName) {
+	public void setMapFileName(MyFile mapFileName) {
 		this.mapFileName = mapFileName;
+	}
+
+	public void setMapFileName(String mapFileName) {
+		this.mapFileName = new MyFile(mapFileName);
 	}
 
 	public void setMaterial(Material material) {

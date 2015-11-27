@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import generator.Mediator;
+import generator.models.MyFile;
 import generator.models.PathTypeSetting;
-import generator.models.generation.GenerationModel;
 import generator.utils.PropertiesKeys;
 
 public class ChangePathTypeListener implements ActionListener {
@@ -15,9 +15,9 @@ public class ChangePathTypeListener implements ActionListener {
 		if (e.getSource() instanceof PathTypeSetting) {
 			PathTypeSetting obj = (PathTypeSetting) e.getSource();
 			if (obj.getName().equals(Mediator.getMessage(PropertiesKeys.ABSOLUTE_PATH))) {
-				GenerationModel.setAbsolute(true);
+				MyFile.setAbsolute(true);
 			} else {
-				GenerationModel.setAbsolute(false);
+				MyFile.setAbsolute(false);
 			}
 		}
 	}

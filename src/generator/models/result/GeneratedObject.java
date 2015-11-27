@@ -7,7 +7,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import generator.models.MyFile;
+import generator.models.MyFileAdapter;
 import generator.models.generation.GenerationModel;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -18,8 +21,9 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 	private Color color;
 	@XmlTransient
 	private GenerationModel model;
+	@XmlJavaTypeAdapter(MyFileAdapter.class)
 	@XmlAttribute(name = "objectFile", required = true)
-	private String objectPath;
+	private MyFile objectPath;
 	@XmlTransient
 	private Color prevColor;
 
@@ -64,7 +68,7 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 	}
 
 	public String getObjectPath() {
-		return objectPath;
+		return objectPath.getAbsolutePath();
 	}
 
 	public boolean overlap(GeneratedObject p) {
@@ -84,7 +88,7 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 	}
 
 	public void setObjectPath(String objectPath) {
-		this.objectPath = objectPath;
+		this.objectPath = new MyFile(objectPath);
 	}
 
 	private void setPrevColor() {
@@ -107,12 +111,4 @@ public class GeneratedObject implements Comparable<GeneratedObject> {
 				.append(basic.getZ());
 		return s.toString();
 	}
-
-	// @Override
-	// public boolean equals(Object obj) {
-	// if (!(obj instanceof GeneratedObject)) {
-	// return false;
-	// }
-	// return overlap((GeneratedObject) obj);
-	// }
 }

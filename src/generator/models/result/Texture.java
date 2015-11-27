@@ -3,12 +3,17 @@ package generator.models.result;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import generator.models.MyFile;
+import generator.models.MyFileAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Texture {
 
+	@XmlJavaTypeAdapter(MyFileAdapter.class)
 	@XmlAttribute(name = "path", required = true)
-	private String path;
+	private MyFile path;
 
 	@XmlAttribute(name = "scale", required = true)
 	private double scale;
@@ -16,21 +21,21 @@ public class Texture {
 	public Texture() {
 	}
 
-	public Texture(String path, double scale) {
+	public Texture(MyFile path, double scale) {
 		super();
 		this.path = path;
 		this.scale = scale;
 	}
 
 	public String getPath() {
-		return path;
+		return path.getAbsolutePath();
 	}
 
 	public double getScale() {
 		return scale;
 	}
 
-	public void setPath(String path) {
+	public void setPath(MyFile path) {
 		this.path = path;
 	}
 

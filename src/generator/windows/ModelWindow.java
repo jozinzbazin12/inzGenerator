@@ -27,6 +27,7 @@ import generator.actions.model.LoadSingleModelAction;
 import generator.algorithms.Algorithm;
 import generator.algorithms.MaskAlgorithm;
 import generator.algorithms.panels.additional.AlgorithmAdditionalPanel;
+import generator.models.MyFile;
 import generator.models.generation.GenerationModel;
 import generator.models.generation.ModelInfo;
 import generator.models.generation.PositionSettings;
@@ -110,7 +111,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 		return objects.get(0);
 	}
 
-	public ModelInfo changeFile(File path) {
+	public ModelInfo changeFile(MyFile path) {
 		ModelInfo modelInfo = objects.get(0);
 		GenerationModel model = modelInfo.getModel();
 		model.setPath(path);
@@ -189,10 +190,9 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private JPanel createFileOptionsPanel() {
 		JPanel fileOptions = new JPanel();
 		fileOptions.setLayout(new GridLayout(0, 3, 5, 5));
-		// fileOptions.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.FILE_MENU)));
 		if (objects.size() == 1) {
 			fileName = new Label(objects.get(0).getModel().getName());
-			pathField = new JTextField(objects.get(0).getModel().getPath());
+			pathField = new JTextField(objects.get(0).getModel().getPath().getAbsolutePath());
 		} else {
 			StringBuilder str = new StringBuilder();
 			for (ModelInfo i : objects) {

@@ -1,20 +1,16 @@
 package generator.models.generation;
 
 import java.awt.Color;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import generator.Mediator;
+import generator.models.MyFile;
 
 public class GenerationModel implements Comparable<GenerationModel> {
 	private static Color prevColor = Color.RED;
 	private Color color;
 	private String name;
-	private File path;
-	private static boolean absolute = true;
+	private MyFile path;
 
-	public GenerationModel(File path) {
+	public GenerationModel(MyFile path) {
 		this.path = path;
 		this.name = getFileNameFromPath();
 		nexColor();
@@ -34,7 +30,7 @@ public class GenerationModel implements Comparable<GenerationModel> {
 			return false;
 		}
 		GenerationModel gm = (GenerationModel) obj;
-		return path.equals(gm.getAbsoultePath());
+		return path.equals(gm.getPath());
 	}
 
 	public Color getColor() {
@@ -49,21 +45,12 @@ public class GenerationModel implements Comparable<GenerationModel> {
 		return name;
 	}
 
-	public String getPath() {
-		if (absolute) {
-			return path.getAbsolutePath();
-		}
-		Path other = Paths.get(path.getAbsolutePath());
-		Path root = Mediator.getRoot();
-		try {
-			return root.relativize(other).toString();
-		} catch (Throwable t) {
-			return path.getAbsolutePath();
-		}
+	public MyFile getPath() {
+		return path;
 	}
-
-	public String getAbsoultePath() {
-		return path.getPath();
+	
+	public String getAbsolutePath() {
+		return path.getAbsolutePath();
 	}
 
 	private void nexColor() {
@@ -76,7 +63,7 @@ public class GenerationModel implements Comparable<GenerationModel> {
 		this.name = name;
 	}
 
-	public void setPath(File path) {
+	public void setPath(MyFile path) {
 		this.path = path;
 		name = getFileNameFromPath();
 	}
@@ -101,11 +88,4 @@ public class GenerationModel implements Comparable<GenerationModel> {
 		return str.toString();
 	}
 
-	public static boolean isAbsolute() {
-		return absolute;
-	}
-
-	public static void setAbsolute(boolean absolute) {
-		GenerationModel.absolute = absolute;
-	}
 }

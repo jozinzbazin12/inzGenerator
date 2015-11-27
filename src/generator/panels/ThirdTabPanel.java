@@ -31,6 +31,7 @@ import javax.swing.table.TableModel;
 
 import generator.Mediator;
 import generator.actions.Action;
+import generator.models.MyFile;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.models.result.ResultObject;
@@ -106,9 +107,8 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		Mediator.registerThirdTabPanel(this);
 	}
 
-	public File addPreview(String imgName) throws IOException {
+	public File addPreview(MyFile file) throws IOException {
 		remove(previewPanel);
-		File file = new File(imgName);
 		BufferedImage image = ImageIO.read(file);
 		if (image == null) {
 			throw new IOException();

@@ -60,7 +60,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 			Map<String, ModelInfo> models = Mediator.getModels();
 			List<ModelInfo> selectedRows = getSelectedRows();
 			for (ModelInfo i : selectedRows) {
-				models.remove(i.getModel().getAbsoultePath());
+				models.remove(i.getModel().getPath());
 			}
 
 			updateModels(models.values());

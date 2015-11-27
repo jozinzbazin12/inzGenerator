@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import generator.models.MyFile;
 import generator.utils.Consts;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -111,7 +112,7 @@ public class ModelInfo implements Comparable<ModelInfo> {
 
 	@XmlAttribute(name = "path")
 	private String getPath() {
-		return model.getPath();
+		return model.getPath().getAbsolutePath();
 	}
 
 	public PositionSettings getPositionSettings() {
@@ -162,7 +163,7 @@ public class ModelInfo implements Comparable<ModelInfo> {
 
 	@SuppressWarnings("unused")
 	private void setPath(String path) {
-		model = new GenerationModel(new File(path));
+		model = new GenerationModel(new MyFile(path));
 	}
 
 	public void setPositionSettings(PositionSettings positionSettings) {

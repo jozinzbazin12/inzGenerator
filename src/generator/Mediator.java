@@ -28,6 +28,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import generator.algorithms.Algorithm;
+import generator.models.MyFile;
 import generator.models.generation.GenerationModel;
 import generator.models.generation.ModelInfo;
 import generator.models.result.GeneratedObject;
@@ -78,8 +79,8 @@ public class Mediator {
 	}
 
 	public static void changeModelFileName(File path) {
-		models.remove(modelWindow.getCurrentModel().getModel().getAbsoultePath());
-		models.put(path.getAbsolutePath(), modelWindow.changeFile(path));
+		models.remove(modelWindow.getCurrentModel().getModel().getPath());
+		models.put(path.getAbsolutePath(), modelWindow.changeFile(new MyFile(path)));
 	}
 
 	private static void createProperties() throws IOException {
@@ -176,7 +177,7 @@ public class Mediator {
 
 	public static void loadModel(String path) {
 		if (models.get(path) == null) {
-			File file = new File(path);
+			MyFile file = new MyFile(path);
 			GenerationModel model = new GenerationModel(file);
 			ModelInfo obj = new ModelInfo(model);
 			models.put(file.getAbsolutePath(), obj);
@@ -204,7 +205,7 @@ public class Mediator {
 		List<ModelInfo> objects = resultObject.getGenerationInfo().getModels();
 		if (objects != null) {
 			for (ModelInfo i : objects) {
-				models.put(i.getModel().getAbsoultePath(), i);
+				models.put(i.getModel().getPath().getKey(), i);
 			}
 		}
 		for (GeneratedObject i : resultObject.getGeneratedObjects()) {
@@ -213,7 +214,7 @@ public class Mediator {
 			if (objectInfo != null) {
 				model = objectInfo.getModel();
 			} else {
-				model = new GenerationModel(new File(i.getObjectPath()));
+				model = new GenerationModel(new MyFile(i.getObjectPath()));
 			}
 			ModelInfo obj = new ModelInfo(model);
 			if (objectInfo == null) {
@@ -231,7 +232,7 @@ public class Mediator {
 			e.printStackTrace();
 		}
 		firstTabPanel.setMapObject(mapObject);
-		firstTabPanel.setMapProperties(mapObject.getMapFileName(), thirdTabPanel.getImageSize());
+		firstTabPanel.setMapProperties(mapObject.getMapFileName().getAbsolutePath(), thirdTabPanel.getImageSize());
 		secondTabPanel.updateModels(models.values());
 		setMapFile(mapObject.getMapFileName());
 		updateModels(resultObject.getGeneratedObjects());
@@ -320,9 +321,9 @@ public class Mediator {
 		Mediator.lastPath = lastPath;
 	}
 
-	public static Dimension setMapFile(String imgName) {
+	public static Dimension setMapFile(MyFile file) {
 		try {
-			String path = thirdTabPanel.addPreview(imgName).getAbsolutePath();
+			String path = thirdTabPanel.addPreview(file).getAbsolutePath();
 			resultObject.getMapObject().setMapFileName(path);
 			mainWindow.getContentPane().revalidate();
 		} catch (IOException e) {
@@ -353,7 +354,7 @@ public class Mediator {
 			mapObject.getMaterial().setTexture(texture);
 		}
 
-		texture.setPath(path);
+		texture.setPath(new MyFile(path));
 
 		mainWindow.getContentPane().revalidate();
 	}
@@ -378,6 +379,7 @@ public class Mediator {
 	public static Path getRoot() {
 		return root;
 	}
+
 }
 // TODO obsluga sciezek relatywnych
 // TODO sprawdzic wysokosc mapy w generatorze i wyswietlaczu
