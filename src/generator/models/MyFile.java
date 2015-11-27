@@ -30,7 +30,7 @@ public class MyFile extends File {
 		String path = f.getPath();
 		String root = Mediator.getRoot().toString();
 
-		return root + path;
+		return root + "/" + path;
 	}
 
 	@Override

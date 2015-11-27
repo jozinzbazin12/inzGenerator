@@ -49,7 +49,7 @@ public class Mediator {
 	private static FirstTabPanel firstTabPanel;
 	private static final String GENERATOR_MODELS_RESULT = "generator.models.result";
 	private static final String LANGUAGE_KEY = "language";
-	private static String lastPath = System.getProperty("user.home") + "/Desktop";
+	private static String lastPath;
 	private static Locale locale;
 	private static MainWindow mainWindow;
 	private static ResourceBundle messages;
@@ -185,7 +185,6 @@ public class Mediator {
 	}
 
 	public static void loadXMLFile(File file) {
-		root = Paths.get(file.getParent());
 		JAXBContext context;
 		try {
 			context = JAXBContext.newInstance(GENERATOR_MODELS_RESULT);
@@ -239,7 +238,9 @@ public class Mediator {
 	}
 
 	public static void main(String[] args) throws IOException, URISyntaxException {
+		root = Paths.get("").toAbsolutePath();
 		properties = new Properties();
+		lastPath = root.toString();
 		InputStream input;
 		try {
 			input = new FileInputStream(PROPERTIES_FILE);
@@ -376,6 +377,3 @@ public class Mediator {
 	}
 
 }
-// TODO obsluga sciezek relatywnych
-// TODO sprawdzic wysokosc mapy w generatorze i wyswietlaczu
-// TODO sprawdzic niekwadratowe mapy

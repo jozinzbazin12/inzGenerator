@@ -20,6 +20,7 @@ public abstract class SaveXMLAction extends AbstractLoadAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		goToStart(chooser);
 		int rVal = chooser.showSaveDialog(new JFrame());
 		if (rVal == JFileChooser.APPROVE_OPTION) {
 			Mediator.setLastPath(chooser.getSelectedFile().getParent());

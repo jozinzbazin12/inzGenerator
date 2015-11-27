@@ -15,10 +15,6 @@ public class XMLChooser extends JFileChooser {
 
 	public XMLChooser() {
 		super();
-		File desktop = new File(Mediator.getLastPath());
-		if (desktop != null) {
-			setCurrentDirectory(desktop);
-		}
 		setAcceptAllFileFilterUsed(false);
 		setFileFilter(new XMLFilter(Mediator.getMessage(PropertiesKeys.XML_FILES)));
 		addChoosableFileFilter(new FileFilter() {

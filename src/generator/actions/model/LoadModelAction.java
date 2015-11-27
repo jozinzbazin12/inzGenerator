@@ -21,6 +21,7 @@ public abstract class LoadModelAction extends AbstractLoadAction {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		goToStart(chooser);
 		int rVal = chooser.showOpenDialog(new JFrame());
 		if (rVal == JFileChooser.APPROVE_OPTION) {
 			Mediator.setLastPath(chooser.getSelectedFile().getParent());

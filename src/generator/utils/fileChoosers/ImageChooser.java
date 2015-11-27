@@ -20,10 +20,6 @@ public class ImageChooser extends JFileChooser {
 
 	public ImageChooser() {
 		super();
-		File desktop = new File(Mediator.getLastPath());
-		if (desktop != null) {
-			setCurrentDirectory(desktop);
-		}
 		setAcceptAllFileFilterUsed(false);
 		setFileFilter(new ImageFilter(IMAGES, Mediator.getMessage(PropertiesKeys.IMAGE_FILES)));
 		addChoosableFileFilter(new ImageFilter(BMP, Mediator.getMessage(PropertiesKeys.BMP_FILES)));
