@@ -1,7 +1,6 @@
 package generator.models.generation;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +11,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import generator.models.MyFile;
+import generator.models.MyFileAdapter;
 import generator.utils.Consts;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -22,8 +23,9 @@ public class ModelInfo implements Comparable<ModelInfo> {
 	private Map<String, Double> args = new HashMap<>();
 	@XmlTransient
 	private BufferedImage mask;
-	@XmlTransient
-	private String maskFile;
+	@XmlJavaTypeAdapter(MyFileAdapter.class)
+	@XmlAttribute(name = "maskFile")
+	private MyFile maskFile;
 	@XmlAttribute(name = "maxCount")
 	private int maxCount;
 
@@ -93,8 +95,7 @@ public class ModelInfo implements Comparable<ModelInfo> {
 		return mask;
 	}
 
-	@XmlAttribute(name = "maskFile")
-	public String getMaskFile() {
+	public MyFile getMaskFile() {
 		return maskFile;
 	}
 
@@ -111,8 +112,9 @@ public class ModelInfo implements Comparable<ModelInfo> {
 	}
 
 	@XmlAttribute(name = "path")
-	private String getPath() {
-		return model.getPath().getAbsolutePath();
+	@XmlJavaTypeAdapter(MyFileAdapter.class)
+	public MyFile getPath() {
+		return model.getPath();
 	}
 
 	public PositionSettings getPositionSettings() {
@@ -142,11 +144,11 @@ public class ModelInfo implements Comparable<ModelInfo> {
 		this.mask = mask;
 	}
 
-	public void setMaskFile(String maskFile) {
+	public void setMaskFile(MyFile maskFile) {
 		this.maskFile = maskFile;
 		if (maskFile != null) {
 			try {
-				this.mask = ImageIO.read(new File(maskFile));
+				this.mask = ImageIO.read(maskFile);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -161,9 +163,8 @@ public class ModelInfo implements Comparable<ModelInfo> {
 		this.minCount = minCount;
 	}
 
-	@SuppressWarnings("unused")
-	private void setPath(String path) {
-		model = new GenerationModel(new MyFile(path));
+	public void setPath(MyFile path) {
+		model = new GenerationModel(path);
 	}
 
 	public void setPositionSettings(PositionSettings positionSettings) {

@@ -10,6 +10,9 @@ public class MyFileAdapter extends XmlAdapter<String, MyFile> {
 
 	@Override
 	public String marshal(MyFile v) throws Exception {
+		if (v == null) {
+			return null;
+		}
 		return v.getAbsolutePath();
 	}
 

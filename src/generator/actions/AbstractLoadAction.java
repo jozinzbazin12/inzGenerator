@@ -1,6 +1,7 @@
 package generator.actions;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -20,11 +21,11 @@ public abstract class AbstractLoadAction extends Action {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String fileName = null;
+		File fileName = null;
 		int rVal = chooser.showOpenDialog(new JFrame());
 		if (rVal == JFileChooser.APPROVE_OPTION) {
 			Mediator.setLastPath(chooser.getSelectedFile().getParent());
-			fileName = (chooser.getSelectedFile().getAbsolutePath());
+			fileName = chooser.getSelectedFile();
 		}
 		if (rVal == JFileChooser.CANCEL_OPTION) {
 			fileName = null;
@@ -41,6 +42,6 @@ public abstract class AbstractLoadAction extends Action {
 		// Override me
 	}
 
-	protected abstract void onSucess(String path);
+	protected abstract void onSucess(File path);
 
 }

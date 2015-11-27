@@ -31,7 +31,7 @@ public abstract class LoadModelAction extends AbstractLoadAction {
 		}
 		if (files != null && files.length > 0) {
 			for (File i : files) {
-				onSucess(i.getAbsolutePath());
+				onSucess(i);
 			}
 		} else {
 			onFail();
@@ -39,7 +39,7 @@ public abstract class LoadModelAction extends AbstractLoadAction {
 	}
 
 	@Override
-	protected void onSucess(String path) {
+	protected void onSucess(File path) {
 		// TODO Auto-generated method stub
 
 	}

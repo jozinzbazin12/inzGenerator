@@ -91,7 +91,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 				if (maskChanged) {
 					i.setMask(preview.getMask());
-					i.setMaskFile(maskName.getText());
+					i.setMaskFile(new MyFile(maskName.getText()));
 				}
 			}
 			dispose();
@@ -221,14 +221,14 @@ public class ModelWindow extends JFrame implements ActionListener {
 		maskName = new Label();
 		maskOptions.setLayout(new GridLayout(0, 3, 5, 5));
 		ModelInfo modelInfo = objects.get(0);
-		String maskFile = modelInfo.getMaskFile();
+		File maskFile = modelInfo.getMaskFile();
 
 		JButton open = new JButton(new LoadImageAction(Mediator.getMessage(PropertiesKeys.LOAD_MASK)) {
 			private static final long serialVersionUID = -2212330075704003715L;
 
 			@Override
-			protected void onSucess(String path) {
-				Mediator.setMask(path);
+			protected void onSucess(File path) {
+				setMask(path);
 				delete.setEnabled(true);
 				maskChanged = true;
 			}
@@ -479,10 +479,10 @@ public class ModelWindow extends JFrame implements ActionListener {
 		return data;
 	}
 
-	private void openMask(String path) {
-		maskName.setText(path);
+	private void openMask(File path) {
+		maskName.setText(path.getAbsolutePath());
 		try {
-			preview.setMask(ImageIO.read(new File(path)));
+			preview.setMask(ImageIO.read(path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -498,16 +498,16 @@ public class ModelWindow extends JFrame implements ActionListener {
 	}
 
 	private void setMask(ModelInfo objectInfo, BufferedImage mask) {
-		String maskFile = objectInfo.getMaskFile();
+		MyFile maskFile = objectInfo.getMaskFile();
 		if (mask != null) {
 			preview.setMask(mask);
-			maskName.setText(maskFile);
+			maskName.setText(maskFile.getKey());
 		} else if (maskFile != null) {
 			openMask(maskFile);
 		}
 	}
 
-	public void setMask(String path) {
+	public void setMask(File path) {
 		openMask(path);
 	}
 

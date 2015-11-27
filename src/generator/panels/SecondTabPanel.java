@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -60,7 +61,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 			Map<String, ModelInfo> models = Mediator.getModels();
 			List<ModelInfo> selectedRows = getSelectedRows();
 			for (ModelInfo i : selectedRows) {
-				models.remove(i.getModel().getPath());
+				models.remove(i.getModel().getPath().getKey());
 			}
 
 			updateModels(models.values());
@@ -83,7 +84,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 		private static final long serialVersionUID = 5761150114867749004L;
 
 		@Override
-		protected void onSucess(String s) {
+		protected void onSucess(File s) {
 			Mediator.loadModel(s);
 			updateModels(Mediator.getModels().values());
 		}

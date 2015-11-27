@@ -92,9 +92,9 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 			private static final long serialVersionUID = 7367163999541143871L;
 
 			@Override
-			protected void onSucess(String path) {
+			protected void onSucess(File path) {
 				Dimension imageSize = Mediator.setMapFile(new MyFile(path));
-				setMapProperties(path, imageSize);
+				setMapProperties(path.getAbsolutePath(), imageSize);
 			}
 
 		});
@@ -161,9 +161,10 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 			private static final long serialVersionUID = -864076895016573176L;
 
 			@Override
-			protected void onSucess(String path) {
-				setTexturePath(path);
-				Mediator.setTextureFile(path);
+			protected void onSucess(File path) {
+				String str = path.getAbsolutePath();
+				setTexturePath(str);
+				Mediator.setTextureFile(str);
 			}
 		});
 		buttonHolder.add(open);

@@ -175,8 +175,8 @@ public class Mediator {
 		thirdTabPanel.highlight(obj);
 	}
 
-	public static void loadModel(String path) {
-		if (models.get(path) == null) {
+	public static void loadModel(File path) {
+		if (models.get(path.getAbsolutePath()) == null) {
 			MyFile file = new MyFile(path);
 			GenerationModel model = new GenerationModel(file);
 			ModelInfo obj = new ModelInfo(model);
@@ -184,8 +184,7 @@ public class Mediator {
 		}
 	}
 
-	public static void loadXMLFile(String name) {
-		File file = new File(name);
+	public static void loadXMLFile(File file) {
 		root = Paths.get(file.getParent());
 		JAXBContext context;
 		try {
@@ -331,10 +330,6 @@ public class Mediator {
 		}
 		Dimension imageSize = thirdTabPanel.getImageSize();
 		return imageSize;
-	}
-
-	public static void setMask(String path) {
-		modelWindow.setMask(path);
 	}
 
 	public static void setResultObject(ResultObject resultObject) {

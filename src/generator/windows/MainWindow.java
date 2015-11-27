@@ -2,6 +2,7 @@ package generator.windows;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.Locale;
 
 import javax.swing.ButtonGroup;
@@ -75,7 +76,7 @@ public class MainWindow extends JFrame {
 			private static final long serialVersionUID = -6720737308249773635L;
 
 			@Override
-			protected void onSucess(String path) {
+			protected void onSucess(File path) {
 				Mediator.loadXMLFile(path);
 			}
 		});
@@ -86,8 +87,8 @@ public class MainWindow extends JFrame {
 			private static final long serialVersionUID = -2803868446968416714L;
 
 			@Override
-			protected void onSucess(String path) {
-				Mediator.saveXMLFile(path);
+			protected void onSucess(File path) {
+				Mediator.saveXMLFile(path.getAbsolutePath());
 			}
 
 		});
