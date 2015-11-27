@@ -1,14 +1,20 @@
 package generator.models.generation;
 
 import java.awt.Color;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import generator.Mediator;
 
 public class GenerationModel implements Comparable<GenerationModel> {
 	private static Color prevColor = Color.RED;
 	private Color color;
 	private String name;
-	private String path;
+	private File path;
+	private static boolean absolute = true;
 
-	public GenerationModel(String path) {
+	public GenerationModel(File path) {
 		this.path = path;
 		this.name = getFileNameFromPath();
 		nexColor();
@@ -28,7 +34,7 @@ public class GenerationModel implements Comparable<GenerationModel> {
 			return false;
 		}
 		GenerationModel gm = (GenerationModel) obj;
-		return path.equals(gm.getPath());
+		return path.equals(gm.getAbsoultePath());
 	}
 
 	public Color getColor() {
@@ -36,9 +42,7 @@ public class GenerationModel implements Comparable<GenerationModel> {
 	}
 
 	private String getFileNameFromPath() {
-		int index = path.lastIndexOf("\\");
-		int index2 = path.lastIndexOf("/");
-		return path.substring(Integer.max(index, index2) + 1);
+		return path.getName();
 	}
 
 	public String getName() {
@@ -46,7 +50,20 @@ public class GenerationModel implements Comparable<GenerationModel> {
 	}
 
 	public String getPath() {
-		return path;
+		if (absolute) {
+			return path.getAbsolutePath();
+		}
+		Path other = Paths.get(path.getAbsolutePath());
+		Path root = Mediator.getRoot();
+		try {
+			return root.relativize(other).toString();
+		} catch (Throwable t) {
+			return path.getAbsolutePath();
+		}
+	}
+
+	public String getAbsoultePath() {
+		return path.getPath();
 	}
 
 	private void nexColor() {
@@ -59,7 +76,7 @@ public class GenerationModel implements Comparable<GenerationModel> {
 		this.name = name;
 	}
 
-	public void setPath(String path) {
+	public void setPath(File path) {
 		this.path = path;
 		name = getFileNameFromPath();
 	}
@@ -82,5 +99,13 @@ public class GenerationModel implements Comparable<GenerationModel> {
 		str.append(path);
 		str.append(")");
 		return str.toString();
+	}
+
+	public static boolean isAbsolute() {
+		return absolute;
+	}
+
+	public static void setAbsolute(boolean absolute) {
+		GenerationModel.absolute = absolute;
 	}
 }

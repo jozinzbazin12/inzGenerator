@@ -162,7 +162,7 @@ public class ModelInfo implements Comparable<ModelInfo> {
 
 	@SuppressWarnings("unused")
 	private void setPath(String path) {
-		model = new GenerationModel(path);
+		model = new GenerationModel(new File(path));
 	}
 
 	public void setPositionSettings(PositionSettings positionSettings) {

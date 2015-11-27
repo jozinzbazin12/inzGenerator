@@ -9,6 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +60,7 @@ public class Mediator {
 	private static ResultObject resultObject = new ResultObject();
 	private static SecondTabPanel secondTabPanel;
 	private static ThirdTabPanel thirdTabPanel;
+	private static Path root;
 	private static final String XML = ".xml";
 
 	public static void changeLocale(Locale locale) {
@@ -68,14 +72,14 @@ public class Mediator {
 				mainWindow.dispose();
 				main(null);
 			}
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void changeModelFileName(String path) {
-		models.remove(modelWindow.getCurrentModel().getModel().getPath());
-		models.put(path, modelWindow.changeFile(path));
+	public static void changeModelFileName(File path) {
+		models.remove(modelWindow.getCurrentModel().getModel().getAbsoultePath());
+		models.put(path.getAbsolutePath(), modelWindow.changeFile(path));
 	}
 
 	private static void createProperties() throws IOException {
@@ -172,14 +176,16 @@ public class Mediator {
 
 	public static void loadModel(String path) {
 		if (models.get(path) == null) {
-			GenerationModel model = new GenerationModel(path);
+			File file = new File(path);
+			GenerationModel model = new GenerationModel(file);
 			ModelInfo obj = new ModelInfo(model);
-			models.put(path, obj);
+			models.put(file.getAbsolutePath(), obj);
 		}
 	}
 
 	public static void loadXMLFile(String name) {
 		File file = new File(name);
+		root = Paths.get(file.getParent());
 		JAXBContext context;
 		try {
 			context = JAXBContext.newInstance(GENERATOR_MODELS_RESULT);
@@ -198,7 +204,7 @@ public class Mediator {
 		List<ModelInfo> objects = resultObject.getGenerationInfo().getModels();
 		if (objects != null) {
 			for (ModelInfo i : objects) {
-				models.put(i.getModel().getPath(), i);
+				models.put(i.getModel().getAbsoultePath(), i);
 			}
 		}
 		for (GeneratedObject i : resultObject.getGeneratedObjects()) {
@@ -207,7 +213,7 @@ public class Mediator {
 			if (objectInfo != null) {
 				model = objectInfo.getModel();
 			} else {
-				model = new GenerationModel(i.getObjectPath());
+				model = new GenerationModel(new File(i.getObjectPath()));
 			}
 			ModelInfo obj = new ModelInfo(model);
 			if (objectInfo == null) {
@@ -232,7 +238,7 @@ public class Mediator {
 		thirdTabPanel.updateObjects(resultObject.getGeneratedObjects());
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, URISyntaxException {
 		properties = new Properties();
 		InputStream input;
 		try {
@@ -367,6 +373,10 @@ public class Mediator {
 	public static void updateObjects() {
 		thirdTabPanel.updateObjects(resultObject.getGeneratedObjects());
 
+	}
+
+	public static Path getRoot() {
+		return root;
 	}
 }
 // TODO obsluga sciezek relatywnych

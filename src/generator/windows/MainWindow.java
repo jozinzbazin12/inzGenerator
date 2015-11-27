@@ -22,7 +22,9 @@ import generator.actions.LoadXMLAction;
 import generator.actions.SaveXMLAction;
 import generator.actions.object.GenerateObjectsAction;
 import generator.listeners.ChangeLanguageListener;
+import generator.listeners.ChangePathTypeListener;
 import generator.models.LangugeOption;
+import generator.models.PathTypeSetting;
 import generator.panels.FirstTabPanel;
 import generator.panels.SecondTabPanel;
 import generator.panels.ThirdTabPanel;
@@ -56,6 +58,14 @@ public class MainWindow extends JFrame {
 		return languageOption;
 	}
 
+	private JRadioButtonMenuItem createPathOption(ButtonGroup group, String name, boolean selected) {
+		PathTypeSetting option = new PathTypeSetting(name);
+		group.add(option);
+		option.setSelected(selected);
+		option.addActionListener(new ChangePathTypeListener());
+		return option;
+	}
+
 	private void createMenu() {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -68,7 +78,6 @@ public class MainWindow extends JFrame {
 			protected void onSucess(String path) {
 				Mediator.loadXMLFile(path);
 			}
-
 		});
 		openXmlOption.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		menu.add(openXmlOption);
@@ -98,6 +107,13 @@ public class MainWindow extends JFrame {
 		languageMenu.add(createLanguage(group, new Locale("PL"), "Polski"));
 		languageMenu.add(createLanguage(group, Locale.ENGLISH, "English"));
 		optionsMenu.add(languageMenu);
+
+		JMenu pathMenu = new JMenu(Mediator.getMessage(PropertiesKeys.PATH_TYPE));
+		ButtonGroup pathGroup = new ButtonGroup();
+		pathMenu.add(createPathOption(pathGroup, Mediator.getMessage(PropertiesKeys.ABSOLUTE_PATH), true));
+		pathMenu.add(createPathOption(pathGroup, Mediator.getMessage(PropertiesKeys.RELATIVE_PATH), false));
+
+		optionsMenu.add(pathMenu);
 
 		JMenuItem generateOption = new JMenuItem(new GenerateObjectsAction(Mediator.getMessage(PropertiesKeys.GENERATE_OPTION)));
 		generateOption.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));

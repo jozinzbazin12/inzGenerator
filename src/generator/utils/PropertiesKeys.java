@@ -153,4 +153,7 @@ public final class PropertiesKeys {
 	public static final String COLLISION_MARGIN = "algorithm.settings.collision.margin";
 	public static final String COLLISION_MARGIN_TOOLTIP = "algorithm.settings.collision.margin.tooltip";
 	public static final String COLLISION = "algorithm.collision.detected";
+	public static final String PATH_TYPE = "path.type";
+	public static final String ABSOLUTE_PATH = "path.type.absolute";
+	public static final String RELATIVE_PATH = "path.type.relative";
 }

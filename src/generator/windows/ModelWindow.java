@@ -110,12 +110,12 @@ public class ModelWindow extends JFrame implements ActionListener {
 		return objects.get(0);
 	}
 
-	public ModelInfo changeFile(String path) {
+	public ModelInfo changeFile(File path) {
 		ModelInfo modelInfo = objects.get(0);
 		GenerationModel model = modelInfo.getModel();
 		model.setPath(path);
 		fileName.setText(model.getName());
-		pathField.setText(path);
+		pathField.setText(path.getAbsolutePath());
 		return modelInfo;
 	}
 

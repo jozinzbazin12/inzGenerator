@@ -1,5 +1,7 @@
 package generator.actions.model;
 
+import java.io.File;
+
 import generator.Mediator;
 import generator.actions.AbstractLoadAction;
 import generator.utils.fileChoosers.ObjChooser;
@@ -14,6 +16,6 @@ public class LoadSingleModelAction extends AbstractLoadAction {
 
 	@Override
 	protected void onSucess(String path) {
-		Mediator.changeModelFileName(path);
+		Mediator.changeModelFileName(new File(path));
 	}
 }
