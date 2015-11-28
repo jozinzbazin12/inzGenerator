@@ -227,7 +227,7 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 
 	@Override
 	public Map<String, Double> getArgs() {
-		return getArgs(new HashMap<>(), false);
+		return getArgs(new HashMap<String, Double>(), false);
 	}
 
 	@Override

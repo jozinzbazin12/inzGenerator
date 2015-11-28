@@ -14,7 +14,7 @@ public abstract class AbstractPanel extends JPanel {
 	protected Map<String, Component> arguments = new HashMap<>();
 
 	public Map<String, Double> getArgs() {
-		return getArgs(new HashMap<>(), false);
+		return getArgs(new HashMap<String, Double>(), false);
 	}
 
 	public Map<String, Double> getArgs(Map<String, Double> args, boolean checkModified) {

@@ -142,9 +142,9 @@ public final class ComponentUtil {
 		panel.setLayout(new GridLayout(0, 3));
 		Label attributelabel = new Label(description, tooltip);
 		panel.add(attributelabel);
-		Spinner minSpinner = new Spinner(new SpinnerNumberModel(0.0, min, max, 1), listen);
+		final Spinner minSpinner = new Spinner(new SpinnerNumberModel(0.0, min, max, 1), listen);
 		panel.add(attributelabel);
-		Spinner maxSpinner = new Spinner(new SpinnerNumberModel(0.0, min, max, 1), listen);
+		final Spinner maxSpinner = new Spinner(new SpinnerNumberModel(0.0, min, max, 1), listen);
 		minSpinner.addChangeListener(new ChangeListener() {
 
 			@Override

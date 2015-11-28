@@ -78,7 +78,7 @@ public class AlgorithmMainPanel extends JPanel {
 	private void addListener(JPanel collisionScale) {
 		for (java.awt.Component c : collisionScale.getComponents()) {
 			if (c instanceof Spinner) {
-				Spinner spinner = (Spinner) c;
+				final Spinner spinner = (Spinner) c;
 				spinner.addChangeListener(new ChangeListener() {
 
 					@Override
