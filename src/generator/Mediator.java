@@ -46,6 +46,9 @@ import generator.windows.ModelWindow;
 import generator.windows.ObjectWindow;
 
 public class Mediator {
+	private static final String UNIX = "unix";
+	private static final String LINUX = "linux";
+	private static final String OS_NAME = "os.name";
 	private static FirstTabPanel firstTabPanel;
 	private static final String GENERATOR_MODELS_RESULT = "generator.models.result";
 	private static final String LANGUAGE_KEY = "language";
@@ -63,6 +66,7 @@ public class Mediator {
 	private static ThirdTabPanel thirdTabPanel;
 	private static Path root;
 	private static final String XML = ".xml";
+	private static boolean linux;
 
 	public static void changeLocale(Locale locale) {
 		properties.setProperty(LANGUAGE_KEY, locale.getLanguage());
@@ -238,6 +242,8 @@ public class Mediator {
 	}
 
 	public static void main(String[] args) throws IOException, URISyntaxException {
+		String name = System.getProperty(OS_NAME).toLowerCase();
+		linux = name.contains(LINUX) || name.contains(UNIX);
 		root = Paths.get("").toAbsolutePath();
 		properties = new Properties();
 		lastPath = root.toString();
@@ -374,6 +380,10 @@ public class Mediator {
 
 	public static Path getRoot() {
 		return root;
+	}
+
+	public static boolean isLinux() {
+		return linux;
 	}
 
 }

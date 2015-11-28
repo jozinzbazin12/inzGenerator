@@ -28,9 +28,12 @@ public class MyFile extends File {
 			return f.getAbsolutePath();
 		}
 		String path = f.getPath();
+		if (Mediator.isLinux()) {
+			path = path.replace("\\", "/");
+		}
 		String root = Mediator.getRoot().toString();
 
-		return root + "/" + path;
+		return root + File.separator + path;
 	}
 
 	@Override

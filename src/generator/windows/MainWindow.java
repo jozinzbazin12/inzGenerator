@@ -34,14 +34,20 @@ import generator.utils.PropertiesKeys;
 public class MainWindow extends JFrame {
 	private static final long serialVersionUID = 2924752215725936696L;
 	private static final String WINDOWS_LOOK = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+	private static final String LINUX_LOOK = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
 	private JTabbedPane tab;
 
 	public MainWindow(String name) {
 		super(name);
 		try {
-			UIManager.setLookAndFeel(WINDOWS_LOOK);
+			if (Mediator.isLinux()) {
+				UIManager.setLookAndFeel(LINUX_LOOK);
+			} else {
+				UIManager.setLookAndFeel(WINDOWS_LOOK);
+			}
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		setVisible(true);
