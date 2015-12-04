@@ -21,6 +21,7 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -228,7 +229,9 @@ public class Mediator {
 		}
 		MapObject mapObject = resultObject.getMapObject();
 		try {
-			thirdTabPanel.addPreview(mapObject.getMapFileName());
+			BufferedImage image = openImage(mapObject.getMapFileName());
+			thirdTabPanel.addPreview(image);
+			firstTabPanel.addPreview(image);
 		} catch (IOException e) {
 			WindowUtil.displayError(PropertiesKeys.FILE_NOT_IMAGE);
 			e.printStackTrace();
@@ -239,6 +242,14 @@ public class Mediator {
 		setMapFile(mapObject.getMapFileName());
 		updateModels(resultObject.getGeneratedObjects());
 		thirdTabPanel.updateObjects(resultObject.getGeneratedObjects());
+	}
+
+	private static BufferedImage openImage(File mapObject) throws IOException {
+		BufferedImage image = ImageIO.read(mapObject);
+		if (image == null) {
+			throw new IOException();
+		}
+		return image;
 	}
 
 	public static void main(String[] args) throws IOException, URISyntaxException {
@@ -329,7 +340,8 @@ public class Mediator {
 
 	public static Dimension setMapFile(MyFile file) {
 		try {
-			String path = thirdTabPanel.addPreview(file).getAbsolutePath();
+			thirdTabPanel.addPreview(openImage(file));
+			String path = file.getAbsolutePath();
 			resultObject.getMapObject().setMapFileName(path);
 			mainWindow.getContentPane().revalidate();
 		} catch (IOException e) {
@@ -385,5 +397,4 @@ public class Mediator {
 	public static boolean isLinux() {
 		return linux;
 	}
-
 }

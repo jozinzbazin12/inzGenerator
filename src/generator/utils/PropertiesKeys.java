@@ -1,6 +1,7 @@
 package generator.utils;
 
 public final class PropertiesKeys {
+	public static final String ABSOLUTE_PATH = "path.type.absolute";
 	public static final String ADDITIONAL = "additional";
 	public static final String AGGREGATION_ALGORITHM = "algorithm.aggregation";
 	public static final String AGGREGATION_ALGORITHM_HELP = "algorithm.aggregation.help";
@@ -20,6 +21,9 @@ public final class PropertiesKeys {
 	public static final String BMP_FILES = "files.bmp";
 	public static final String CANCEL = "cancel";
 	public static final String CHANGE_LANGUAGE_WARNING = "language.change.warning";
+	public static final String COLLISION = "algorithm.collision.detected";
+	public static final String COLLISION_MARGIN = "algorithm.settings.collision.margin";
+	public static final String COLLISION_MARGIN_TOOLTIP = "algorithm.settings.collision.margin.tooltip";
 	public static final String COLOR = "settings.color";
 	public static final String COLOR_ALPHA_TOOLTIP = "settings.color.alpha.tooltip";
 	public static final String COLOR_BLUE_TOOLTIP = "settings.color.blue.tooltip";
@@ -58,9 +62,8 @@ public final class PropertiesKeys {
 	public static final String JPEG_FILES = "files.jpeg";
 	public static final String LANGUAGE = "language";
 	public static final String LANGUAGE_MENU = "menu.language";
-	public static final String LENGTH = "length";
-	public static final String LENGTHT_TOOLTIP = "length.tooltip";
 	public static final String LIGHT = "light";
+	public static final String LIGHT_BORDER = "light.settings.border";
 	public static final String LIGHT_POSITION = "light.position";
 	public static final String LIGHT_POSITION_TOOLTIP = "light.position.tooltip";
 	public static final String LIGHT_TOOLTIP = "light.tooltip";
@@ -70,14 +73,20 @@ public final class PropertiesKeys {
 	public static final String LOAD_XML_ERROR = "load.xml.error";
 	public static final String LOAD_XML_OPTION = "load.xml.option";
 	public static final String MAP_BORDER = "map.border";
+	public static final String MAP_HEIGHT = "map.height";
+	public static final String MAP_INFO_BORDER = "map.info.border";
+	public static final String MAP_LENGTH = "map.length";
 	public static final String MAP_OPTIONS_BORDER = "map.options.border";
+	public static final String MAP_PREVIEV_BORDER = "map.preview.border";
+	public static final String MAP_SIZE_BORDER = "map.size.border";
+	public static final String MAP_WIDTH = "map.width";
 	public static final String MASK_ALGORITHM = "algorithm.mask";
 	public static final String MASK_ALGORITHM_HELP = "algorithm.mask.help";
 	public static final String MASK_FILE_NAME = "mask.file.name";
-	public static final String MATERIAL = "material";
 	public static final String MATERIAL_AMBIENT_TOOLTIP = "material.ambient.tooltip";
 	public static final String MATERIAL_DIFFUSE_TOOLTIP = "material.diffuse.tooltip";
 	public static final String MATERIAL_OPACITY_TOOLTIP = "material.opacity.tooltip";
+	public static final String MATERIAL_OPTIONS = "material.options";
 	public static final String MATERIAL_SHINESS_TOOLTIP = "material.shiness.tooltip";
 	public static final String MATERIAL_SPECULAR_TOOLTIP = "material.specular.tooltip";
 	public static final String MATERIAL_TOOLTIP = "material.tooltip";
@@ -107,6 +116,7 @@ public final class PropertiesKeys {
 	public static final String OPEN_TEXTURE = "texture.open";
 	public static final String OPTIONS_BORDER = "options.border";
 	public static final String OPTIONS_MENU = "menu.options";
+	public static final String PATH_TYPE = "path.type";
 	public static final String PNG_FILES = "files.png";
 	public static final String PREVENT_COLLISIONS = "algorithm.settings.prevent.collisions";
 	public static final String PREVENT_COLLISIONS_TOOLTIP = "algorithm.settings.prevent.collisions.tooltip";
@@ -117,6 +127,7 @@ public final class PropertiesKeys {
 	public static final String REGULAR_ALGORITHM = "algorithm.regular";
 	public static final String REGULAR_ALGORITHM_HELP = "algorithm.regular.help";
 	public static final String RELATIVE = "settings.coordinate.relative";
+	public static final String RELATIVE_PATH = "path.type.relative";
 	public static final String RELATIVE_TOOLTIP = "settings.coordinate.relative.tooltip";
 	public static final String ROTATION = "settings.rotation";
 	public static final String ROTATIONS = "settings.rotations";
@@ -139,7 +150,6 @@ public final class PropertiesKeys {
 	public static final String START_Z_POSITION = "algorithm.settings.spread.start.z";
 	public static final String START_Z_POSITION_TOOLTIP = "algorithm.settings.spread.start.z.tooltip";
 	public static final String TEXTURE = "texture";
-	public static final String TEXTURE_OPTIONS = "texture.options";
 	public static final String TEXTURE_PATH = "texture.path";
 	public static final String TEXTURE_SCALE = "texture.scale";
 	public static final String TEXTURE_SCALE_TOOLTIP = "texture.scale.tooltip";
@@ -150,10 +160,4 @@ public final class PropertiesKeys {
 	public static final String WIDTH = "settings.width";
 	public static final String WINDOW_NAME = "window.name";
 	public static final String XML_FILES = "files.xml";
-	public static final String COLLISION_MARGIN = "algorithm.settings.collision.margin";
-	public static final String COLLISION_MARGIN_TOOLTIP = "algorithm.settings.collision.margin.tooltip";
-	public static final String COLLISION = "algorithm.collision.detected";
-	public static final String PATH_TYPE = "path.type";
-	public static final String ABSOLUTE_PATH = "path.type.absolute";
-	public static final String RELATIVE_PATH = "path.type.relative";
 }

@@ -7,7 +7,6 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,12 +44,14 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	private JPanel texture;
 	private Label texturePath;
 
+	private JPanel preview;
+
 	public FirstTabPanel() {
 		arguments = new HashMap<>();
 		setLayout(new GridLayout(0, 3));
 		createMapOptionsPanel();
 		createTextureOptionsPanel();
-		createTextureOptionsPanel2();
+		createPreview();
 		Mediator.registerFirstTabPanel(this);
 	}
 
@@ -70,12 +71,17 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	}
 
 	private void createMapOptionsPanel() {
-		JPanel options = new JPanel();
+		JPanel options = new JPanel(new GridLayout(3, 0, 5, 5));
 		options.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_OPTIONS_BORDER)));
-		options.setLayout(new GridLayout(15, 0, 5, 5));
+
+		JPanel mapPanel = new JPanel(new GridLayout(4, 0, 5, 5));
+		mapPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_INFO_BORDER)));
 		mapLabel = new Label();
 		mapLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_BORDER)));
-		options.add(mapLabel);
+		mapPanel.add(mapLabel);
+		texturePath = new Label();
+		texturePath.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE_PATH)));
+		mapPanel.add(texturePath);
 		JPanel size = new JPanel();
 		size.setLayout(new GridLayout(0, 2));
 		mapWidthLabel = new Label();
@@ -84,7 +90,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		mapHeightLabel = new Label();
 		mapHeightLabel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.HEIGHT)));
 		size.add(mapHeightLabel);
-		options.add(size);
+		mapPanel.add(size);
 
 		JPanel controls = new JPanel();
 		controls.setLayout(new GridLayout(0, 2));
@@ -98,43 +104,49 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 			}
 
 		});
+		JButton texture = new JButton(new LoadImageAction(Mediator.getMessage(PropertiesKeys.OPEN_TEXTURE)) {
+			private static final long serialVersionUID = -864076895016573176L;
+
+			@Override
+			protected void onSucess(File path) {
+				String str = path.getAbsolutePath();
+				setTexturePath(str);
+				Mediator.setTextureFile(str);
+			}
+		});
 		controls.add(loadMapButton);
-		options.add(controls);
-		options.add(new Label(Mediator.getMessage(PropertiesKeys.SIZE), Mediator.getMessage(PropertiesKeys.SIZE_TOOLTIP),
-				SwingConstants.CENTER));
+		controls.add(texture);
+		mapPanel.add(controls);
+		options.add(mapPanel);
 
-		JPanel legendPanel = ComponentUtil.createDoubleLegendPanel();
+		JPanel mapPanel2 = new JPanel(new GridLayout(4, 0, 5, 5));
+		mapPanel2.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_SIZE_BORDER)));
+		mapPanel2.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.X,
+				Mediator.getMessage(PropertiesKeys.MAP_LENGTH), arguments));
+		mapPanel2.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Y,
+				Mediator.getMessage(PropertiesKeys.MAP_HEIGHT), arguments));
+		mapPanel2.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Z,
+				Mediator.getMessage(PropertiesKeys.MAP_WIDTH), arguments));
 
-		options.add(legendPanel);
-		options.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.X,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.X), arguments,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTHT_TOOLTIP), Consts.X)));
-		options.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Y,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.Y), arguments,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTHT_TOOLTIP), Consts.Y)));
-		options.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Z,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTH), Consts.Z), arguments,
-				MessageFormat.format(Mediator.getMessage(PropertiesKeys.LENGTHT_TOOLTIP), Consts.Z)));
+		options.add(mapPanel2);
 
-		options.add(new Label(Mediator.getMessage(PropertiesKeys.LIGHT), Mediator.getMessage(PropertiesKeys.LIGHT_TOOLTIP),
-				SwingConstants.CENTER));
-
-		options.add(createLightSettingsTitle());
-
-		options.add(ComponentUtil.createLightSpinners(0, 1, Consts.LIGHT_AMBIENT_R, Consts.LIGHT_AMBIENT_G,
+		JPanel lightPanel = new JPanel(new GridLayout(5, 0, 5, 5));
+		lightPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.LIGHT_BORDER)));
+		lightPanel.add(createLightSettingsTitle());
+		lightPanel.add(ComponentUtil.createLightSpinners(0, 1, Consts.LIGHT_AMBIENT_R, Consts.LIGHT_AMBIENT_G,
 				Consts.LIGHT_AMBIENT_B, Consts.LIGHT_AMBIENT_A, Mediator.getMessage(PropertiesKeys.AMBIENT),
 				Mediator.getMessage(PropertiesKeys.AMBIENT_TOOLTIP), 0.5, arguments));
-		options.add(ComponentUtil.createLightSpinners(0, 1, Consts.LIGHT_DIFFUSE_R, Consts.LIGHT_DIFFUSE_G,
+		lightPanel.add(ComponentUtil.createLightSpinners(0, 1, Consts.LIGHT_DIFFUSE_R, Consts.LIGHT_DIFFUSE_G,
 				Consts.LIGHT_DIFFUSE_B, Consts.LIGHT_DIFFUSE_A, Mediator.getMessage(PropertiesKeys.DIFFUSE),
 				Mediator.getMessage(PropertiesKeys.DIFFUSE_TOOLTIP), 0.8, arguments));
-		options.add(ComponentUtil.createLightSpinners(0, 1, Consts.LIGHT_SPECULAR_R, Consts.LIGHT_SPECULAR_G,
+		lightPanel.add(ComponentUtil.createLightSpinners(0, 1, Consts.LIGHT_SPECULAR_R, Consts.LIGHT_SPECULAR_G,
 				Consts.LIGHT_SPECULAR_B, Consts.LIGHT_SPECULAR_A, Mediator.getMessage(PropertiesKeys.SPECULAR),
 				Mediator.getMessage(PropertiesKeys.SPECULAR_TOOLTIP), 0.5, arguments));
-		options.add(
+		lightPanel.add(
 				ComponentUtil.createLightSpinners(-MAX_POSITION, MAX_POSITION, Consts.LIGHT_POSITION_X, Consts.LIGHT_POSITION_Y,
 						Consts.LIGHT_POSITION_Z, Consts.LIGHT_POSITION_MODE, Mediator.getMessage(PropertiesKeys.LIGHT_POSITION),
 						Mediator.getMessage(PropertiesKeys.LIGHT_POSITION_TOOLTIP), 1, arguments));
-
+		options.add(lightPanel);
 		add(options);
 	}
 
@@ -146,65 +158,42 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	}
 
 	private void createTextureOptionsPanel() {
-		JPanel textureOptions = new JPanel();
-		textureOptions.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE_OPTIONS)));
+		JPanel textureOptions = new JPanel(new GridLayout(2, 0, 5, 5));
+		textureOptions.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MATERIAL_OPTIONS)));
 
-		textureOptions.setLayout(new GridLayout(15, 0, 5, 5));
-
-		texturePath = new Label();
-		texturePath.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE_PATH)));
-		textureOptions.add(texturePath);
-
-		JPanel buttonHolder = new JPanel();
-		buttonHolder.setLayout(new GridLayout(0, 2));
-		JButton open = new JButton(new LoadImageAction(Mediator.getMessage(PropertiesKeys.OPEN_TEXTURE)) {
-			private static final long serialVersionUID = -864076895016573176L;
-
-			@Override
-			protected void onSucess(File path) {
-				String str = path.getAbsolutePath();
-				setTexturePath(str);
-				Mediator.setTextureFile(str);
-			}
-		});
-		buttonHolder.add(open);
-		textureOptions.add(buttonHolder);
-		textureOptions
-				.add(ComponentUtil.createSpinner(0.01, 9999, Consts.SCALE, Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE), 1,
-						arguments, Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE_TOOLTIP)));
-
-		textureOptions.add(new Label(Mediator.getMessage(PropertiesKeys.MATERIAL),
-				Mediator.getMessage(PropertiesKeys.MATERIAL_TOOLTIP), SwingConstants.CENTER));
-		textureOptions.add(createMaterialsSettingsTitle());
-		textureOptions.add(ComponentUtil.createMaterialSpinners(0, 1, Consts.MATERIAL_AMBIENT_R, Consts.MATERIAL_AMBIENT_G,
+		JPanel settings = new JPanel(new GridLayout(7, 0, 5, 5));
+		settings.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
+		settings.add(createMaterialsSettingsTitle());
+		settings.add(ComponentUtil.createMaterialSpinners(0, 1, Consts.MATERIAL_AMBIENT_R, Consts.MATERIAL_AMBIENT_G,
 				Consts.MATERIAL_AMBIENT_B, Mediator.getMessage(PropertiesKeys.AMBIENT),
 				Mediator.getMessage(PropertiesKeys.MATERIAL_AMBIENT_TOOLTIP), 0.5, arguments));
-		textureOptions.add(ComponentUtil.createMaterialSpinners(0, 1, Consts.MATERIAL_DIFFUSE_R, Consts.MATERIAL_DIFFUSE_G,
+		settings.add(ComponentUtil.createMaterialSpinners(0, 1, Consts.MATERIAL_DIFFUSE_R, Consts.MATERIAL_DIFFUSE_G,
 				Consts.MATERIAL_DIFFUSE_B, Mediator.getMessage(PropertiesKeys.DIFFUSE),
 				Mediator.getMessage(PropertiesKeys.MATERIAL_DIFFUSE_TOOLTIP), 0.8, arguments));
-		textureOptions.add(ComponentUtil.createMaterialSpinners(0, 1, Consts.MATERIAL_SPECULAR_R, Consts.MATERIAL_SPECULAR_G,
+		settings.add(ComponentUtil.createMaterialSpinners(0, 1, Consts.MATERIAL_SPECULAR_R, Consts.MATERIAL_SPECULAR_G,
 				Consts.MATERIAL_SPECULAR_B, Mediator.getMessage(PropertiesKeys.SPECULAR),
 				Mediator.getMessage(PropertiesKeys.MATERIAL_SPECULAR_TOOLTIP), 0.5, arguments));
 
-		textureOptions.add(ComponentUtil.createSpinner(0, 1, Consts.MATERIAL_D, Mediator.getMessage(PropertiesKeys.OPACITY), 1,
+		settings.add(ComponentUtil.createSpinner(0, 1, Consts.MATERIAL_D, Mediator.getMessage(PropertiesKeys.OPACITY), 1,
 				arguments, Mediator.getMessage(PropertiesKeys.MATERIAL_OPACITY_TOOLTIP)));
-		textureOptions.add(ComponentUtil.createSpinner(0, 1000, Consts.MATERIAL_NS, Mediator.getMessage(PropertiesKeys.SHINESS),
-				1, arguments, Mediator.getMessage(PropertiesKeys.MATERIAL_SHINESS_TOOLTIP)));
+		settings.add(ComponentUtil.createSpinner(0, 1000, Consts.MATERIAL_NS, Mediator.getMessage(PropertiesKeys.SHINESS), 1,
+				arguments, Mediator.getMessage(PropertiesKeys.MATERIAL_SHINESS_TOOLTIP)));
 
+		settings.add(ComponentUtil.createSpinner(0.01, 9999, Consts.SCALE, Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE), 1,
+				arguments, Mediator.getMessage(PropertiesKeys.TEXTURE_SCALE_TOOLTIP)));
+		textureOptions.add(settings);
 		add(textureOptions);
-	}
-
-	private void createTextureOptionsPanel2() {
-		JPanel texturePanel = new JPanel();
-		texturePanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE_OPTIONS)));
-		texturePanel.setLayout(new GridLayout(2, 0));
 
 		texture = new JPanel();
 		texture.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE)));
 		texture.setLayout(new GridLayout(1, 0));
-		texturePanel.add(texture);
+		textureOptions.add(texture);
+	}
 
-		add(texturePanel);
+	private void createPreview() {
+		preview = new JPanel(new GridLayout(1, 0));
+		preview.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_PREVIEV_BORDER)));
+		add(preview);
 	}
 
 	public Map<String, Component> getArguments() {
@@ -382,5 +371,14 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 
 	public void setTextureScale(double scale) {
 		arguments.get(Consts.SCALE).setValue(scale);
+	}
+
+	public void addPreview(BufferedImage image) {
+		preview.removeAll();
+		try {
+			preview.add(new ObjectsPreviewPanel(image));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

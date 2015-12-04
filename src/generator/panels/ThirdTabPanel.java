@@ -9,7 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -31,7 +29,6 @@ import javax.swing.table.TableModel;
 
 import generator.Mediator;
 import generator.actions.Action;
-import generator.models.MyFile;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
 import generator.models.result.ResultObject;
@@ -107,17 +104,12 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		Mediator.registerThirdTabPanel(this);
 	}
 
-	public File addPreview(MyFile file) throws IOException {
+	public void addPreview(BufferedImage image) throws IOException {
 		remove(previewPanel);
-		BufferedImage image = ImageIO.read(file);
-		if (image == null) {
-			throw new IOException();
-		}
 		imageSize = new Dimension(image.getWidth(), image.getHeight());
 		previewPanel = new ObjectsPreviewPanel(image);
 		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
 		add(previewPanel);
-		return file;
 	}
 
 	public void click(GeneratedObject obj) {
