@@ -186,6 +186,8 @@ public class Mediator {
 			GenerationModel model = new GenerationModel(file);
 			ModelInfo obj = new ModelInfo(model);
 			models.put(file.getAbsolutePath(), obj);
+		} else {
+			WindowUtil.displayError(PropertiesKeys.MODEL_ALREADY_EXISTS_ERROR);
 		}
 	}
 
@@ -265,6 +267,7 @@ public class Mediator {
 			locale = new Locale(properties.getProperty(LANGUAGE_KEY));
 		} catch (IOException e) {
 			createProperties();
+			main(null);
 		}
 
 		messages = ResourceBundle.getBundle(PropertiesKeys.PROPERTIES_FILE, locale);
