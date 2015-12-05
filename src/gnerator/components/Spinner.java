@@ -1,4 +1,4 @@
-package generator.utils;
+package gnerator.components;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -17,6 +17,7 @@ public class Spinner extends JSpinner implements Component {
 	private boolean listeningEnabled;
 	private boolean modified = false;
 	private boolean silent = false;
+	private boolean displayChange = true;
 
 	public Spinner(boolean listen) {
 		init(listen);
@@ -74,7 +75,7 @@ public class Spinner extends JSpinner implements Component {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		if (modified) {
+		if (modified && displayChange) {
 			g.setColor(Color.red);
 			g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
 		}
@@ -96,6 +97,11 @@ public class Spinner extends JSpinner implements Component {
 	@Override
 	public double value() {
 		return (double) getValue();
+	}
+
+	@Override
+	public void setDisplayChange(boolean value) {
+		this.displayChange = value;
 	}
 
 }

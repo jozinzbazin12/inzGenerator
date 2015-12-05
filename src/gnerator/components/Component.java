@@ -1,4 +1,4 @@
-package generator.utils;
+package gnerator.components;
 
 import javax.swing.event.ChangeListener;
 
@@ -19,4 +19,6 @@ public interface Component {
 	void setValue(double value);
 
 	double value();
+	
+	void setDisplayChange(boolean value);
 }

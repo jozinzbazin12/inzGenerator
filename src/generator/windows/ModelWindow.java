@@ -35,12 +35,12 @@ import generator.models.generation.PositionSettings;
 import generator.models.generation.RotationSettings;
 import generator.models.generation.ScaleSettings;
 import generator.panels.MaskPreviewPanel;
-import generator.utils.CheckBox;
-import generator.utils.Component;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
-import generator.utils.Label;
 import generator.utils.PropertiesKeys;
+import gnerator.components.CheckBox;
+import gnerator.components.Component;
+import gnerator.components.Label;
 
 public class ModelWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 5328377975510513084L;
@@ -300,6 +300,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 		if (objects.size() == 1) {
 			ModelInfo objectInfo = objects.get(0);
 			setSilent(true);
+			setDisplayChange(false);
 			arguments.get(Consts.MIN_COUNT).setValue(objectInfo.getMinCount());
 			arguments.get(Consts.MAX_COUNT).setValue(objectInfo.getMaxCount());
 
@@ -328,6 +329,7 @@ public class ModelWindow extends JFrame implements ActionListener {
 			arguments.get(Consts.MAX_SZ).setValue(scaleSettings.getMaxZ());
 			relative.setSelected(positionSettings.isRelative());
 
+			relative.setDisplayChange(false);
 			setEqualScale(scaleSettings.isEqual());
 			setSilent(false);
 			additionalPanel.setArgs(objectInfo.getArgs());
@@ -364,8 +366,8 @@ public class ModelWindow extends JFrame implements ActionListener {
 			if (!diff) {
 				relative.setSelected(objects.get(0).getPositionSettings().isRelative());
 			}
-			relative.setSilent(false);
 		}
+		relative.setSilent(false);
 	}
 
 	public Map<String, Component> getArguments() {
@@ -516,6 +518,12 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private void setSilent(boolean value) {
 		for (Map.Entry<String, Component> i : arguments.entrySet()) {
 			i.getValue().setSilent(value);
+		}
+	}
+
+	private void setDisplayChange(boolean value) {
+		for (Map.Entry<String, Component> i : arguments.entrySet()) {
+			i.getValue().setDisplayChange(value);
 		}
 	}
 

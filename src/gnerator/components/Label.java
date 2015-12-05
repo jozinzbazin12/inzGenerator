@@ -1,4 +1,4 @@
-package generator.utils;
+package gnerator.components;
 
 import javax.swing.JLabel;
 

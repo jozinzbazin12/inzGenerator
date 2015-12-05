@@ -1,4 +1,4 @@
-package generator.utils;
+package gnerator.components;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,6 +14,7 @@ public class CheckBox extends JCheckBox implements Component {
 	private boolean listeningEnabled;
 	private boolean modified = false;
 	private boolean silent = false;
+	private boolean displayChange = true;
 
 	public CheckBox() {
 		super();
@@ -87,7 +88,7 @@ public class CheckBox extends JCheckBox implements Component {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		if (modified) {
+		if (modified && displayChange) {
 			g.setColor(Color.red);
 			g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
 		}
@@ -118,5 +119,9 @@ public class CheckBox extends JCheckBox implements Component {
 	public double value() {
 		boolean selected = isSelected();
 		return selected ? 1 : 0;
+	}
+
+	public void setDisplayChange(boolean displayChange) {
+		this.displayChange = displayChange;
 	}
 }

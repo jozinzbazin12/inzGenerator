@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import generator.utils.Component;
-import generator.utils.Spinner;
+import gnerator.components.Component;
+import gnerator.components.Spinner;
 
 public abstract class AbstractPanel extends JPanel {
 	protected static final int MAX_POSITION = 10000;

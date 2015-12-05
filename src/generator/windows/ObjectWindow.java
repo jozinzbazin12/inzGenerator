@@ -25,12 +25,12 @@ import generator.models.generation.GenerationModel;
 import generator.models.generation.ModelInfo;
 import generator.models.result.BasicModelData;
 import generator.models.result.GeneratedObject;
-import generator.utils.CheckBox;
-import generator.utils.Component;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
-import generator.utils.Label;
 import generator.utils.PropertiesKeys;
+import gnerator.components.CheckBox;
+import gnerator.components.Component;
+import gnerator.components.Label;
 
 public class ObjectWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 5328377975510513084L;
@@ -145,11 +145,11 @@ public class ObjectWindow extends JFrame implements ActionListener {
 	private void fillValues() {
 		GeneratedObject generatedObject = objects.get(0);
 		BasicModelData basic = generatedObject.getBasic();
+		relative.setSilent(true);
 		if (objects.size() == 1) {
 			arguments.get(Consts.X).setValue(basic.getX());
 			arguments.get(Consts.Y).setValue(basic.getY());
 			arguments.get(Consts.Z).setValue(basic.getZ());
-
 			arguments.get(Consts.RX).setValue(basic.getRx());
 			arguments.get(Consts.RY).setValue(basic.getRy());
 			arguments.get(Consts.RZ).setValue(basic.getRz());
@@ -157,8 +157,11 @@ public class ObjectWindow extends JFrame implements ActionListener {
 			arguments.get(Consts.SX).setValue(basic.getSx());
 			arguments.get(Consts.SY).setValue(basic.getSy());
 			arguments.get(Consts.SZ).setValue(basic.getSz());
-			relative.setSilent(true);
+
 			relative.setSelected(basic.isRelative());
+			relative.setSilent(false);
+			relative.setDisplayChange(false);
+			setDisplayChange(false);
 			models.setSelectedItem(generatedObject.getModel());
 		} else {
 			boolean last = basic.isRelative();
@@ -176,8 +179,8 @@ public class ObjectWindow extends JFrame implements ActionListener {
 				relative.setSelected(basic.isRelative());
 			}
 			models.setSelectedIndex(-1);
-			relative.setSilent(false);
 		}
+		relative.setSilent(false);
 	}
 
 	public Map<String, Component> getArguments() {
@@ -227,5 +230,11 @@ public class ObjectWindow extends JFrame implements ActionListener {
 			data.setRelative(relative.isSelected());
 		}
 		return data;
+	}
+
+	private void setDisplayChange(boolean value) {
+		for (Map.Entry<String, Component> i : arguments.entrySet()) {
+			i.getValue().setDisplayChange(value);
+		}
 	}
 }

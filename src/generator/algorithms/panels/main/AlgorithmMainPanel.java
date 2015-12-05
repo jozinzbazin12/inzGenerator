@@ -12,12 +12,12 @@ import javax.swing.event.ChangeListener;
 
 import generator.Mediator;
 import generator.actions.Action;
-import generator.utils.CheckBox;
-import generator.utils.Component;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
-import generator.utils.Spinner;
+import gnerator.components.CheckBox;
+import gnerator.components.Component;
+import gnerator.components.Spinner;
 
 public class AlgorithmMainPanel extends JPanel {
 	protected static Map<String, Component> arguments = new HashMap<>();
