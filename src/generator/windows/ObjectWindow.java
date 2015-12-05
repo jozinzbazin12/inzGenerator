@@ -1,6 +1,7 @@
 package generator.windows;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -128,13 +129,14 @@ public class ObjectWindow extends JFrame implements ActionListener {
 		setVisible(true);
 		add(panel, BorderLayout.CENTER);
 		JPanel bottom = new JPanel();
-		bottom.setLayout(new GridLayout(0, 2, 20, 20));
 		ok = new JButton(Mediator.getMessage(PropertiesKeys.OK));
 		ok.addActionListener(this);
+		ok.setPreferredSize(new Dimension(120, 30));
 		bottom.add(ok);
 
 		cancel = new JButton(Mediator.getMessage(PropertiesKeys.CANCEL));
 		cancel.addActionListener(this);
+		cancel.setPreferredSize(new Dimension(120, 30));
 		bottom.add(cancel);
 		add(bottom, BorderLayout.PAGE_END);
 		Mediator.registerObjectWindow(this);
