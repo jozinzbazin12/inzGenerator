@@ -1,6 +1,7 @@
 package generator.windows;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
 
 import generator.Mediator;
 import generator.utils.PropertiesKeys;
@@ -35,24 +37,27 @@ public class HelpWindow extends JFrame implements ActionListener {
 	}
 
 	private void createWindow() {
-		setSize(600, 300);
+		setSize(400, 200);
 		setLocation(400, 100);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
 
 		JPanel panel = new JPanel();
+		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		panel.setLayout(new GridLayout(0, 1));
 		JTextArea area = new JTextArea(help);
 		area.setEditable(false);
 		area.setFont(new Font("Arial", 0, 12));
 		area.setLineWrap(true);
+		area.setOpaque(false);
 		area.setWrapStyleWord(true);
 		panel.add(area);
 
 		add(panel, BorderLayout.CENTER);
-		JPanel bottom = new JPanel(new BorderLayout());
+		JPanel bottom = new JPanel();
 		ok = new JButton(Mediator.getMessage(PropertiesKeys.OK));
 		ok.addActionListener(this);
+		ok.setPreferredSize(new Dimension(120, 30));
 		bottom.add(ok, BorderLayout.CENTER);
 
 		add(bottom, BorderLayout.PAGE_END);
