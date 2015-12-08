@@ -45,6 +45,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 	protected boolean collisions;
 	protected int webFactor;
 	private boolean collisionDetected = false;
+	protected int max;
 
 	public static void init() {
 		EmptyPanel emptyPanel = new EmptyPanel();
@@ -191,7 +192,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		Map<Double, List<HeightInfo>> heights = new HashMap<>();
 		int width = img.getWidth();
 		int height = img.getHeight();
-		int max = Integer.MIN_VALUE;
+		max = Integer.MIN_VALUE;
 		double mapMaxYSetting = Mediator.getMapMaxYSetting();
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {

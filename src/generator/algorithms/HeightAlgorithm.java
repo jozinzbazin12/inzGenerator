@@ -44,8 +44,8 @@ public class HeightAlgorithm extends Algorithm {
 				pos = 0;
 			}
 			y = includedPoints.get(pos).get(0).getY();
-			sectionSize /= 2;
-			if (sectionSize == 0) {
+			sectionSize = (int) Math.ceil(sectionSize / 2.0);
+			if (sectionSize == 1) {
 				break;
 			}
 			lastPos = pos;
@@ -79,8 +79,8 @@ public class HeightAlgorithm extends Algorithm {
 	private List<HeightInfo> getHeights(ModelInfo info) {
 		double min = info.getArgs().get(Consts.MIN_Y_HEIGHT);
 		double max = info.getArgs().get(Consts.MAX_Y_HEIGHT);
-		int minPos = find(min / yRatio);
-		int maxPos = find(max / yRatio);
+		int minPos = find(min);
+		int maxPos = find(max);
 		if (maxPos < includedPoints.size() - 1) {
 			maxPos++;
 		} else if (minPos > 1) {
