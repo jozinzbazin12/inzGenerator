@@ -46,7 +46,7 @@ public class MaskAlgorithm extends Algorithm {
 
 		for (ModelInfo objInfo : info.getModels()) {
 			if (objInfo.getMask() == null) {
-				continue;
+				objInfo.parseMask();
 			}
 			int count = getCount(objInfo);
 
@@ -71,7 +71,7 @@ public class MaskAlgorithm extends Algorithm {
 	}
 
 	private Cumulative[] getCumulative(ModelInfo info) {
-		heights = findHeights(info.getMask(), Mediator.getMapWidth() / info.getMask().getWidth(),
+		heights = findOriginalHeights(info.getMask(), Mediator.getMapWidth() / info.getMask().getWidth(),
 				Mediator.getMapHeight() / info.getMask().getHeight());
 		double total = 0;
 		double rate = info.getArgs().get(Consts.RATE);

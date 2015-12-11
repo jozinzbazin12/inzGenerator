@@ -146,6 +146,9 @@ public class ModelInfo implements Comparable<ModelInfo> {
 
 	public void setMaskFile(MyFile maskFile) {
 		this.maskFile = maskFile;
+	}
+
+	public void parseMask() {
 		if (maskFile != null) {
 			try {
 				this.mask = ImageIO.read(maskFile);

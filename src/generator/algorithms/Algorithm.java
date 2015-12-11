@@ -92,7 +92,10 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		List<HeightInfo> list = new LinkedList<>();
 		BufferedImage mask = info.getMask();
 		if (mask == null) {
-			return list;
+			info.parseMask();
+			if (mask == null) {
+				return list;
+			}
 		}
 		int width = mask.getWidth();
 		int height = mask.getHeight();
@@ -226,6 +229,34 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		return points;
 	}
 
+	protected List<List<HeightInfo>> findOriginalHeights(BufferedImage img, double dx, double dz) {
+		Map<Double, List<HeightInfo>> heights = new HashMap<>();
+		int width = img.getWidth();
+		int height = img.getHeight();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				double y = PreviewPanel.getColor(img, i, j);
+				List<HeightInfo> list = heights.get(y);
+				if (list == null) {
+					list = new ArrayList<>();
+					heights.put(y, list);
+				}
+				double x = (width / 2 - i) * dx;
+				double z = (height / 2 - j) * dz;
+				list.add(new HeightInfo(x, y, z));
+			}
+		}
+		List<List<HeightInfo>> points = new ArrayList<>(heights.values());
+		points.sort(new Comparator<List<HeightInfo>>() {
+
+			@Override
+			public int compare(List<HeightInfo> o1, List<HeightInfo> o2) {
+				return o1.get(0).compareTo(o2.get(0));
+			}
+		});
+		return points;
+	}
+	
 	public List<GeneratedObject> generate(GenerationInfo info) {
 		int collisionsValue = info.getArgs().get(Consts.COLLISIONS).intValue();
 		collisions = collisionsValue == 1 ? true : false;

@@ -30,6 +30,7 @@ import javax.xml.bind.Unmarshaller;
 
 import generator.algorithms.Algorithm;
 import generator.models.MyFile;
+import generator.models.generation.GenerationInfo;
 import generator.models.generation.GenerationModel;
 import generator.models.generation.ModelInfo;
 import generator.models.result.GeneratedObject;
@@ -317,8 +318,9 @@ public class Mediator {
 		mapObject.setBasic(firstTabPanel.getMapSettings());
 		mapObject.setLightData(firstTabPanel.getLightSettings());
 		mapObject.setMaterial(firstTabPanel.getMaterial());
-		resultObject.getGenerationInfo().setModels(new ArrayList<>(models.values()));
-		resultObject.getGenerationInfo().setArgs(secondTabPanel.getArgs());
+		GenerationInfo generationInfo = resultObject.getGenerationInfo();
+		generationInfo.setModels(new ArrayList<>(models.values()));
+		generationInfo.setArgs(secondTabPanel.getArgs());
 		try {
 			context = JAXBContext.newInstance(GENERATOR_MODELS_RESULT);
 			Marshaller marshaller = context.createMarshaller();

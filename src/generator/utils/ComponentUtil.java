@@ -25,7 +25,7 @@ public final class ComponentUtil {
 		Label minLabel = new Label(Mediator.getMessage(PropertiesKeys.MIN), Mediator.getMessage(PropertiesKeys.MIN_TOOLTIP),
 				SwingConstants.CENTER);
 		legendPanel.add(attributelabel);
-		Label maxLabel = new Label(Mediator.getMessage(PropertiesKeys.MIN), Mediator.getMessage(PropertiesKeys.MAX_TOOLTIP),
+		Label maxLabel = new Label(Mediator.getMessage(PropertiesKeys.MAX), Mediator.getMessage(PropertiesKeys.MAX_TOOLTIP),
 				SwingConstants.CENTER);
 		legendPanel.add(attributelabel);
 		legendPanel.add(minLabel);
