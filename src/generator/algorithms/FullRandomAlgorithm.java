@@ -18,7 +18,7 @@ public class FullRandomAlgorithm extends Algorithm {
 	}
 
 	@Override
-	public List<GeneratedObject> generationMethod(GenerationInfo info) {
+	protected List<GeneratedObject> generationMethod(GenerationInfo info) {
 		List<GeneratedObject> list = new ArrayList<GeneratedObject>();
 
 		for (ModelInfo objInfo : info.getModels()) {

@@ -41,7 +41,7 @@ public class MaskAlgorithm extends Algorithm {
 	}
 
 	@Override
-	public List<GeneratedObject> generationMethod(GenerationInfo info) {
+	protected List<GeneratedObject> generationMethod(GenerationInfo info) {
 		List<GeneratedObject> list = new ArrayList<GeneratedObject>();
 
 		for (ModelInfo objInfo : info.getModels()) {
@@ -79,7 +79,7 @@ public class MaskAlgorithm extends Algorithm {
 		for (List<HeightInfo> i : heights) {
 			int height = (int) i.get(0).getY();
 			if (height != 0) {
-				double d = 1 + Math.pow(height, rate);
+				double d = Math.pow(height, rate);
 				total += d;
 				cumulative[height] = new Cumulative(d, i);
 			}

@@ -54,7 +54,7 @@ public class HeightAlgorithm extends Algorithm {
 	}
 
 	@Override
-	public List<GeneratedObject> generationMethod(GenerationInfo info) {
+	protected List<GeneratedObject> generationMethod(GenerationInfo info) {
 		List<GeneratedObject> list = new ArrayList<GeneratedObject>();
 		includedPoints = findHeights();
 		for (ModelInfo objInfo : info.getModels()) {

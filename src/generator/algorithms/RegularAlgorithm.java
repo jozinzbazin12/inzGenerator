@@ -18,7 +18,7 @@ public class RegularAlgorithm extends Algorithm {
 	}
 
 	@Override
-	public List<GeneratedObject> generationMethod(GenerationInfo info) {
+	protected List<GeneratedObject> generationMethod(GenerationInfo info) {
 		List<GeneratedObject> list = new ArrayList<GeneratedObject>();
 		double minX = info.getArgs().get(Consts.MIN_X).doubleValue();
 		double minZ = info.getArgs().get(Consts.MIN_Z).doubleValue();
