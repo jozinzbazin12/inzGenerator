@@ -118,9 +118,11 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 			@Override
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				options.removeAll();
-				JPanel panel = Algorithm.getMainPanels().get(getAlgorithm());
+				Algorithm algorithm = getAlgorithm();
+				AlgorithmMainPanel panel = Algorithm.getMainPanels().get(algorithm);
 				if (panel != null) {
 					options.add(panel);
+					panel.refreshPanel(algorithm);
 				}
 				options.revalidate();
 				options.repaint();

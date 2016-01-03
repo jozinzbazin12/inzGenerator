@@ -12,6 +12,8 @@ import javax.swing.event.ChangeListener;
 
 import generator.Mediator;
 import generator.actions.Action;
+import generator.algorithms.Algorithm;
+import generator.algorithms.RegularAlgorithm;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
@@ -21,34 +23,33 @@ import gnerator.components.Spinner;
 
 public class AlgorithmMainPanel extends JPanel {
 	protected static Map<String, Component> arguments = new HashMap<>();
-	private static double collisionEnabled;
-	private static double collisonScale = 1;
+	private static double collisionEnabled = 0;
+	private static double collisonScale = 0;
 	protected static final int MAX_POSITION = 10000;
 	private static final long serialVersionUID = 3043925881010825869L;
 	private JPanel collisionScale;
+	private CheckBox collisions;
 
-	protected void setEnabled(JPanel p, boolean value) {
-		for (java.awt.Component i : p.getComponents()) {
-			i.setEnabled(value);
-		}
+	protected Spinner getScale() {
+		return (Spinner) collisionScale.getComponents()[1];
 	}
 
-	private void refresh(ActionEvent e) {
+	public void refresh(ActionEvent e) {
 		if (e != null) {
 			collisionEnabled = ((CheckBox) e.getSource()).value();
 		}
+		Spinner scale = getScale();
 		if (collisionEnabled == 1) {
-			setEnabled(collisionScale, true);
+			collisions.setSelected(true);
+			scale.setEnabled(true);
 		} else {
-			setEnabled(collisionScale, false);
+			scale.setEnabled(false);
 		}
+		scale.setValue(collisonScale);
 	}
 
 	@Override
 	public void repaint() {
-		if (collisionScale != null) {
-			refresh(null);
-		}
 		super.repaint();
 	}
 
@@ -59,7 +60,7 @@ public class AlgorithmMainPanel extends JPanel {
 				Mediator.getMessage(PropertiesKeys.COLLISION_MARGIN), arguments,
 				Mediator.getMessage(PropertiesKeys.COLLISION_MARGIN_TOOLTIP));
 		addListener(collisionScale);
-		setEnabled(collisionScale, false);
+		getScale().setEnabled(false);
 		Action a = new Action(Mediator.getMessage(PropertiesKeys.PREVENT_COLLISIONS)) {
 			private static final long serialVersionUID = -2843015922845460404L;
 
@@ -68,7 +69,7 @@ public class AlgorithmMainPanel extends JPanel {
 				refresh(e);
 			}
 		};
-		CheckBox collisions = new CheckBox(a, Mediator.getMessage(PropertiesKeys.PREVENT_COLLISIONS_TOOLTIP));
+		collisions = new CheckBox(a, Mediator.getMessage(PropertiesKeys.PREVENT_COLLISIONS_TOOLTIP));
 
 		collisions.setAction(a);
 		add(collisions);
@@ -110,4 +111,14 @@ public class AlgorithmMainPanel extends JPanel {
 			}
 		}
 	}
+
+	public void refreshPanel(Algorithm a) {
+		refresh(null);
+		Spinner scale = getScale();
+		if (a instanceof RegularAlgorithm) {
+			scale.setEnabled(false);
+			collisions.setEnabled(false);
+		}
+	}
+
 }
