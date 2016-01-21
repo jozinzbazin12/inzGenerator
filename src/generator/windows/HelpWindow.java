@@ -22,10 +22,14 @@ public class HelpWindow extends JFrame implements ActionListener {
 	private String help;
 	private JButton ok;
 
-	public HelpWindow(String name, String help) {
+	public HelpWindow(String name, String help, int width, int height) {
 		super(name);
 		this.help = help;
-		createWindow();
+		createWindow(width, height);
+	}
+
+	public HelpWindow(String name, String help) {
+		this(name, help, 400, 200);
 	}
 
 	@Override
@@ -36,8 +40,8 @@ public class HelpWindow extends JFrame implements ActionListener {
 
 	}
 
-	private void createWindow() {
-		setSize(400, 200);
+	private void createWindow(int width, int height) {
+		setSize(width, height);
 		setLocation(400, 100);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);

@@ -18,6 +18,7 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import generator.Mediator;
+import generator.actions.Action;
 import generator.actions.ExitAction;
 import generator.actions.LoadXMLAction;
 import generator.actions.SaveXMLAction;
@@ -128,6 +129,28 @@ public class MainWindow extends JFrame {
 
 		menuBar.add(menu);
 		menuBar.add(optionsMenu);
+
+		JMenu helpMenu = new JMenu(Mediator.getMessage(PropertiesKeys.HELP));
+		JMenuItem helpOption = new JMenuItem(new Action(Mediator.getMessage(PropertiesKeys.INSTRUCTIONS)) {
+			private static final long serialVersionUID = -6720737308249773635L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new HelpWindow(Mediator.getMessage(PropertiesKeys.INSTRUCTIONS),
+						Mediator.getMessage(PropertiesKeys.INSTRUCTIONS_INFO), 700, 200);
+			}
+		});
+		helpMenu.add(helpOption);
+		JMenuItem aboutOption = new JMenuItem(new Action(Mediator.getMessage(PropertiesKeys.ABOUT)) {
+			private static final long serialVersionUID = -6720737308249773635L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new HelpWindow(Mediator.getMessage(PropertiesKeys.ABOUT), Mediator.getMessage(PropertiesKeys.ABOUT_INFO));
+			}
+		});
+		helpMenu.add(aboutOption);
+		menuBar.add(helpMenu);
 	}
 
 	public void createWindow() {

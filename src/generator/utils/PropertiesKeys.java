@@ -164,4 +164,9 @@ public final class PropertiesKeys {
 	public static final String RESULT = "objects.generated";
 	public static final String NO_RESULT = "objects.generated.nothing";
 	public static final String NO_HEIGHTMAP = "objects.no.map";
+	public static final String HELP = "menu.help";
+	public static final String INSTRUCTIONS = "menu.help.instructions";
+	public static final String ABOUT = "menu.help.about";
+	public static final String INSTRUCTIONS_INFO = "menu.help.instructions.info";
+	public static final String ABOUT_INFO = "menu.help.about.info";
 }
