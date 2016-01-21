@@ -198,28 +198,32 @@ public class SecondTabPanel extends AbstractPanel implements MouseListener {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				int rowindex = table.rowAtPoint(e.getPoint());
-				if (rowindex >= 0) {
 					if (e.getButton() == MouseEvent.BUTTON3) {
-						if (Mediator.find(table.getSelectedRows(), rowindex) == -1) {
-							table.setRowSelectionInterval(rowindex, rowindex);
+						int rowindex = table.rowAtPoint(e.getPoint());
+						if (rowindex == -1) {
+							menu.show(e.getComponent(), e.getX(), e.getY());
+						} else {
+							if (Mediator.find(table.getSelectedRows(), rowindex) == -1) {
+								table.setRowSelectionInterval(rowindex, rowindex);
+							}
+							rowMenu.show(e.getComponent(), e.getX(), e.getY());
 						}
-						rowMenu.show(e.getComponent(), e.getX(), e.getY());
 					}
-				}
+				
 			}
 		};
 		table.addMouseListener(rowListener);
 		table.addMouseMotionListener(rowListener);
-		MouseListener tableListener = new MouseAdapter() {
+		MouseListener headerListener = new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
+
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					menu.show(e.getComponent(), e.getX(), e.getY());
 				}
 			}
 		};
-		table.getTableHeader().addMouseListener(tableListener);
+		table.getTableHeader().addMouseListener(headerListener);
 		return table;
 	}
 
