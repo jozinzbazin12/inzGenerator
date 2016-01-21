@@ -36,6 +36,7 @@ import generator.tables.Table;
 import generator.tables.object.ObjectTableColumnModel;
 import generator.tables.object.ObjectTableModel;
 import generator.utils.PropertiesKeys;
+import generator.utils.WindowUtil;
 import generator.windows.ObjectWindow;
 
 public class ThirdTabPanel extends JPanel implements MouseListener {
@@ -90,6 +91,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	private JPopupMenu rowMenu;
 
 	private Table table;
+	private JPanel holder;
 
 	public ThirdTabPanel() {
 		setLayout(new GridLayout(0, 2));
@@ -98,18 +100,17 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		objectsPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.GENERATED_OBJECTS)));
 		objectsPanel.add(createObjectListPanel());
 		add(objectsPanel);
-		previewPanel = new ObjectsPreviewPanel();
-		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
-		add(previewPanel);
+		holder = new JPanel(new GridLayout(0, 1));
+		WindowUtil.setBorder(holder, PropertiesKeys.PREVIEW_BORDER);
+		add(holder);
 		Mediator.registerThirdTabPanel(this);
 	}
 
 	public void addPreview(BufferedImage image) throws IOException {
-		remove(previewPanel);
+		holder.removeAll();
 		imageSize = new Dimension(image.getWidth(), image.getHeight());
 		previewPanel = new ObjectsPreviewPanel(image);
-		previewPanel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.PREVIEW_BORDER)));
-		add(previewPanel);
+		holder.add(previewPanel);
 	}
 
 	public void click(GeneratedObject obj) {

@@ -185,14 +185,14 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		add(textureOptions);
 
 		texture = new JPanel();
-		texture.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.TEXTURE)));
+		WindowUtil.setBorder(texture, PropertiesKeys.TEXTURE);
 		texture.setLayout(new GridLayout(1, 0));
 		textureOptions.add(texture);
 	}
 
 	private void createPreview() {
 		preview = new JPanel(new GridLayout(1, 0));
-		preview.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_PREVIEV_BORDER)));
+		WindowUtil.setBorder(preview, PropertiesKeys.MAP_PREVIEV_BORDER);
 		add(preview);
 	}
 

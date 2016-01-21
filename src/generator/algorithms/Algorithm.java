@@ -43,7 +43,6 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 	protected double yRatio;
 	protected double zRatio;
 	protected boolean collisions;
-	protected int webFactor;
 	private boolean collisionDetected = false;
 	protected int max;
 
@@ -140,8 +139,8 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 					x = place.getMid()[0];
 					z = place.getMid()[1];
 					double nodeRange = place.getRange();
-					xVar = nodeRange + webFactor - actual.getSx();
-					zVar = nodeRange + webFactor - actual.getSz();
+					xVar = nodeRange + 1 - actual.getSx();
+					zVar = nodeRange + 1 - actual.getSz();
 					TreeNode.mark(place);
 				} else {
 					collisionDetected = true;
@@ -260,9 +259,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 	public List<GeneratedObject> generate(GenerationInfo info) {
 		int collisionsValue = info.getArgs().get(Consts.COLLISIONS).intValue();
 		collisions = collisionsValue == 1 ? true : false;
-		webFactor = 1;
 		if (collisions) {
-			webFactor = info.getArgs().get(Consts.WEB_SCALE).intValue();
 			collisionTree = TreeNode.createTree(Mediator.getMapWidth(), Mediator.getMapHeight(),
 					(short) (Math.log(Mediator.getMapDimensions().getWidth()) / Math.log(2)));
 		}
@@ -276,7 +273,10 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		collisionTree = null;
 		if (collisionDetected) {
 			collisionDetected = false;
-			WindowUtil.displayError(PropertiesKeys.COLLISION);
+			WindowUtil.displayError(PropertiesKeys.COLLISION, result.size());
+		}
+		else{
+			WindowUtil.displayInfo(PropertiesKeys.RESULT, result.size());
 		}
 		return result;
 	}
