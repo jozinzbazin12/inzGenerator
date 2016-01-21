@@ -108,7 +108,9 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	public void addPreview(BufferedImage image) {
 		holder.removeAll();
 		imageSize = new Dimension(image.getWidth(), image.getHeight());
+		List<GeneratedObject> generatedObjects = previewPanel.getGeneratedObjects();
 		previewPanel = new ObjectsPreviewPanel(image);
+		previewPanel.setResultObject(generatedObjects);
 		holder.add(previewPanel);
 	}
 
