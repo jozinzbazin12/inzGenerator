@@ -36,7 +36,8 @@ import gnerator.components.Label;
 
 public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	private static final long serialVersionUID = -2087487239161953473L;
-
+	private static final double DEFAULT_MAP_SIZE = 2000;
+	private static final double DEFAULT_MAP_HEIGHT = 100;
 	private Label mapHeightLabel;
 	private Label mapLabel;
 	private Label mapWidthLabel;
@@ -122,11 +123,11 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		JPanel mapPanel2 = new JPanel(new GridLayout(4, 0, 5, 5));
 		mapPanel2.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_SIZE_BORDER)));
 		mapPanel2.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.X,
-				Mediator.getMessage(PropertiesKeys.MAP_LENGTH), arguments));
+				Mediator.getMessage(PropertiesKeys.MAP_LENGTH), DEFAULT_MAP_SIZE, arguments));
 		mapPanel2.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Y,
-				Mediator.getMessage(PropertiesKeys.MAP_HEIGHT), arguments));
+				Mediator.getMessage(PropertiesKeys.MAP_HEIGHT), DEFAULT_MAP_HEIGHT, arguments));
 		mapPanel2.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Z,
-				Mediator.getMessage(PropertiesKeys.MAP_WIDTH), arguments));
+				Mediator.getMessage(PropertiesKeys.MAP_WIDTH), DEFAULT_MAP_SIZE, arguments));
 
 		options.add(mapPanel2);
 
@@ -237,7 +238,9 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		mtl.setSpecular(specular);
 		mtl.setD(getValue(Consts.MATERIAL_D));
 		mtl.setNs(getValue(Consts.MATERIAL_NS));
-		mtl.setTexture(new Texture(new MyFile(texturePath.getText()), getValue(Consts.SCALE)));
+		if (!texturePath.getText().isEmpty()) {
+			mtl.setTexture(new Texture(new MyFile(texturePath.getText()), getValue(Consts.SCALE)));
+		}
 		return mtl;
 	}
 
@@ -375,10 +378,6 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 
 	public void addPreview(BufferedImage image) {
 		preview.removeAll();
-		try {
-			preview.add(new ObjectsPreviewPanel(image));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		preview.add(new ObjectsPreviewPanel(image));
 	}
 }

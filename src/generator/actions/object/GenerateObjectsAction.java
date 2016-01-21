@@ -9,6 +9,8 @@ import javax.swing.AbstractAction;
 import generator.Mediator;
 import generator.models.generation.GenerationInfo;
 import generator.models.generation.ModelInfo;
+import generator.utils.PropertiesKeys;
+import generator.utils.WindowUtil;
 
 public class GenerateObjectsAction extends AbstractAction {
 
@@ -22,7 +24,8 @@ public class GenerateObjectsAction extends AbstractAction {
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		GenerationInfo info = new GenerationInfo();
 		Map<String, ModelInfo> models = Mediator.getModels();
-		if(models.isEmpty()){
+		if (models.isEmpty()) {
+			WindowUtil.displayError(PropertiesKeys.NO_RESULT);
 			return;
 		}
 		info.setModels(new ArrayList<>(models.values()));

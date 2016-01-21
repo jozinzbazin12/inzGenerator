@@ -9,7 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -106,7 +105,7 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 		Mediator.registerThirdTabPanel(this);
 	}
 
-	public void addPreview(BufferedImage image) throws IOException {
+	public void addPreview(BufferedImage image) {
 		holder.removeAll();
 		imageSize = new Dimension(image.getWidth(), image.getHeight());
 		previewPanel = new ObjectsPreviewPanel(image);
@@ -206,6 +205,9 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	}
 
 	public BufferedImage getMap() {
+		if (previewPanel == null) {
+			return null;
+		}
 		return previewPanel.getImage();
 	}
 
@@ -267,8 +269,10 @@ public class ThirdTabPanel extends JPanel implements MouseListener {
 	}
 
 	private void printOnPreview() {
-		previewPanel.setResultObject(objects);
-		previewPanel.repaint();
+		if (previewPanel != null) {
+			previewPanel.setResultObject(objects);
+			previewPanel.repaint();
+		}
 	}
 
 	public void refreshPreview() {

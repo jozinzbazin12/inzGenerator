@@ -3,7 +3,6 @@ package generator.panels;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
 
 import generator.Mediator;
@@ -17,7 +16,7 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 		super();
 	}
 
-	public ObjectsPreviewPanel(BufferedImage image) throws IOException {
+	public ObjectsPreviewPanel(BufferedImage image) {
 		super(image);
 		findMinMax();
 	}
@@ -28,7 +27,7 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 
 	private int getObjectX(GeneratedObject i) {
 		int mapWidth = image.getWidth();
-		return (int) ((  mapWidth / 2-(i.getBasic().getX() * (mapWidth / Mediator.getMapWidth()))) * (1 + zoom) + currentPoint.x);
+		return (int) ((mapWidth / 2 - (i.getBasic().getX() * (mapWidth / Mediator.getMapWidth()))) * (1 + zoom) + currentPoint.x);
 	}
 
 	private int getObjectZ(GeneratedObject i) {

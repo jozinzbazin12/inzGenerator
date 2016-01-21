@@ -124,8 +124,13 @@ public class ModelWindow extends JFrame implements ActionListener {
 	private JPanel createAdditionalPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 0));
 		boolean bnw = algorithm instanceof MaskAlgorithm ? false : true;
-		preview = new MaskPreviewPanel(Mediator.getMapImage(), true, bnw);
-		panel.add(preview);
+		BufferedImage mapImage = Mediator.getMapImage();
+		if (mapImage != null) {
+			preview = new MaskPreviewPanel(mapImage, true, bnw);
+			panel.add(preview);
+		} else {
+			panel.add(new JPanel());
+		}
 		panel.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.SETTINGS)));
 		panel.add(additionalPanel);
 		return panel;

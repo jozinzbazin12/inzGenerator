@@ -162,4 +162,6 @@ public final class PropertiesKeys {
 	public static final String XML_FILES = "files.xml";
 	public static final String MODEL_ALREADY_EXISTS_ERROR = "object.already.exists.error";
 	public static final String RESULT = "objects.generated";
+	public static final String NO_RESULT = "objects.generated.nothing";
+	public static final String NO_HEIGHTMAP = "objects.no.map";
 }

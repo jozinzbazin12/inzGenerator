@@ -1,5 +1,6 @@
 package generator.algorithms;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -255,28 +256,37 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		});
 		return points;
 	}
-	
+
 	public List<GeneratedObject> generate(GenerationInfo info) {
 		int collisionsValue = info.getArgs().get(Consts.COLLISIONS).intValue();
 		collisions = collisionsValue == 1 ? true : false;
+		Dimension mapDimensions = Mediator.getMapDimensions();
+		if (mapDimensions == null) {
+			WindowUtil.displayError(PropertiesKeys.NO_HEIGHTMAP);
+			return new ArrayList<>();
+		}
 		if (collisions) {
 			collisionTree = TreeNode.createTree(Mediator.getMapWidth(), Mediator.getMapHeight(),
-					(short) (Math.log(Mediator.getMapDimensions().getWidth()) / Math.log(2)));
+					(short) (Math.log(mapDimensions.getWidth()) / Math.log(2)));
 		}
-		xRatio = Mediator.getMapWidth() / Mediator.getMapDimensions().width;
-		zRatio = Mediator.getMapHeight() / Mediator.getMapDimensions().height;
+		xRatio = Mediator.getMapWidth() / mapDimensions.width;
+		zRatio = Mediator.getMapHeight() / mapDimensions.height;
 		yRatio = Mediator.getMapMaxYSetting() / Mediator.getMapMaxY();
 		HeightInfo.setThreshold((xRatio + zRatio) / 2.0);
 
 		List<GeneratedObject> result = generationMethod(info);
 		Mediator.updateModels(result);
 		collisionTree = null;
+		int size = result.size();
 		if (collisionDetected) {
 			collisionDetected = false;
-			WindowUtil.displayError(PropertiesKeys.COLLISION, result.size());
-		}
-		else{
-			WindowUtil.displayInfo(PropertiesKeys.RESULT, result.size());
+			WindowUtil.displayError(PropertiesKeys.COLLISION, size);
+		} else {
+			if (size > 0) {
+				WindowUtil.displayInfo(PropertiesKeys.RESULT, size);
+			} else {
+				WindowUtil.displayError(PropertiesKeys.NO_RESULT);
+			}
 		}
 		return result;
 	}

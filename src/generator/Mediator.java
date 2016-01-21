@@ -33,6 +33,8 @@ import generator.models.MyFile;
 import generator.models.generation.GenerationInfo;
 import generator.models.generation.GenerationModel;
 import generator.models.generation.ModelInfo;
+import generator.models.generation.PositionSettings;
+import generator.models.generation.RotationSettings;
 import generator.models.result.GeneratedObject;
 import generator.models.result.MapObject;
 import generator.models.result.Material;
@@ -186,10 +188,25 @@ public class Mediator {
 			MyFile file = new MyFile(path);
 			GenerationModel model = new GenerationModel(file);
 			ModelInfo obj = new ModelInfo(model);
+			setDefaultObjectSettings(obj);
 			models.put(file.getAbsolutePath(), obj);
 		} else {
 			WindowUtil.displayError(PropertiesKeys.MODEL_ALREADY_EXISTS_ERROR);
 		}
+	}
+
+	private static void setDefaultObjectSettings(ModelInfo obj) {
+		PositionSettings pos = obj.getPositionSettings();
+		double mapWidth = getMapWidth() / 2.0;
+		pos.setMinX(-mapWidth);
+		pos.setMaxX(mapWidth);
+		double mapHeight = getMapHeight() / 2.0;
+		pos.setMinZ(-mapHeight);
+		pos.setMaxZ(mapHeight);
+
+		RotationSettings rot = obj.getRotationSettings();
+		rot.setMinY(-180);
+		rot.setMaxY(180);
 	}
 
 	public static void loadXMLFile(File file) {
@@ -231,18 +248,10 @@ public class Mediator {
 			}
 		}
 		MapObject mapObject = resultObject.getMapObject();
-		try {
-			BufferedImage image = openImage(mapObject.getMapFileName());
-			thirdTabPanel.addPreview(image);
-			firstTabPanel.addPreview(image);
-		} catch (IOException e) {
-			WindowUtil.displayError(PropertiesKeys.FILE_NOT_IMAGE);
-			e.printStackTrace();
-		}
+		setMapFile(mapObject.getMapFileName());
 		firstTabPanel.setMapObject(mapObject);
 		firstTabPanel.setMapProperties(mapObject.getMapFileName().getAbsolutePath(), thirdTabPanel.getImageSize());
 		secondTabPanel.updateModels(models.values());
-		setMapFile(mapObject.getMapFileName());
 		updateModels(resultObject.getGeneratedObjects());
 		thirdTabPanel.updateObjects(resultObject.getGeneratedObjects());
 	}
@@ -345,7 +354,9 @@ public class Mediator {
 
 	public static Dimension setMapFile(MyFile file) {
 		try {
-			thirdTabPanel.addPreview(openImage(file));
+			BufferedImage img = openImage(file);
+			firstTabPanel.addPreview(img);
+			thirdTabPanel.addPreview(img);
 			String path = file.getAbsolutePath();
 			resultObject.getMapObject().setMapFileName(path);
 			mainWindow.getContentPane().revalidate();
