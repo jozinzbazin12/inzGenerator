@@ -2,7 +2,6 @@ package generator.algorithms;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -279,7 +278,7 @@ public abstract class Algorithm implements Comparable<Algorithm> {
 		List<GeneratedObject> result = generationMethod(info);
 		Mediator.updateModels(result);
 		time = System.currentTimeMillis() - time;
-		System.out.println("Time used:" + time);
+		System.out.println("Time used: " + time + " ms.");
 		time /= 1000F;
 		collisionTree = null;
 		int size = result.size();
