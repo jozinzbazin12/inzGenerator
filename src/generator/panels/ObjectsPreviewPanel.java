@@ -26,7 +26,7 @@ public class ObjectsPreviewPanel extends PreviewPanel {
 	}
 
 	private int getObjectX(GeneratedObject i) {
-		int mapWidth = image.getWidth();
+		int mapWidth = (int) (image.getWidth() * Mediator.getMapWidth() / Mediator.getMapHeight());
 		return (int) ((mapWidth / 2 - (i.getBasic().getX() * (mapWidth / Mediator.getMapWidth()))) * (1 + zoom) + currentPoint.x);
 	}
 

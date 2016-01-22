@@ -40,7 +40,7 @@ public class ImageListener extends MouseAdapter {
 		}
 		if (currentObject != null && SwingUtilities.isLeftMouseButton(e)) {
 			((ObjectsPreviewPanel) panel).setPoint(e.getPoint());
-			int mapWidth = Mediator.getMapDimensions().width;
+			int mapWidth = (int) (Mediator.getMapDimensions().width * Mediator.getMapWidth() / Mediator.getMapHeight());
 			int mapHeight = Mediator.getMapDimensions().height;
 			currentObject.getBasic()
 					.setX((Mediator.getMapWidth() * (-2 * e.getX() + panel.getZoom() * mapWidth + 2 * currentPoint.x + mapWidth))
@@ -61,7 +61,7 @@ public class ImageListener extends MouseAdapter {
 			ObjectsPreviewPanel panel = (ObjectsPreviewPanel) this.panel;
 			if (panel.getGeneratedObjects() != null) {
 				for (GeneratedObject i : panel.getGeneratedObjects()) {
-					int mapWidth = Mediator.getMapDimensions().width;
+					int mapWidth = (int) (Mediator.getMapDimensions().width * Mediator.getMapWidth() / Mediator.getMapHeight());
 					int mapHeight = Mediator.getMapDimensions().height;
 					double x = (mapWidth / 2 - (i.getBasic().getX() * (mapWidth / Mediator.getMapWidth())))
 							* (1 + panel.getZoom()) + panel.getCurrentPoint().x;

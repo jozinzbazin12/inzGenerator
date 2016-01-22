@@ -66,6 +66,7 @@ public class PreviewPanel extends JPanel {
 		if (height <= 0) {
 			height = 1;
 		}
+		width *= Mediator.getMapWidth() / Mediator.getMapHeight();
 		Image scaledInstance = image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
 		g.drawImage(scaledInstance, (int) currentPoint.getX(), (int) currentPoint.getY(), null);
 	}
@@ -121,8 +122,9 @@ public class PreviewPanel extends JPanel {
 		if (p == null) {
 			return 0;
 		}
+		double ratio = Mediator.getMapHeight() / Mediator.getMapWidth();
 		int mapWidth = image.getWidth();
-		return (Mediator.getMapWidth() * (-2 * p.getX() + zoom * mapWidth + 2 * currentPoint.x + mapWidth))
+		return (Mediator.getMapWidth() * (-2 * p.getX() * ratio + zoom * mapWidth + 2 * currentPoint.x * ratio + mapWidth))
 				/ (2 * mapWidth * (zoom + 1));
 	}
 
