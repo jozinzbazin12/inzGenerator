@@ -363,7 +363,7 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		BufferedImage pic;
 		try {
 			pic = ImageIO.read(new File(path));
-			texture.add(new PreviewPanel(pic));
+			texture.add(new TexturePreveiwPanel(pic));
 			texturePath.setText(path);
 		} catch (IOException e) {
 			WindowUtil.displayError(PropertiesKeys.FILE_NOT_IMAGE);

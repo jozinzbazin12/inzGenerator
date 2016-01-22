@@ -66,7 +66,6 @@ public class PreviewPanel extends JPanel {
 		if (height <= 0) {
 			height = 1;
 		}
-		width *= Mediator.getMapWidth() / Mediator.getMapHeight();
 		Image scaledInstance = image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
 		g.drawImage(scaledInstance, (int) currentPoint.getX(), (int) currentPoint.getY(), null);
 	}
@@ -143,7 +142,7 @@ public class PreviewPanel extends JPanel {
 	}
 
 	protected int getResizedWidth() {
-		return (int) (image.getWidth() + image.getWidth() * zoom);
+		return (int) ((int) (image.getWidth() + image.getWidth() * zoom) * Mediator.getMapWidth() / Mediator.getMapHeight());
 	}
 
 	public double getZoom() {
@@ -166,9 +165,10 @@ public class PreviewPanel extends JPanel {
 	}
 
 	public void setDefaultZoom() {
-		double dw = image.getWidth() - getWidth();
+		double h = image.getWidth() * Mediator.getMapWidth() / Mediator.getMapHeight();
+		double dw = h - getWidth();
 		double dh = image.getHeight() - getHeight();
-		zoom = -Math.max(dw / image.getWidth(), dh / image.getHeight());
+		zoom = -Math.max(dw / h, dh / image.getHeight());
 		currentPoint = new Point((getWidth() - getResizedWidth()) / 2, (getHeight() - getResizedHeight()) / 2);
 	}
 
@@ -189,6 +189,10 @@ public class PreviewPanel extends JPanel {
 	}
 
 	public void setZoom(double zoom) {
+		if (zoom < -1) {
+			this.zoom = -1;
+			return;
+		}
 		this.zoom = zoom;
 	}
 }
