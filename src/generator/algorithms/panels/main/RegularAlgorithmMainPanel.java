@@ -13,9 +13,9 @@ public class RegularAlgorithmMainPanel extends AlgorithmMainPanel {
 
 	public RegularAlgorithmMainPanel() {
 		add(ComponentUtil.createAtrributeLegendPanel());
-		add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.MIN_X, Consts.MAX_X,
+		add(ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.MIN_X, Consts.MAX_X,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments));
-		add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.MIN_Z, Consts.MAX_Z,
+		add(ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.MIN_Z, Consts.MAX_Z,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), arguments));
 	}
 }

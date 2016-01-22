@@ -17,7 +17,7 @@ public class AggregationAlgorithmPanel extends AlgorithmMainPanel {
 				arguments, Mediator.getMessage(PropertiesKeys.AGGREGATION_CHANCE_TOOLTIP)));
 		add(new JSeparator());
 		add(ComponentUtil.createAtrributeLegendPanel());
-		add(ComponentUtil.createSpinner(0, MAX_POSITION, Consts.MIN_AGGREGATION_RANGE, Consts.MAX_AGGREGATION_RANGE,
+		add(ComponentUtil.createSpinner(0, Consts.MAX_POSITION, Consts.MIN_AGGREGATION_RANGE, Consts.MAX_AGGREGATION_RANGE,
 				Mediator.getMessage(PropertiesKeys.AGGREGATION_RANGE), arguments,
 				Mediator.getMessage(PropertiesKeys.AGGREGATION_RANGE_TOOLTIP)));
 	}

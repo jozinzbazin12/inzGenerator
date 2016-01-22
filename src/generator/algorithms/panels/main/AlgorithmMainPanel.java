@@ -25,7 +25,6 @@ public class AlgorithmMainPanel extends JPanel {
 	protected static Map<String, Component> arguments = new HashMap<>();
 	private static double collisionEnabled = 0;
 	private static double collisonScale = 0;
-	protected static final int MAX_POSITION = 10000;
 	private static final long serialVersionUID = 3043925881010825869L;
 	private JPanel collisionScale;
 	private CheckBox collisions;

@@ -13,8 +13,8 @@ public class MaskAlgorithmPanel extends AlgorithmAdditionalPanel {
 	public MaskAlgorithmPanel() {
 		setLayout(new GridLayout(10, 3, 5, 5));
 		add(ComponentUtil.createDoubleLegendPanel());
-		add(ComponentUtil.createSpinner(0, MAX_POSITION, Consts.RATE, Mediator.getMessage(PropertiesKeys.COLOR_RATE), arguments,
-				Mediator.getMessage(PropertiesKeys.COLOR_RATE_TOOLTIP), true));
+		add(ComponentUtil.createSpinner(0, Consts.MAX_POSITION, Consts.RATE, Mediator.getMessage(PropertiesKeys.COLOR_RATE),
+				arguments, Mediator.getMessage(PropertiesKeys.COLOR_RATE_TOOLTIP), true));
 	}
 
 	@Override

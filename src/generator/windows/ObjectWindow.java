@@ -105,11 +105,11 @@ public class ObjectWindow extends JFrame implements ActionListener {
 				Mediator.getMessage(PropertiesKeys.RELATIVE_TOOLTIP), true);
 		panel.add(relative);
 
-		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.X,
+		panel.add(ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.X,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments, true));
-		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.Y,
+		panel.add(ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.Y,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y), arguments, true));
-		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.Z,
+		panel.add(ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.Z,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), arguments, true));
 		panel.add(new JSeparator());
 		panel.add(ComponentUtil.createSpinner(-1000, 1000, Consts.SX,

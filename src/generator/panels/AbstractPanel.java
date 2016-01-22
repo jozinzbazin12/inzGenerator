@@ -9,7 +9,6 @@ import gnerator.components.Component;
 import gnerator.components.Spinner;
 
 public abstract class AbstractPanel extends JPanel {
-	protected static final int MAX_POSITION = 10000;
 	private static final long serialVersionUID = -4327845537212042650L;
 	protected Map<String, Component> arguments = new HashMap<>();
 

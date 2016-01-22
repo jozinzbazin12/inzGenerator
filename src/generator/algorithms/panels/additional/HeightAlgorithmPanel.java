@@ -13,7 +13,7 @@ public class HeightAlgorithmPanel extends AlgorithmAdditionalPanel {
 	public HeightAlgorithmPanel() {
 		setLayout(new GridLayout(10, 3, 5, 5));
 		add(ComponentUtil.createAtrributeLegendPanel());
-		add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.MIN_Y_HEIGHT, Consts.MAX_Y_HEIGHT,
+		add(ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.MIN_Y_HEIGHT, Consts.MAX_Y_HEIGHT,
 				Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM_SETTINGS), arguments,
 				Mediator.getMessage(PropertiesKeys.HEIGHT_ALGORITHM_SETTINGS_TOOLTIP), true));
 	}

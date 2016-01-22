@@ -159,15 +159,15 @@ public class ModelWindow extends JFrame implements ActionListener {
 
 		panel.add(ComponentUtil.createAtrributeLegendPanel());
 
-		panel.add(ComponentUtil.createSpinner(0, 10000, Consts.MIN_COUNT, Consts.MAX_COUNT,
+		panel.add(ComponentUtil.createSpinner(0, Consts.MAX_POSITION, Consts.MIN_COUNT, Consts.MAX_COUNT,
 				Mediator.getMessage(PropertiesKeys.COUNT), arguments, true));
 		panel.add(new JSeparator());
-		spinnersX = ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_X, Consts.MAX_X,
+		spinnersX = ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.MIN_X, Consts.MAX_X,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.X), arguments, true);
 		panel.add(spinnersX);
-		panel.add(ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_Y, Consts.MAX_Y,
+		panel.add(ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.MIN_Y, Consts.MAX_Y,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Y), arguments, true));
-		spinnersZ = ComponentUtil.createSpinner(-10000, 10000, Consts.MIN_Z, Consts.MAX_Z,
+		spinnersZ = ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.MIN_Z, Consts.MAX_Z,
 				MessageFormat.format(Mediator.getMessage(PropertiesKeys.COORDINATE), Consts.Z), arguments, true);
 		panel.add(spinnersZ);
 

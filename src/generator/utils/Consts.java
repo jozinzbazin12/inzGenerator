@@ -85,4 +85,5 @@ public class Consts {
 	public static final String RATE = "rate";
 	public static final String COLLISIONS = "collisions";
 	public static final String WEB_SCALE = "wbs";
+	public static final int MAX_POSITION = 100000;
 }

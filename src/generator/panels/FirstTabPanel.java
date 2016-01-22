@@ -122,11 +122,11 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 
 		JPanel mapPanel2 = new JPanel(new GridLayout(4, 0, 5, 5));
 		mapPanel2.setBorder(BorderFactory.createTitledBorder(Mediator.getMessage(PropertiesKeys.MAP_SIZE_BORDER)));
-		mapPanel2.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.X,
+		mapPanel2.add(ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.X,
 				Mediator.getMessage(PropertiesKeys.MAP_LENGTH), DEFAULT_MAP_SIZE, arguments));
-		mapPanel2.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Y,
+		mapPanel2.add(ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.Y,
 				Mediator.getMessage(PropertiesKeys.MAP_HEIGHT), DEFAULT_MAP_HEIGHT, arguments));
-		mapPanel2.add(ComponentUtil.createSpinner(-MAX_POSITION, MAX_POSITION, Consts.Z,
+		mapPanel2.add(ComponentUtil.createSpinner(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.Z,
 				Mediator.getMessage(PropertiesKeys.MAP_WIDTH), DEFAULT_MAP_SIZE, arguments));
 
 		options.add(mapPanel2);
@@ -143,10 +143,10 @@ public class FirstTabPanel extends AbstractPanel implements MouseListener {
 		lightPanel.add(ComponentUtil.createLightSpinners(0, 1, Consts.LIGHT_SPECULAR_R, Consts.LIGHT_SPECULAR_G,
 				Consts.LIGHT_SPECULAR_B, Consts.LIGHT_SPECULAR_A, Mediator.getMessage(PropertiesKeys.SPECULAR),
 				Mediator.getMessage(PropertiesKeys.SPECULAR_TOOLTIP), 0.5, arguments));
-		lightPanel.add(
-				ComponentUtil.createLightSpinners(-MAX_POSITION, MAX_POSITION, Consts.LIGHT_POSITION_X, Consts.LIGHT_POSITION_Y,
-						Consts.LIGHT_POSITION_Z, Consts.LIGHT_POSITION_MODE, Mediator.getMessage(PropertiesKeys.LIGHT_POSITION),
-						Mediator.getMessage(PropertiesKeys.LIGHT_POSITION_TOOLTIP), 1, arguments));
+		lightPanel.add(ComponentUtil.createLightSpinners(-Consts.MAX_POSITION, Consts.MAX_POSITION, Consts.LIGHT_POSITION_X,
+				Consts.LIGHT_POSITION_Y, Consts.LIGHT_POSITION_Z, Consts.LIGHT_POSITION_MODE,
+				Mediator.getMessage(PropertiesKeys.LIGHT_POSITION), Mediator.getMessage(PropertiesKeys.LIGHT_POSITION_TOOLTIP), 1,
+				arguments));
 		options.add(lightPanel);
 		add(options);
 	}
