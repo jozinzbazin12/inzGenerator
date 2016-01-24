@@ -138,11 +138,13 @@ public class PreviewPanel extends JPanel {
 	}
 
 	protected int getResizedHeight() {
-		return (int) (image.getHeight() + image.getHeight() * zoom);
+		int i = (int) (image.getHeight() + image.getHeight() * zoom);
+		return i > 0 ? i : 1;
 	}
 
 	protected int getResizedWidth() {
-		return (int) ((int) (image.getWidth() + image.getWidth() * zoom) * Mediator.getMapWidth() / Mediator.getMapHeight());
+		int i = (int) ((int) (image.getWidth() + image.getWidth() * zoom) * Mediator.getMapWidth() / Mediator.getMapHeight());
+		return i > 0 ? i : 1;
 	}
 
 	public double getZoom() {
