@@ -8,7 +8,7 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import gnerator.components.Label;
+import generator.components.Label;
 
 public class CellRenderer implements TableCellRenderer {
 

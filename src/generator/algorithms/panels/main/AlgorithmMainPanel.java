@@ -14,12 +14,12 @@ import generator.Mediator;
 import generator.actions.Action;
 import generator.algorithms.Algorithm;
 import generator.algorithms.RegularAlgorithm;
+import generator.components.CheckBox;
+import generator.components.Component;
+import generator.components.Spinner;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
-import gnerator.components.CheckBox;
-import gnerator.components.Component;
-import gnerator.components.Spinner;
 
 public class AlgorithmMainPanel extends JPanel {
 	protected static Map<String, Component> arguments = new HashMap<>();

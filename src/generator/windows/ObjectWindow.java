@@ -21,6 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 import generator.Mediator;
+import generator.components.CheckBox;
+import generator.components.Component;
+import generator.components.Label;
 import generator.models.generation.GenerationModel;
 import generator.models.generation.ModelInfo;
 import generator.models.result.BasicModelData;
@@ -28,9 +31,6 @@ import generator.models.result.GeneratedObject;
 import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
-import gnerator.components.CheckBox;
-import gnerator.components.Component;
-import gnerator.components.Label;
 
 public class ObjectWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 5328377975510513084L;

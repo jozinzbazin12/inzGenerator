@@ -1,4 +1,4 @@
-package gnerator.components;
+package generator.components;
 
 import java.awt.Color;
 import java.awt.Graphics;

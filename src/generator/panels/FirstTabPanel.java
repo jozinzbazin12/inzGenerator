@@ -19,6 +19,8 @@ import javax.swing.SwingConstants;
 
 import generator.Mediator;
 import generator.actions.LoadImageAction;
+import generator.components.Component;
+import generator.components.Label;
 import generator.models.MyFile;
 import generator.models.result.BasicMapData;
 import generator.models.result.LightData;
@@ -31,8 +33,6 @@ import generator.utils.ComponentUtil;
 import generator.utils.Consts;
 import generator.utils.PropertiesKeys;
 import generator.utils.WindowUtil;
-import gnerator.components.Component;
-import gnerator.components.Label;
 
 public class FirstTabPanel extends AbstractPanel implements MouseListener {
 	private static final long serialVersionUID = -2087487239161953473L;

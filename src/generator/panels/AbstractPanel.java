@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import gnerator.components.Component;
-import gnerator.components.Spinner;
+import generator.components.Component;
+import generator.components.Spinner;
 
 public abstract class AbstractPanel extends JPanel {
 	private static final long serialVersionUID = -4327845537212042650L;

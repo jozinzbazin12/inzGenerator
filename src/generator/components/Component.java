@@ -1,4 +1,4 @@
-package gnerator.components;
+package generator.components;
 
 import javax.swing.event.ChangeListener;
 

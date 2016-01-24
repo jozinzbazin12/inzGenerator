@@ -10,9 +10,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import generator.Mediator;
-import gnerator.components.Component;
-import gnerator.components.Label;
-import gnerator.components.Spinner;
+import generator.components.Component;
+import generator.components.Label;
+import generator.components.Spinner;
 
 public final class ComponentUtil {
 
